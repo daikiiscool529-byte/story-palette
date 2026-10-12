@@ -48,7 +48,7 @@
 
   <h1>StoryPalette</h1>
   <p>写真を選んでストーリーを作ろう！</p>
-
+<div id="editorArea">
   <!-- 写真選択 -->
   <input type="file" accept="image/*" id="photo">
 
@@ -91,27 +91,39 @@
   value="100"
   oninput="changeSize()"
 >
+  
   <!-- 保存ボタン -->
+  <br>
   <button onclick="saveStory()">
     画像を保存する
   </button>
-  
-  <!-- iPhone用の保存画面 -->
-  <div id="saveArea" style="display:none; margin:20px auto;">
-    <p>完成した画像を長押し、または共有して保存してね！</p>
-  
-    <img
-      id="savedImage"
-      alt="完成したストーリー"
-      style="width:270px; max-width:100%;"
-    >
-  </div>
-  
-  <!-- ストーリー表示 -->
+
+  <!-- 編集用ストーリー表示 -->
   <div class="story">
     <img id="preview" alt="" style="display:none;">
     <p id="previewText">My Memories ♡</p>
   </div>
+
+</div>
+
+<!-- 完成画像の表示画面 -->
+<div id="saveArea" style="display:none; margin:20px auto;">
+
+  <p>完成した画像を長押しして保存してね！</p>
+
+  <img
+    id="savedImage"
+    alt="完成したストーリー"
+    style="width:270px; max-width:100%;"
+  >
+
+  <br>
+
+  <button onclick="backToEdit()">
+    ← 編集に戻る
+  </button>
+
+</div>
 
   <script>
     const photo = document.getElementById("photo");
@@ -217,6 +229,7 @@ photo.addEventListener("change", function () {
 
       savedImage.src = imageData;
       saveArea.style.display = "block";
+      document.getElementById("editorArea").style.display = "none";
 
       // 保存画面までスクロール
       saveArea.scrollIntoView({ behavior: "smooth" });
@@ -226,7 +239,18 @@ photo.addEventListener("change", function () {
 
       document.getElementById("preview").style.transform =
         `scale(${size / 100})`;
+}   
+    
+    function backToEdit() {
+     document.getElementById("saveArea").style.display = "none";
+
+    document.getElementById("editorArea").style.display = "block";
+
+     document.getElementById("editorArea").scrollIntoView({
+     behavior: "smooth"
+  });
 }
+
   </script>
 
 </body>
