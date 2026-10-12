@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>StoryPalette</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8edf2;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .story {
+      width: 270px;
+      height: 480px;
+      background: #e9dfce;
+      margin: 20px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .story img {
+      width: 220px;
+      max-height: 320px;
+      object-fit: contain;
+    }
+
+    button {
+      margin: 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    input {
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>StoryPalette</h1>
+  <p>写真を選んでストーリーを作ろう！</p>
+
+  <!-- 写真選択 -->
+  <input type="file" accept="image/*" id="photo">
+
+  <br>
+
+  <!-- 背景色変更 -->
+  <button onclick="changeColor('#f8c8dc')">
+    ピンク
+  </button>
+
+  <button onclick="changeColor('#c8e7ff')">
+    水色
+  </button>
+
+  <button onclick="changeColor('#e9dfce')">
+    ベージュ
+  </button>
+
+  <br>
+
+  <!-- 文字入力 -->
+  <p>ストーリーに入れる文字</p>
+
+  <input
+    type="text"
+    id="storyText"
+    value="My Memories ♡"
+    oninput="changeText()"
+  >
+
+  <br>
+  <!-- 写真サイズ調整 -->
+  <p>写真の大きさ</p>
+
+  <input
+  type="range"
+  id="photoSize"
+  min="50"
+  max="150"
+  value="100"
+  oninput="changeSize()"
+>
+  <!-- 保存ボタン -->
+  <button onclick="saveStory()">
+    画像を保存する
+  </button>
+
+  <!-- ストーリー表示 -->
+  <div class="story">
+    <img id="preview" alt="" style="display:none;">
+    <p id="previewText">My Memories ♡</p>
+  </div>
+
+  <script>
+    const photo = document.getElementById("photo");
+    const preview = document.getElementById("preview");
+
+    // 写真を選択
+    
+photo.addEventListener("change", function () {
+  const file = photo.files[0];
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("画像ファイルを選択してください");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function (event) {
+    preview.src = event.target.result;
+    preview.style.display = "block";
+  };
+
+  reader.onerror = function () {
+    alert("写真の読み込みに失敗しました");
+  };
+
+  reader.readAsDataURL(file);
+});
+
+
+    // 背景色変更
+    function changeColor(color) {
+      document.querySelector(".story")
+        .style.backgroundColor = color;
+    }
+
+    // 文字変更
+    function changeText() {
+      const text = document
+        .getElementById("storyText").value;
+
+      document
+        .getElementById("previewText")
+        .textContent = text;
+    }
+
+    // 画像保存
+    function saveStory() {
+      const story = document.querySelector(".story");
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1920;
+
+      const ctx = canvas.getContext("2d");
+
+      // 背景色
+      ctx.fillStyle =
+        getComputedStyle(story).backgroundColor;
+
+      ctx.fillRect(0, 0, 1080, 1920);
+
+      // 写真
+      if (preview.complete && preview.naturalWidth > 0) {
+        const photoSize =
+          document.getElementById("photoSize").value / 100;
+
+        const scale = Math.min(
+          880 / preview.naturalWidth,
+          1280 / preview.naturalHeight
+        ) * photoSize;
+
+        const w = preview.naturalWidth * scale;
+        const h = preview.naturalHeight * scale;
+
+        ctx.drawImage(
+          preview,
+          (1080 - w) / 2,
+          (1920 - h) / 2 - 100,
+          w,
+          h
+        );
+      }
+
+      // 文字
+      const text = document
+        .getElementById("storyText").value;
+
+      ctx.fillStyle = "#555555";
+      ctx.font = "60px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(text, 540, 1650, 980);
+
+      // 保存
+      const link = document.createElement("a");
+      link.download = "my-story.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+    function changeSize() {
+      const size = document.getElementById("photoSize").value;
+
+      document.getElementById("preview").style.transform =
+        `scale(${size / 100})`;
+}
+  </script>
+
+</body>
+</html>
