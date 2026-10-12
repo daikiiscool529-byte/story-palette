@@ -48,63 +48,62 @@
 
   <h1>StoryPalette</h1>
   <p>写真を選んでストーリーを作ろう！</p>
-<div id="editorArea">
-  <!-- 写真選択 -->
-  <input type="file" accept="image/*" id="photo">
+   <div id="editorArea">
+      <!-- 写真選択 -->
+     <input type="file" accept="image/*" id="photo">
 
-  <br>
+     <br>
 
-  <!-- 背景色変更 -->
-  <button onclick="changeColor('#f8c8dc')">
-    ピンク
-  </button>
+     <!-- 背景色変更 -->
+     <button onclick="changeColor('#f8c8dc')">
+     ピンク
+     </button>
 
-  <button onclick="changeColor('#c8e7ff')">
-    水色
-  </button>
+     <button onclick="changeColor('#c8e7ff')">
+     水色
+     </button>
 
-  <button onclick="changeColor('#e9dfce')">
-    ベージュ
-  </button>
+     <button onclick="changeColor('#e9dfce')">
+     ベージュ
+     </button>
 
-  <br>
+     <br>
 
-  <!-- 文字入力 -->
-  <p>ストーリーに入れる文字</p>
+     <!-- 文字入力 -->
+     <p>ストーリーに入れる文字</p>
 
-  <input
-    type="text"
-    id="storyText"
-    value="My Memories ♡"
-    oninput="changeText()"
-  >
+     <input
+     type="text"
+     id="storyText"
+     value="My Memories ♡"
+     oninput="changeText()"
+     >
 
-  <br>
-  <!-- 写真サイズ調整 -->
-  <p>写真の大きさ</p>
+     <br>
+     <!-- 写真サイズ調整 -->
+     <p>写真の大きさ</p>
 
-  <input
-  type="range"
-  id="photoSize"
-  min="50"
-  max="150"
-  value="100"
-  oninput="changeSize()"
->
+     <input
+     type="range"
+     id="photoSize"
+     min="50"
+     max="150"
+     value="100"
+     oninput="changeSize()"
+     >
   
-  <!-- 保存ボタン -->
-  <br>
-  <button onclick="saveStory()">
-    画像を保存する
-  </button>
+     <!-- 保存ボタン -->
+     <br>
+     <button onclick="saveStory()">
+     画像を保存する
+     </button>
 
-  <!-- 編集用ストーリー表示 -->
-  <div class="story">
-    <img id="preview" alt="" style="display:none;">
-    <p id="previewText">My Memories ♡</p>
-  </div>
-
-</div>
+     <!-- 編集用ストーリー表示 -->
+      <div class="story">
+     <img id="preview" alt="" style="display:none;">
+     <p id="previewText">My Memories ♡</p>
+    </div>
+ </div>
 
 <!-- 完成画像の表示画面 -->
 <div id="saveArea" style="display:none; margin:20px auto;">
