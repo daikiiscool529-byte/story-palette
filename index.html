@@ -30,7 +30,11 @@
       width: 220px;
       max-height: 320px;
       object-fit: contain;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
     }
+     
 
     button {
       margin: 5px;
@@ -201,11 +205,11 @@ photo.addEventListener("change", function () {
         const h = preview.naturalHeight * scale;
 
         ctx.drawImage(
-          preview,
-          (1080 - w) / 2,
-          (1920 - h) / 2 - 100,
-          w,
-          h
+         preview,
+         (1080 - w) / 2 + photoX * 4,
+         (1920 - h) / 2 - 100 + photoY * 4,
+         w,
+         h
         );
       }
 
@@ -234,20 +238,56 @@ photo.addEventListener("change", function () {
       saveArea.scrollIntoView({ behavior: "smooth" });
     }
     function changeSize() {
-      const size = document.getElementById("photoSize").value;
+     updatePhotoPosition();
+    }
 
-      document.getElementById("preview").style.transform =
-        `scale(${size / 100})`;
-}   
-    
-    function backToEdit() {
-     document.getElementById("saveArea").style.display = "none";
+     
+     function backToEdit() {
+      document.getElementById("saveArea").style.display = "none";
 
-    document.getElementById("editorArea").style.display = "block";
+      document.getElementById("editorArea").style.display = "block";
 
-     document.getElementById("editorArea").scrollIntoView({
-     behavior: "smooth"
-  });
+      document.getElementById("editorArea").scrollIntoView({
+       behavior: "smooth"
+    });
+ }
+
+let photoX = 0;
+let photoY = 0;
+
+let dragging = false;
+let startX = 0;
+let startY = 0;
+
+preview.addEventListener("pointerdown", function(e) {
+  dragging = true;
+  startX = e.clientX - photoX;
+  startY = e.clientY - photoY;
+  preview.setPointerCapture(e.pointerId);
+});
+
+preview.addEventListener("pointermove", function(e) {
+  if (!dragging) return;
+
+  photoX = e.clientX - startX;
+  photoY = e.clientY - startY;
+
+  updatePhotoPosition();
+});
+
+preview.addEventListener("pointerup", function() {
+  dragging = false;
+});
+
+preview.addEventListener("pointercancel", function() {
+  dragging = false;
+});
+
+function updatePhotoPosition() {
+  const size = document.getElementById("photoSize").value / 100;
+
+  preview.style.transform =
+    `translate(${photoX}px, ${photoY}px) scale(${size})`;
 }
 
   </script>
