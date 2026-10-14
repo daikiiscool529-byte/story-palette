@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,11 +13,9 @@
       margin: 0;
       box-sizing: border-box;
     }
-
     * {
       box-sizing: border-box;
     }
-
     .story {
       width: 270px;
       height: 480px;
@@ -29,7 +26,6 @@
       border-radius: 12px;
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     }
-
     .story img {
       position: absolute;
       left: 50%;
@@ -41,7 +37,6 @@
       cursor: grab;
       user-select: none;
     }
-
     .storyTextItem {
       touch-action: none;
       position: absolute;
@@ -63,17 +58,14 @@
       user-select: none;
       transform: translateX(-50%);
     }
-
     button {
       margin: 5px;
       padding: 8px 12px;
       cursor: pointer;
     }
-
     input {
       margin: 10px;
     }
-
     /* 編集タブ */
     .editTabs {
       display: flex;
@@ -82,7 +74,6 @@
       margin: 20px auto 10px;
       max-width: 360px;
     }
-
     .tabButton {
       flex: 1;
       padding: 12px 5px;
@@ -92,13 +83,11 @@
       color: #665260;
       font-size: 14px;
     }
-
     .tabButton.active {
       background: white;
       color: #a65d87;
       font-weight: bold;
     }
-
     .tabContent {
       display: none;
       background: white;
@@ -107,18 +96,15 @@
       max-width: 340px;
       margin: 0 auto;
     }
-
     .tabContent.active {
       display: block;
     }
-
     .tabContent textarea {
       width: 85%;
       max-width: 280px;
       padding: 8px;
       box-sizing: border-box;
     }
-
     .saveButton {
       background: #a87898;
       color: white;
@@ -127,7 +113,6 @@
       padding: 12px 25px;
       font-size: 15px;
     }
-
     /* スマホ向けデザイン */
     .editTabs {
       width: 100%;
@@ -135,7 +120,6 @@
       gap: 6px;
       padding: 0 4px;
     }
-
     .tabButton {
       min-height: 48px;
       margin: 0;
@@ -143,31 +127,26 @@
       font-size: 14px;
       border-radius: 12px 12px 0 0;
     }
-
     .tabContent {
       width: 100%;
       max-width: 360px;
       padding: 20px 12px;
       border-radius: 0 0 14px 14px;
     }
-
     .tabContent p {
       font-size: 14px;
       font-weight: 500;
       color: #665260;
     }
-
     .tabContent input[type="range"] {
       width: 85%;
       max-width: 280px;
       accent-color: #a87898;
     }
-
     .tabContent input[type="file"] {
       max-width: 100%;
       font-size: 13px;
     }
-
     .tabContent select,
     .tabContent textarea {
       max-width: 100%;
@@ -176,7 +155,6 @@
       border-radius: 8px;
       padding: 10px;
     }
-
     .tabContent button {
       min-height: 44px;
       border: none;
@@ -185,7 +163,6 @@
       background: #f0e4eb;
       color: #665260;
     }
-
     .saveButton {
       display: block;
       width: 100%;
@@ -198,61 +175,50 @@
       background: #a87898;
       color: white;
     }
-
     /* 小さいスマホ向け */
     @media (max-width: 360px) {
       body {
         padding: 10px;
       }
-
       .tabButton {
         font-size: 12px;
       }
     }
-
     /* 文字の縁取り */
     .storyTextItem {
       -webkit-text-stroke: 0px;
       paint-order: stroke fill;
     }
-
     /* 文字の影 */
     .story.shadow {
       text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
     }
-
     /* 選択中の文字 */
     .storyTextItem.selected {
       outline: 1px dashed rgba(0, 0, 0, 0.5);
       outline-offset: 3px;
     }
-
     /* 文字一覧 */
     #textList button {
       margin: 4px;
       padding: 8px 12px;
     }
-
     #textList button.active {
       background: #a87898;
       color: white;
     }
-
     .storyPhotoItem.selected {
       outline: 2px dashed #a87898;
       outline-offset: 3px;
     }
-
     #photoList button {
       margin: 4px;
       padding: 8px 12px;
     }
-
     #photoList button.active {
       background: #a87898;
       color: white;
     }
-
     .addPhotoButton {
       display: inline-block;
       background: #a87898;
@@ -264,7 +230,6 @@
       cursor: pointer;
       margin: 12px auto;
     }
-
     /* 元に戻す・やり直すボタン */
     .historyControls {
       display: flex;
@@ -272,7 +237,6 @@
       gap: 10px;
       margin: 15px auto;
     }
-
     .historyControls button {
       background: #a87898;
       color: white;
@@ -281,19 +245,16 @@
       padding: 12px 18px;
       font-size: 14px;
     }
-
     .historyControls button:disabled {
       background: #ddd;
       color: #999;
       cursor: not-allowed;
     }
-
     /* 新規作成ボタン */
     .newStoryControls {
       text-align: center;
       margin: 12px auto;
     }
-
     .newStoryControls button {
       background: #f0e4eb;
       color: #8c526f;
@@ -304,14 +265,12 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     /* 共通削除ボタン */
     .deleteControls {
       display: flex;
       justify-content: center;
       margin: 12px auto;
     }
-
     .deleteControls button {
       background: #fff0f3;
       color: #c04f68;
@@ -322,7 +281,6 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     /* 選択されていないときの削除ボタン */
     .deleteControls button:disabled {
       background: #eeeeee;
@@ -330,7 +288,6 @@
       border-color: #dddddd;
       cursor: not-allowed;
     }
-
     /* 中央配置のガイドライン */
     .centerGuide {
       position: absolute;
@@ -339,21 +296,18 @@
       z-index: 9999;
       pointer-events: none;
     }
-
     .centerGuide.vertical {
       top: 0;
       left: 50%;
       width: 1px;
       height: 100%;
     }
-
     .centerGuide.horizontal {
       top: 50%;
       left: 0;
       width: 100%;
       height: 1px;
     }
-
     /* 写真・文字の整列ボタン */
     .alignControls {
       max-width: 360px;
@@ -362,13 +316,11 @@
       background: white;
       border-radius: 12px;
     }
-
     .alignControls p {
       color: #665260;
       font-size: 14px;
       font-weight: bold;
     }
-
     .alignControls button {
       background: #f0e4eb;
       color: #665260;
@@ -377,13 +329,11 @@
       padding: 10px 12px;
       font-size: 13px;
     }
-
     /* ロックボタン */
     .lockControls {
       margin: 12px auto;
       text-align: center;
     }
-
     .lockControls button {
       background: #f0e4eb;
       color: #665260;
@@ -393,13 +343,11 @@
       font-size: 14px;
       font-weight: bold;
     }
-
     /* ロック中の選択表示 */
     .storyPhotoItem.selected[data-locked="true"],
     .storyTextItem.selected[data-locked="true"] {
       outline: 2px solid #8c526f;
     }
-
     /* ロック中のスライダー */
     #photoSize:disabled,
     #textSize:disabled,
@@ -408,29 +356,46 @@
       cursor: not-allowed;
       filter: grayscale(100%);
     }
-
     /* ロックした項目を選択中は鍵マークを表示 */
-    .story:has(.storyPhotoItem.selected[data-locked="true"],
-      .storyTextItem.selected[data-locked="true"])::after {
-      content: "🔒";
+    /* 写真・文字の右上に表示する操作ボタン */
+    .itemCornerActions {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 8px;
-      padding: 5px;
-      z-index: 10000;
-      pointer-events: none;
+      z-index: 20000;
+      display: none;
+      gap: 4px;
+      align-items: center;
+      pointer-events: auto;
     }
-
+    /* 小さな鍵・削除ボタン */
+    .itemCornerActions button {
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      margin: 0;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      color: #665260;
+      font-size: 12px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .itemCornerActions .cornerDelete {
+      background: #333333;
+      color: white;
+      font-size: 18px;
+    }
     /* 詳細ツールの開閉ボタン */
     .toolToggleControls {
       max-width: 360px;
       margin: 12px auto;
       text-align: center;
     }
-
     .toolToggleControls button {
       width: 100%;
       background: #f0e4eb;
@@ -442,13 +407,11 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     /* 最初は詳細ツールを折りたたむ */
     #editorArea.toolsCollapsed .alignControls,
     #editorArea.toolsCollapsed .lockControls {
       display: none;
     }
-
     /* 写真・文字一覧の折りたたみ */
     .editorAccordion {
       background: #f8f0f5;
@@ -458,7 +421,6 @@
       padding: 0;
       overflow: hidden;
     }
-
     .editorAccordion summary {
       padding: 14px;
       color: #665260;
@@ -467,46 +429,124 @@
       cursor: pointer;
       text-align: left;
     }
-
     .editorAccordion[open] summary {
       border-bottom: 1px solid #ead8e3;
     }
-
     .editorAccordion #photoList,
     .editorAccordion #textList {
       padding: 10px;
     }
-
     /* 文字の装飾設定 */
     .textDecorationAccordion {
       margin-top: 18px;
     }
-
     .decorationSettings {
       padding: 14px;
       text-align: left;
     }
-
     .decorationSettings>label {
       display: block;
       margin: 12px 0;
       color: #665260;
       font-size: 14px;
     }
-
     .decorationSettings>div {
       margin: 14px 0;
     }
-
     .decorationSettings>div label {
       display: block;
       margin-bottom: 6px;
       color: #665260;
       font-size: 13px;
     }
+    /* 選択中の写真・文字を見やすくする */
+    .storyPhotoItem.selected,
+    .storyTextItem.selected {
+      outline: 2px dashed #a87898;
+      outline-offset: 3px;
+    }
+    /* ロック中は実線に変更 */
+    .storyPhotoItem.selected[data-locked="true"],
+    .storyTextItem.selected[data-locked="true"] {
+      outline: 2px solid #8c526f;
+      outline-offset: 3px;
+    }
+    /* 右上の操作ボタンを少しコンパクトに */
+    .itemCornerActions {
+      gap: 3px;
+    }
+    .itemCornerActions button {
+      width: 24px;
+      height: 24px;
+      font-size: 11px;
+      opacity: 0.95;
+    }
+    .itemCornerActions .cornerDelete {
+      font-size: 17px;
+    }
+    /* 押したときの反応 */
+    .itemCornerActions button:active {
+      transform: scale(0.92);
+    }
+    /* ロック解除中：薄い鍵 */
+    .itemCornerActions .cornerLock {
+      background: #ffffff;
+      opacity: 0.35;
+      filter: grayscale(100%);
+      transition: opacity 0.15s, background 0.15s;
+    }
+    /* ロック中：濃い鍵 */
+    .itemCornerActions .cornerLock.isLocked {
+      background: #665260;
+      opacity: 1;
+      filter: grayscale(100%);
+    }
+    /* 操作ボタンを写真・文字の動きにすぐ追従させる */
+    .itemCornerActions {
+      transition: none;
+      will-change: left, top;
+    }
+    /* iPhoneでのタップ操作を安定させる */
+    .itemCornerActions button {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* 上下左右の吸着ガイドライン */
+    .edgeGuide {
+      position: absolute;
+      display: none;
+      background: #e05b97;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    /* 左右のガイド */
+    .edgeGuide.left,
+    .edgeGuide.right {
+      top: 0;
+      width: 1px;
+      height: 100%;
+    }
+    .edgeGuide.left {
+      left: 10px;
+    }
+    .edgeGuide.right {
+      right: 10px;
+    }
+    /* 上下のガイド */
+    .edgeGuide.top,
+    .edgeGuide.bottom {
+      left: 0;
+      width: 100%;
+      height: 1px;
+    }
+    .edgeGuide.top {
+      top: 10px;
+    }
+    .edgeGuide.bottom {
+      bottom: 10px;
+    }
   </style>
 </head>
-
 <body>
   <h1>StoryPalette</h1>
   <p>写真を選んでストーリーを作ろう！</p>
@@ -524,14 +564,12 @@
       </button>
     </div>
     <!-- 写真・文字の整列 -->
-
     <!-- 詳細ツールの開閉ボタン -->
     <div class="toolToggleControls">
       <button type="button" id="toolToggleButton" onclick="toggleAdvancedTools()" aria-expanded="false">
         ⚙️ 詳細ツールを表示 ▼
       </button>
     </div>
-
     <div class="alignControls">
       <p>選択した写真・文字の位置を揃える</p>
       <div>
@@ -556,12 +594,6 @@
           下揃え
         </button>
       </div>
-    </div>
-    <!-- 写真・文字のロック -->
-    <div class="lockControls">
-      <button type="button" onclick="toggleItemLock()">
-        🔒 選択した項目を固定・解除
-      </button>
     </div>
     <div class="historyControls">
       <button type="button" id="undoButton" disabled>
@@ -590,13 +622,10 @@
       <input type="file" accept="image/*" id="photo" style="display:none;">
       <p>写真の大きさ</p>
       <input type="range" id="photoSize" min="10" max="400" value="100" oninput="changeSize()">
-
       <details class="editorAccordion">
         <summary>📷 追加した写真の一覧</summary>
-
         <div id="photoList"></div>
       </details>
-
       <button type="button" onclick="duplicatePhoto()">
         写真を複製
       </button> <button type="button" onclick="removePhoto()">
@@ -620,13 +649,10 @@
     <!-- 文字タブ -->
     <div id="textTab" class="tabContent">
       <!-- 複数文字の管理 -->
-
       <details class="editorAccordion">
         <summary>✏️ 文字の一覧</summary>
-
         <div id="textList"></div>
       </details>
-
       <button type="button" onclick="addText()">＋ 文字を追加</button>
       <button type="button" onclick="duplicateText()">文字を複製</button>
       <button type="button" onclick="removeText()">選択した文字を削除</button>
@@ -649,39 +675,29 @@
       </select>
       <!-- 文字の装飾 -->
       <p>文字の装飾</p>
-
       <!-- 文字の装飾 -->
       <details class="editorAccordion textDecorationAccordion">
         <summary>✨ 文字の装飾・詳細設定</summary>
-
         <div class="decorationSettings">
-
           <label>
             <input type="checkbox" id="textOutline" onchange="changeTextStyle()">
             縁取りをつける
           </label>
-
           <div>
             <label for="outlineColor">縁取りの色</label>
             <input type="color" id="outlineColor" value="#333333" oninput="changeTextStyle()">
           </div>
-
           <div>
             <label for="outlineWidth">縁取りの太さ</label>
             <input type="range" id="outlineWidth" min="1" max="8" value="2" oninput="changeTextStyle()">
           </div>
-
           <label>
             <input type="checkbox" id="textShadow" onchange="changeTextStyle()">
             影をつける
           </label>
-
-
         </div>
       </details>
-
     </div> <!-- 背景タブ -->
-
     <div id="backgroundTab" class="tabContent">
       <p>背景の色</p>
       <button onclick="changeColor('#f8c8dc')">ピンク</button>
@@ -797,106 +813,181 @@
       const y = Number(img.dataset.y || 0);
       img.style.transform =
         `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotation}deg)`;
+      // 写真の位置変更と同時に操作ボタンも移動
+      updateItemCornerActions();
     }
-    function enablePhotoDrag(img) {
+    /* 写真と文字で共通のタッチ操作。種類の取り違えを防止する */
+    function enableItemDrag(item, kind) {
       const pointers = new Map();
-      // 1回の指操作で履歴を1つだけ保存する
+      const isPhoto = kind === "photo";
       let gestureHistorySaved = false;
-      let startX = 0;
-      let startY = 0;
+      let dragPointerX = 0;
+      let dragPointerY = 0;
+      let dragItemX = 0;
+      let dragItemY = 0;
       let startDistance = 0;
       let startAngle = 0;
       let startSize = 100;
       let startRotation = 0;
+      let startMidX = 0;
+      let startMidY = 0;
+      let startCenterX = 0;
+      let startCenterY = 0;
       function getDistance(a, b) {
         return Math.hypot(b.x - a.x, b.y - a.y);
       }
       function getAngle(a, b) {
-        return Math.atan2(
-          b.y - a.y,
-          b.x - a.x
-        ) * 180 / Math.PI;
+        return Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
       }
-      img.addEventListener("pointerdown", function (e) {
+      function getScale() {
+        const rect = storyArea.getBoundingClientRect();
+        return {
+          rect: rect,
+          x: rect.width / storyArea.offsetWidth,
+          y: rect.height / storyArea.offsetHeight
+        };
+      }
+      function refreshItem() {
+        if (isPhoto) {
+          updatePhotoItem(item);
+        } else {
+          updateTextTransform(item);
+        }
+      }
+      function beginSinglePointer(point) {
+        dragPointerX = point.x;
+        dragPointerY = point.y;
+        dragItemX = Number(item.dataset.x || 0);
+        dragItemY = Number(item.dataset.y || 0);
+      }
+      function beginPinch() {
+        const [a, b] = [...pointers.values()];
+        startDistance = getDistance(a, b);
+        startAngle = getAngle(a, b);
+        startSize = isPhoto
+          ? Number(item.dataset.size || 100)
+          : parseFloat(getComputedStyle(item).fontSize);
+        startRotation = Number(item.dataset.rotation || 0);
+        startMidX = (a.x + b.x) / 2;
+        startMidY = (a.y + b.y) / 2;
+        const rect = item.getBoundingClientRect();
+        startCenterX = rect.left + rect.width / 2;
+        startCenterY = rect.top + rect.height / 2;
+        // ピンチ中は吸着を使わない（つまんだ点がずれるのを防ぐ）
+        hideAllSnapGuides();
+      }
+      item.addEventListener("pointerdown", function (e) {
         e.preventDefault();
-        selectPhoto(img);
-        // ロック中は指で動かせない
-        if (img.dataset.locked === "true") {
-          return;
-        }
-        pointers.set(e.pointerId, {
-          x: e.clientX,
-          y: e.clientY
-        });
-        img.setPointerCapture(e.pointerId);
+        if (isPhoto) selectPhoto(item);
+        else selectText(item);
+        if (item.dataset.locked === "true") return;
+        if (pointers.has(e.pointerId) || pointers.size >= 2) return;
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        item.setPointerCapture(e.pointerId);
         if (pointers.size === 1) {
-          startX = e.clientX - Number(img.dataset.x || 0);
-          startY = e.clientY - Number(img.dataset.y || 0);
-        }
-        if (pointers.size === 2) {
-          const [a, b] = [...pointers.values()];
-          startDistance = getDistance(a, b);
-          startAngle = getAngle(a, b);
-          startSize = Number(img.dataset.size || 100);
-          startRotation = Number(img.dataset.rotation || 0);
+          beginSinglePointer({ x: e.clientX, y: e.clientY });
+        } else if (pointers.size === 2) {
+          beginPinch();
         }
       });
-      img.addEventListener("pointermove", function (e) {
-        const previousPoint = pointers.get(e.pointerId);
-        if (!previousPoint) return;
-        // 指が実際に動いたときだけ処理する
-        if (
-          previousPoint.x === e.clientX &&
-          previousPoint.y === e.clientY
-        ) return;
-        // 動かす前の状態を1回だけ保存
+      item.addEventListener("pointermove", function (e) {
+        const previous = pointers.get(e.pointerId);
+        if (!previous) return;
+        if (previous.x === e.clientX && previous.y === e.clientY) return;
         if (!gestureHistorySaved) {
           saveHistory();
           gestureHistorySaved = true;
         }
-        pointers.set(e.pointerId, {
-          x: e.clientX,
-          y: e.clientY
-        });
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        const storyScale = getScale();
         if (pointers.size === 1) {
-          img.dataset.x = String(e.clientX - startX);
-          img.dataset.y = String(e.clientY - startY);
-          updatePhotoItem(img);
-          // 中央に近づいたらスナップ
-          snapItemToCenter(img);
+          // 指が動いた距離を編集画面の倍率で割る
+          item.dataset.x = String(
+            dragItemX + (e.clientX - dragPointerX) / storyScale.x
+          );
+          item.dataset.y = String(
+            dragItemY + (e.clientY - dragPointerY) / storyScale.y
+          );
+          refreshItem();
+          snapItemToGuides(item);
+          updateCenterGuides(item);
+          updateEdgeGuides(item);
+          return;
         }
         if (pointers.size === 2 && startDistance > 0) {
           const [a, b] = [...pointers.values()];
-          const scale = getDistance(a, b) / startDistance;
-          const angle = getAngle(a, b) - startAngle;
-          const newSize = Math.max(
-            10,
-            Math.min(400, startSize * scale)
-          );
+          const distanceRatio = getDistance(a, b) / startDistance;
+          const angle =
+            ((getAngle(a, b) - startAngle + 540) % 360) - 180;
+          const newSize = isPhoto
+            ? Math.max(10, Math.min(400, startSize * distanceRatio))
+            : Math.max(8, Math.min(100, startSize * distanceRatio));
           const newRotation = startRotation + angle;
-          img.dataset.size = String(newSize);
-          img.dataset.rotation = String(newRotation);
-          updatePhotoItem(img);
-          document.getElementById("photoSize").value = newSize;
+          const zoom = newSize / startSize;
+          const rad = angle * Math.PI / 180;
+          if (isPhoto) {
+            item.dataset.size = String(newSize);
+            document.getElementById("photoSize").value = String(newSize);
+          } else {
+            item.style.fontSize = newSize + "px";
+            document.getElementById("textSize").value = String(newSize);
+            document.getElementById("textRotation").value = String(
+              Math.max(-180, Math.min(180, newRotation))
+            );
+            document.getElementById("rotationValue").textContent =
+              Math.round(newRotation) + "°";
+          }
+          item.dataset.rotation = String(newRotation);
+          // つまんだ位置を中心として、写真・文字の中心点を変換する
+          const midX = (a.x + b.x) / 2;
+          const midY = (a.y + b.y) / 2;
+          const offsetX = startCenterX - startMidX;
+          const offsetY = startCenterY - startMidY;
+          const nextCenterX = midX +
+            (offsetX * Math.cos(rad) - offsetY * Math.sin(rad)) * zoom;
+          const nextCenterY = midY +
+            (offsetX * Math.sin(rad) + offsetY * Math.cos(rad)) * zoom;
+          item.dataset.x = String(
+            (nextCenterX -
+              (storyScale.rect.left + storyScale.rect.width / 2)) /
+            storyScale.x
+          );
+          if (isPhoto) {
+            item.dataset.y = String(
+              (nextCenterY -
+                (storyScale.rect.top + storyScale.rect.height / 2)) /
+              storyScale.y
+            );
+          } else {
+            // 文字は上端を基準に配置しているため文字の高さを補正
+            const textTop = parseFloat(getComputedStyle(item).top) || 0;
+            item.dataset.y = String(
+              (nextCenterY - storyScale.rect.top) / storyScale.y -
+              textTop - item.offsetHeight / 2
+            );
+          }
+          refreshItem();
         }
       });
       function endPointer(e) {
+        if (!pointers.has(e.pointerId)) return;
         pointers.delete(e.pointerId);
-        // すべての指を離したら次の操作に備える
-        if (pointers.size === 0) {
-          gestureHistorySaved = false;
-        }
         if (pointers.size === 1) {
-          const remaining = [...pointers.values()][0];
-          startX = remaining.x - Number(img.dataset.x || 0);
-          startY = remaining.y - Number(img.dataset.y || 0);
+          // 2本指から1本指になった瞬間、現在位置からドラッグを再開
+          beginSinglePointer([...pointers.values()][0]);
+        } else if (pointers.size === 0) {
+          gestureHistorySaved = false;
+          startDistance = 0;
+          hideAllSnapGuides();
         }
       }
-
-      img.addEventListener("pointerup", endPointer);
-      img.addEventListener("pointercancel", endPointer);
+      item.addEventListener("pointerup", endPointer);
+      item.addEventListener("pointercancel", endPointer);
+      item.addEventListener("lostpointercapture", endPointer);
     }
-
+    function enablePhotoDrag(img) {
+      enableItemDrag(img, "photo");
+    }
     function duplicatePhoto() {
       if (!selectedPhoto) return;
       // 複製する前の状態を保存
@@ -1389,103 +1480,7 @@
     }
     // 文字をドラッグできるようにする
     function enableTextDrag(el) {
-      const pointers = new Map();
-      // 1回の指操作で履歴を1つだけ保存する
-      let gestureHistorySaved = false;
-      let startX = 0;
-      let startY = 0;
-      let startDistance = 0;
-      let startAngle = 0;
-      let startFontSize = 15;
-      let startRotation = 0;
-      function getDistance(a, b) {
-        return Math.hypot(b.x - a.x, b.y - a.y);
-      }
-      function getAngle(a, b) {
-        return Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
-      }
-      el.addEventListener("pointerdown", function (e) {
-        e.preventDefault();
-        selectText(el);
-        // ロック中は指で動かせない
-        if (el.dataset.locked === "true") {
-          return;
-        }
-        pointers.set(e.pointerId, {
-          x: e.clientX,
-          y: e.clientY
-        });
-        el.setPointerCapture(e.pointerId);
-        if (pointers.size === 1) {
-          startX = e.clientX - Number(el.dataset.x || 0);
-          startY = e.clientY - Number(el.dataset.y || 0);
-        }
-        if (pointers.size === 2) {
-          const [a, b] = [...pointers.values()];
-          startDistance = getDistance(a, b);
-          startAngle = getAngle(a, b);
-          startFontSize = parseFloat(getComputedStyle(el).fontSize);
-          startRotation = Number(el.dataset.rotation || 0);
-        }
-      });
-      el.addEventListener("pointermove", function (e) {
-        const previousPoint = pointers.get(e.pointerId);
-        if (!previousPoint) return;
-        // 指が実際に動いたか確認
-        if (
-          previousPoint.x === e.clientX &&
-          previousPoint.y === e.clientY
-        ) return;
-        // 移動・拡大・回転前の状態を1回だけ保存
-        if (!gestureHistorySaved) {
-          saveHistory();
-          gestureHistorySaved = true;
-        }
-        pointers.set(e.pointerId, {
-          x: e.clientX,
-          y: e.clientY
-        });
-        if (pointers.size === 1) {
-          const x = e.clientX - startX;
-          const y = e.clientY - startY;
-          el.dataset.x = String(x);
-          el.dataset.y = String(y);
-          updateTextTransform(el);
-          // 中央に近づいたらスナップ
-          snapItemToCenter(el);
-        }
-        if (pointers.size === 2 && startDistance > 0) {
-          const [a, b] = [...pointers.values()];
-          const scale = getDistance(a, b) / startDistance;
-          const angle = getAngle(a, b) - startAngle;
-          const newSize = Math.max(
-            8,
-            Math.min(100, startFontSize * scale)
-          );
-          const newRotation = startRotation + angle;
-          el.style.fontSize = newSize + "px";
-          el.dataset.rotation = String(newRotation);
-          updateTextTransform(el);
-          document.getElementById("textSize").value = newSize;
-          document.getElementById("textRotation").value =
-            Math.max(-180, Math.min(180, newRotation));
-          document.getElementById("rotationValue").textContent =
-            Math.round(newRotation) + "°";
-        }
-      }); function endPointer(e) {
-        pointers.delete(e.pointerId);
-        // すべての指を離したらリセット
-        if (pointers.size === 0) {
-          gestureHistorySaved = false;
-        }
-        // 2本指から1本指になったときの位置調整
-        if (pointers.size === 1) {
-          const remaining = [...pointers.values()][0];
-          startX = remaining.x - Number(el.dataset.x || 0);
-          startY = remaining.y - Number(el.dataset.y || 0);
-        }
-      } el.addEventListener("pointerup", endPointer);
-      el.addEventListener("pointercancel", endPointer);
+      enableItemDrag(el, "text");
     }
     // 最初は文字を選択しない
     refreshTextList();
@@ -1519,6 +1514,8 @@
       const angle = Number(el.dataset.rotation || 0);
       el.style.transform =
         `translate(calc(-50% + ${x}px), ${y}px) rotate(${angle}deg)`;
+      // 文字の位置変更と同時に操作ボタンも移動
+      updateItemCornerActions();
     }
     function changeTextSize() {
       if (!selectedText) return;
@@ -1687,8 +1684,26 @@
     // 写真や文字の変更を監視
     function startStoryDraftWatching() {
       const story = document.querySelector(".story");
-      const observer = new MutationObserver(function () {
-        scheduleStoryDraftSave();
+      const observer = new MutationObserver(function (changes) {
+        const contentChanged = changes.some(function (change) {
+          const target = change.target.nodeType === Node.ELEMENT_NODE
+            ? change.target : change.target.parentElement;
+          if (!target) return false;
+          if (target.closest(".centerGuide, .edgeGuide, .itemCornerActions")) {
+            return false;
+          }
+          if (change.type === "childList") {
+            return [...change.addedNodes, ...change.removedNodes].some(
+              function (node) {
+                return node.nodeType !== Node.ELEMENT_NODE ||
+                  node.matches(".storyPhotoItem, .storyTextItem");
+              }
+            );
+          }
+          return target === story ||
+            !!target.closest(".storyPhotoItem, .storyTextItem");
+        });
+        if (contentChanged) scheduleStoryDraftSave();
       });
       observer.observe(story, {
         childList: true,
@@ -1703,10 +1718,13 @@
         console.warn("このブラウザでは自動保存を利用できません");
         return;
       }
-      const request = indexedDB.open(
-        "StoryPaletteDraftDB",
-        1
-      );
+      let request;
+      try {
+        request = indexedDB.open("StoryPaletteDraftDB", 1);
+      } catch (error) {
+        console.warn("この環境では自動保存が使えません", error);
+        return;
+      }
       request.onupgradeneeded = function (event) {
         const db = event.target.result;
         if (!db.objectStoreNames.contains("drafts")) {
@@ -1887,7 +1905,7 @@
       verticalGuide.style.display = "none";
       horizontalGuide.style.display = "none";
     }
-    /* 写真や文字の中心位置を確認 */
+    /* 写真や文字がガイド位置に揃っているか確認 */
     function updateCenterGuides(item) {
       const storyRect = storyArea.getBoundingClientRect();
       const itemRect = item.getBoundingClientRect();
@@ -1895,65 +1913,61 @@
       const centerY = storyRect.top + storyRect.height / 2;
       const itemCenterX = itemRect.left + itemRect.width / 2;
       const itemCenterY = itemRect.top + itemRect.height / 2;
-      // 中央から8px以内ならガイド線を表示
-      const nearCenterX = Math.abs(itemCenterX - centerX) < 8;
-      const nearCenterY = Math.abs(itemCenterY - centerY) < 8;
       verticalGuide.style.display =
-        nearCenterX ? "block" : "none";
+        Math.abs(itemCenterX - centerX) < 2 ? "block" : "none";
       horizontalGuide.style.display =
-        nearCenterY ? "block" : "none";
+        Math.abs(itemCenterY - centerY) < 2 ? "block" : "none";
     }
-    /* ドラッグ中に中央位置をチェック */
-    storyArea.addEventListener("pointermove", function (e) {
-      const item = e.target.closest(
-        ".storyPhotoItem, .storyTextItem"
-      );
-      if (!item) return;
-      // マウスを乗せただけでは表示しない
-      if (e.pointerType === "mouse" && e.buttons === 0) {
-        return;
-      }
-      updateCenterGuides(item);
-    });
-    /* 指を離したらガイド線を消す */
-    storyArea.addEventListener("pointerup", hideCenterGuides);
-    storyArea.addEventListener("pointercancel", hideCenterGuides);
-    storyArea.addEventListener("pointerleave", hideCenterGuides);
-    /* 写真・文字を中央にスナップさせる */
-    function snapItemToCenter(item) {
+    /* 中央と四辺への吸着を一度に計算（位置補正を蓄積しない） */
+    function snapItemToGuides(item) {
       const storyRect = storyArea.getBoundingClientRect();
       const itemRect = item.getBoundingClientRect();
+      const scaleX = storyRect.width / storyArea.offsetWidth;
+      const scaleY = storyRect.height / storyArea.offsetHeight;
+      const marginX = 10 * scaleX;
+      const marginY = 10 * scaleY;
       const centerX = storyRect.left + storyRect.width / 2;
       const centerY = storyRect.top + storyRect.height / 2;
       const itemCenterX = itemRect.left + itemRect.width / 2;
       const itemCenterY = itemRect.top + itemRect.height / 2;
-      const differenceX = centerX - itemCenterX;
-      const differenceY = centerY - itemCenterY;
-      // 中央から8px以内なら吸い付く
-      const snapDistance = 8;
-      // 画面上の距離を編集エリア内の座標に変換
-      const scaleX = storyRect.width / storyArea.offsetWidth;
-      const scaleY = storyRect.height / storyArea.offsetHeight;
-      let changed = false;
-      if (Math.abs(differenceX) <= snapDistance) {
-        item.dataset.x = String(
-          Number(item.dataset.x || 0) + differenceX / scaleX
-        );
-        changed = true;
+      function softSnap(delta) {
+        const distance = Math.abs(delta);
+        if (distance >= 18) return 0;
+        if (distance <= 8) return delta;
+        return delta * (18 - distance) / 10;
       }
-      if (Math.abs(differenceY) <= snapDistance) {
-        item.dataset.y = String(
-          Number(item.dataset.y || 0) + differenceY / scaleY
-        );
-        changed = true;
+      const centerDX = centerX - itemCenterX;
+      const centerDY = centerY - itemCenterY;
+      const leftDiff = storyRect.left + marginX - itemRect.left;
+      const rightDiff = storyRect.right - marginX - itemRect.right;
+      const topDiff = storyRect.top + marginY - itemRect.top;
+      const bottomDiff = storyRect.bottom - marginY - itemRect.bottom;
+      // 同じ方向に中央と端が競合しないよう、中央を優先する
+      // 大きな写真では中央と端の吸着位置が近すぎる場合がある。
+      // 吸着範囲（各18px）が重なる端は候補から除く。
+      function eligibleEdge(centerDelta, first, second) {
+        const candidates = [first, second].filter(function (delta) {
+          return Math.abs(delta - centerDelta) >= 36;
+        });
+        if (candidates.length === 0) return 0;
+        const nearest = candidates.reduce(function (a, b) {
+          return Math.abs(a) <= Math.abs(b) ? a : b;
+        });
+        return softSnap(nearest);
       }
-      // 中央に吸い付いた位置を画面に反映
-      if (changed) {
-        if (item.classList.contains("storyPhotoItem")) {
-          updatePhotoItem(item);
-        } else if (item.classList.contains("storyTextItem")) {
-          updateTextTransform(item);
-        }
+      const dx = Math.abs(centerDX) < 18
+        ? softSnap(centerDX)
+        : eligibleEdge(centerDX, leftDiff, rightDiff);
+      const dy = Math.abs(centerDY) < 18
+        ? softSnap(centerDY)
+        : eligibleEdge(centerDY, topDiff, bottomDiff);
+      if (dx === 0 && dy === 0) return;
+      item.dataset.x = String(Number(item.dataset.x || 0) + dx / scaleX);
+      item.dataset.y = String(Number(item.dataset.y || 0) + dy / scaleY);
+      if (item.classList.contains("storyPhotoItem")) {
+        updatePhotoItem(item);
+      } else {
+        updateTextTransform(item);
       }
     }
     /* 選択した写真・文字を整列する */
@@ -2036,11 +2050,6 @@
       item.dataset.locked = isLocked ? "false" : "true";
       refreshPhotoList();
       refreshTextList();
-      if (isLocked) {
-        alert("ロックを解除しました");
-      } else {
-        alert("位置をロックしました");
-      }
     }
     /* ロック状態に合わせて編集スライダーを切り替える */
     function updateLockControls() {
@@ -2074,30 +2083,156 @@
     });
     // 最初の状態を反映
     updateLockControls();
-
     /* 詳細ツールの表示・非表示 */
     function toggleAdvancedTools() {
       const editor = document.getElementById("editorArea");
       const button = document.getElementById("toolToggleButton");
-
       const isCollapsed =
         editor.classList.toggle("toolsCollapsed");
-
       button.textContent = isCollapsed
         ? "⚙️ 詳細ツールを表示 ▼"
         : "⚙️ 詳細ツールを閉じる ▲";
-
       button.setAttribute(
         "aria-expanded",
         String(!isCollapsed)
       );
     }
-
     // ページを開いたときは折りたたんだ状態にする
     document.getElementById("editorArea")
       .classList.add("toolsCollapsed");
-
+    /* 選択した写真・文字の右上に操作ボタンを表示 */
+    const itemCornerActions = document.createElement("div");
+    itemCornerActions.className = "itemCornerActions";
+    itemCornerActions.innerHTML = `
+  <button type="button"
+    class="cornerLock"
+    aria-label="ロック切り替え">🔓</button>
+  <button type="button"
+    class="cornerDelete"
+    aria-label="削除">×</button>
+`;
+    storyArea.appendChild(itemCornerActions);
+    // 鍵ボタン
+    itemCornerActions.querySelector(".cornerLock")
+      .addEventListener("click", function () {
+        toggleItemLock();
+      });
+    // ×ボタン
+    itemCornerActions.querySelector(".cornerDelete")
+      .addEventListener("click", function () {
+        deleteSelectedItem();
+      });
+    /* ボタンを選択中の写真・文字の右上に配置 */
+    function updateItemCornerActions() {
+      const item = storyArea.querySelector(
+        ".storyPhotoItem.selected, .storyTextItem.selected"
+      );
+      if (!item) {
+        itemCornerActions.style.display = "none";
+        return;
+      }
+      const storyRect = storyArea.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      // 表示倍率を考慮
+      const scaleX = storyRect.width / storyArea.offsetWidth;
+      const scaleY = storyRect.height / storyArea.offsetHeight;
+      // アイテム右上の位置
+      let left =
+        (itemRect.right - storyRect.left) / scaleX - 56;
+      let top =
+        (itemRect.top - storyRect.top) / scaleY - 10;
+      // ストーリーの外に出ないようにする
+      left = Math.max(
+        4,
+        Math.min(left, storyArea.offsetWidth - 60)
+      );
+      top = Math.max(
+        4,
+        Math.min(top, storyArea.offsetHeight - 30)
+      );
+      itemCornerActions.style.left = left + "px";
+      itemCornerActions.style.top = top + "px";
+      itemCornerActions.style.display = "flex";
+      // ロック状態に合わせて鍵マークを変更
+      const lockButton =
+        itemCornerActions.querySelector(".cornerLock");
+      const isLocked = item.dataset.locked === "true";
+      // 鍵の形は変えず、色の濃さだけ切り替える
+      lockButton.textContent = "🔒";
+      lockButton.classList.toggle("isLocked", isLocked);
+      lockButton.setAttribute(
+        "aria-label",
+        isLocked ? "ロックを解除" : "ロックする"
+      );
+    }
+    /* 写真の移動・選択・重なり順の変更に追従 */
+    const itemCornerObserver = new MutationObserver(function (changes) {
+      // 操作ボタン自身の変化では再計算しない
+      const itemChanged = changes.some(function (change) {
+        return change.target !== itemCornerActions &&
+          !itemCornerActions.contains(change.target);
+      });
+      if (itemChanged) {
+        updateItemCornerActions();
+      }
+    });
+    itemCornerObserver.observe(storyArea, {
+      childList: true,
+      attributes: true,
+      attributeFilter: ["class", "style", "data-locked"],
+      subtree: true
+    });
+    window.addEventListener("resize", updateItemCornerActions);
+    updateItemCornerActions();
+    /* 端のガイドラインを作成 */
+    const edgeGuides = {};
+    ["left", "right", "top", "bottom"].forEach(function (side) {
+      const guide = document.createElement("div");
+      guide.className = "edgeGuide " + side;
+      storyArea.appendChild(guide);
+      edgeGuides[side] = guide;
+    });
+    /* 端に吸着したときガイドラインを表示 */
+    function updateEdgeGuides(item) {
+      const storyRect = storyArea.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      const scaleX = storyRect.width / storyArea.offsetWidth;
+      const scaleY = storyRect.height / storyArea.offsetHeight;
+      const marginX = 10 * scaleX;
+      const marginY = 10 * scaleY;
+      const positions = {
+        left: Math.abs(
+          itemRect.left - (storyRect.left + marginX)
+        ) < 2,
+        right: Math.abs(
+          itemRect.right - (storyRect.right - marginX)
+        ) < 2,
+        top: Math.abs(
+          itemRect.top - (storyRect.top + marginY)
+        ) < 2,
+        bottom: Math.abs(
+          itemRect.bottom - (storyRect.bottom - marginY)
+        ) < 2
+      };
+      Object.keys(edgeGuides).forEach(function (side) {
+        const guide = edgeGuides[side];
+        const nextDisplay = positions[side] ? "block" : "none";
+        // 表示状態が変わるときだけ更新する
+        if (guide.style.display !== nextDisplay) {
+          guide.style.display = nextDisplay;
+        }
+      });
+    }
+    /* 操作がすべて終わったときだけ中央・端のガイドを消す */
+    function hideAllSnapGuides() {
+      document.querySelectorAll(".centerGuide, .edgeGuide").forEach(
+        function (guide) {
+          if (guide.style.display !== "none") {
+            guide.style.display = "none";
+          }
+        }
+      );
+    }
   </script>
 </body>
-
 </html>
