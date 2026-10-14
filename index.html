@@ -6,7 +6,7 @@
         content="width=device-width, initial-scale=1">
   <title>StoryPalette</title>
 
-  <style>
+ <style>
     body {
       font-family: sans-serif;
       background: #f8edf2;
@@ -14,28 +14,48 @@
       padding: 20px;
     }
 
-    .story {
-      width: 270px;
-      height: 480px;
-      background: #e9dfce;
-      margin: 20px auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-    }
+    
+.story {
+  width: 270px;
+  height: 480px;
+  background: #e9dfce;
+  margin: 20px auto;
+  position: relative;
+  overflow: hidden;
+}
 
-    .story img {
-      width: 220px;
-      max-height: 320px;
-      object-fit: contain;
-      touch-action: none;
-      cursor: grab;
-      user-select: none;
-    }
-     
+.story img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
 
+#previewText {
+  position: absolute;
+  left: 50%;
+  top: 400px;
+  width: max-content;
+  max-width: 240px;
+  margin: 0;
+  padding: 0;
+  color: #555555;
+  font-size: 15px;
+  font-family: sans-serif;
+  line-height: 1.2;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  transform: translateX(-50%);
+}
     button {
       margin: 5px;
       padding: 8px 12px;
@@ -76,24 +96,48 @@
      <!-- 文字入力 -->
      <p>ストーリーに入れる文字</p>
 
-     <input
-     type="text"
-     id="storyText"
-     value="My Memories ♡"
-     oninput="changeText()"
-     >
+     <textarea
+       id="storyText"
+       rows="3"
+       oninput="changeText()"
+     >My Memories ♡</textarea>
 
      <br>
+     <p>文字の色</p>
+     <input
+      type="color"
+      id="textColor"
+      value="#555555"
+      oninput="changeTextColor()"
+     >
+     <p>文字の大きさ</p>
+
+     <input
+      type="range"
+      id="textSize"
+      min="10"
+      max="40"
+      value="15"
+      oninput="changeTextSize()"
+     >
+     <p>文字のフォント</p>
+
+     <select id="textFont" onchange="changeTextFont()">
+     <option value="sans-serif">ゴシック体</option>
+     <option value="serif">明朝体</option>
+     <option value="cursive">筆記体</option>
+     <option value="monospace">等幅フォント</option>
+     </select>
      <!-- 写真サイズ調整 -->
      <p>写真の大きさ</p>
 
      <input
-     type="range"
-     id="photoSize"
-     min="50"
-     max="150"
-     value="100"
-     oninput="changeSize()"
+      type="range"
+      id="photoSize"
+      min="50"
+      max="150"
+      value="100"
+      oninput="changeSize()"
      >
   
      <!-- 保存ボタン -->
@@ -146,10 +190,21 @@ photo.addEventListener("change", function () {
 
   const reader = new FileReader();
 
-  reader.onload = function (event) {
-    preview.src = event.target.result;
+   
+ reader.onload = function (event) {
+  preview.onload = function () {
+    photoX = 0;
+    photoY = 0;
+
+    document.getElementById("photoSize").value = 100;
+
+    updatePhotoPosition();
     preview.style.display = "block";
-  };
+ };
+
+  preview.src = event.target.result;
+};
+
 
   reader.onerror = function () {
     alert("写真の読み込みに失敗しました");
@@ -191,6 +246,7 @@ photo.addEventListener("change", function () {
 
       ctx.fillRect(0, 0, 1080, 1920);
 
+      
       // 写真
       if (preview.complete && preview.naturalWidth > 0) {
         const photoSize =
@@ -205,22 +261,68 @@ photo.addEventListener("change", function () {
         const h = preview.naturalHeight * scale;
 
         ctx.drawImage(
-         preview,
-         (1080 - w) / 2 + photoX * 4,
-         (1920 - h) / 2 - 100 + photoY * 4,
-         w,
-         h
+          preview,
+          (1080 - w) / 2 + photoX * 4,
+          (1920 - h) / 2 + photoY * 4,
+          w,
+          h
         );
       }
 
-      // 文字
-      const text = document
-        .getElementById("storyText").value;
 
-      ctx.fillStyle = "#555555";
-      ctx.font = "60px sans-serif";
+      
+      // 文字
+      const text = document.getElementById("storyText").value;
+      const textSize = Number(document.getElementById("textSize").value);
+      const textFont = document.getElementById("textFont").value;
+      const textColor = document.getElementById("textColor").value;
+
+      ctx.fillStyle = textColor;
+      ctx.font = `${textSize * 4}px ${textFont}`;
       ctx.textAlign = "center";
-      ctx.fillText(text, 540, 1650, 980);
+      ctx.textBaseline = "top";
+
+      const maxTextWidth = 960;
+      const lineHeight = textSize * 4 * 1.2;
+      const textCenterX = 540 + textX * 4;
+      const textTopY = 1600 + textY * 4;
+
+      const lines = [];
+      const paragraphs = text.split("\n");
+
+      paragraphs.forEach(function(paragraph) {
+        if (paragraph === "") {
+          lines.push("");
+          return;
+        }
+
+        let line = "";
+
+        for (const char of paragraph) {
+          const testLine = line + char;
+
+          if (ctx.measureText(testLine).width > maxTextWidth && line !== "") {
+            lines.push(line);
+            line = char;
+          } else {
+            line = testLine;
+          }
+        }
+
+        if (line !== "") {
+          lines.push(line);
+        }
+      });
+
+      lines.forEach(function(line, index) {
+        ctx.fillText(
+          line,
+          textCenterX,
+          textTopY + index * lineHeight
+        );
+      });
+
+
 
       
       // 完成画像を生成
@@ -283,13 +385,79 @@ preview.addEventListener("pointercancel", function() {
   dragging = false;
 });
 
+
+
 function updatePhotoPosition() {
-  const size = document.getElementById("photoSize").value / 100;
+  if (!preview.naturalWidth) return;
+
+  const size =
+    document.getElementById("photoSize").value / 100;
+
+  const scale = Math.min(
+    220 / preview.naturalWidth,
+    320 / preview.naturalHeight
+  ) * size;
+
+  const w = preview.naturalWidth * scale;
+  const h = preview.naturalHeight * scale;
+
+  preview.style.width = `${w}px`;
+  preview.style.height = `${h}px`;
 
   preview.style.transform =
-    `translate(${photoX}px, ${photoY}px) scale(${size})`;
+    `translate(calc(-50% + ${photoX}px), calc(-50% + ${photoY}px))`;
 }
+  
+let textX = 0;
+let textY = 0;
 
+let textDragging = false;
+let textStartX = 0;
+let textStartY = 0;
+
+const previewText = document.getElementById("previewText");
+
+previewText.addEventListener("pointerdown", function(e) {
+  textDragging = true;
+
+  textStartX = e.clientX - textX;
+  textStartY = e.clientY - textY;
+
+  previewText.setPointerCapture(e.pointerId);
+});
+
+previewText.addEventListener("pointermove", function(e) {
+  if (!textDragging) return;
+
+  textX = e.clientX - textStartX;
+  textY = e.clientY - textStartY;
+
+  previewText.style.transform =
+  `translate(calc(-50% + ${textX}px), ${textY}px)`;
+});
+
+previewText.addEventListener("pointerup", function() {
+  textDragging = false;
+});
+
+previewText.addEventListener("pointercancel", function() {
+  textDragging = false;
+});
+function changeTextColor() {
+  const color = document.getElementById("textColor").value;
+  document.getElementById("previewText").style.color = color;
+}
+function changeTextSize() {
+  const size = document.getElementById("textSize").value;
+
+  document.getElementById("previewText").style.fontSize =
+    `${size}px`;
+}
+function changeTextFont() {
+  const font = document.getElementById("textFont").value;
+
+  document.getElementById("previewText").style.fontFamily = font;
+}
   </script>
 
 </body>
