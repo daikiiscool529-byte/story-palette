@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>StoryPalette</title>
-
   <style>
     body {
       font-family: sans-serif;
@@ -19,7 +18,6 @@
     * {
       box-sizing: border-box;
     }
-
 
     .story {
       width: 270px;
@@ -214,7 +212,7 @@
 
     /* 文字の縁取り */
     .storyTextItem {
-      -webkit-text-stroke: 1px #333333;
+      -webkit-text-stroke: 0px;
       paint-order: stroke fill;
     }
 
@@ -254,95 +252,394 @@
       background: #a87898;
       color: white;
     }
+
+    .addPhotoButton {
+      display: inline-block;
+      background: #a87898;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 12px auto;
+    }
+
+    /* 元に戻す・やり直すボタン */
+    .historyControls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px auto;
+    }
+
+    .historyControls button {
+      background: #a87898;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 14px;
+    }
+
+    .historyControls button:disabled {
+      background: #ddd;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    /* 新規作成ボタン */
+    .newStoryControls {
+      text-align: center;
+      margin: 12px auto;
+    }
+
+    .newStoryControls button {
+      background: #f0e4eb;
+      color: #8c526f;
+      border: 1px solid #d8b9ca;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* 共通削除ボタン */
+    .deleteControls {
+      display: flex;
+      justify-content: center;
+      margin: 12px auto;
+    }
+
+    .deleteControls button {
+      background: #fff0f3;
+      color: #c04f68;
+      border: 1px solid #efb9c5;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* 選択されていないときの削除ボタン */
+    .deleteControls button:disabled {
+      background: #eeeeee;
+      color: #999999;
+      border-color: #dddddd;
+      cursor: not-allowed;
+    }
+
+    /* 中央配置のガイドライン */
+    .centerGuide {
+      position: absolute;
+      display: none;
+      background: #e05b97;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .centerGuide.vertical {
+      top: 0;
+      left: 50%;
+      width: 1px;
+      height: 100%;
+    }
+
+    .centerGuide.horizontal {
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+    }
+
+    /* 写真・文字の整列ボタン */
+    .alignControls {
+      max-width: 360px;
+      margin: 15px auto;
+      padding: 12px;
+      background: white;
+      border-radius: 12px;
+    }
+
+    .alignControls p {
+      color: #665260;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .alignControls button {
+      background: #f0e4eb;
+      color: #665260;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+
+    /* ロックボタン */
+    .lockControls {
+      margin: 12px auto;
+      text-align: center;
+    }
+
+    .lockControls button {
+      background: #f0e4eb;
+      color: #665260;
+      border: 1px solid #d8b9ca;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* ロック中の選択表示 */
+    .storyPhotoItem.selected[data-locked="true"],
+    .storyTextItem.selected[data-locked="true"] {
+      outline: 2px solid #8c526f;
+    }
+
+    /* ロック中のスライダー */
+    #photoSize:disabled,
+    #textSize:disabled,
+    #textRotation:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      filter: grayscale(100%);
+    }
+
+    /* ロックした項目を選択中は鍵マークを表示 */
+    .story:has(.storyPhotoItem.selected[data-locked="true"],
+      .storyTextItem.selected[data-locked="true"])::after {
+      content: "🔒";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      padding: 5px;
+      z-index: 10000;
+      pointer-events: none;
+    }
+
+    /* 詳細ツールの開閉ボタン */
+    .toolToggleControls {
+      max-width: 360px;
+      margin: 12px auto;
+      text-align: center;
+    }
+
+    .toolToggleControls button {
+      width: 100%;
+      background: #f0e4eb;
+      color: #665260;
+      border: 1px solid #d8b9ca;
+      border-radius: 10px;
+      padding: 13px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* 最初は詳細ツールを折りたたむ */
+    #editorArea.toolsCollapsed .alignControls,
+    #editorArea.toolsCollapsed .lockControls {
+      display: none;
+    }
+
+    /* 写真・文字一覧の折りたたみ */
+    .editorAccordion {
+      background: #f8f0f5;
+      border: 1px solid #ead8e3;
+      border-radius: 10px;
+      margin: 12px auto;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .editorAccordion summary {
+      padding: 14px;
+      color: #665260;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .editorAccordion[open] summary {
+      border-bottom: 1px solid #ead8e3;
+    }
+
+    .editorAccordion #photoList,
+    .editorAccordion #textList {
+      padding: 10px;
+    }
+
+    /* 文字の装飾設定 */
+    .textDecorationAccordion {
+      margin-top: 18px;
+    }
+
+    .decorationSettings {
+      padding: 14px;
+      text-align: left;
+    }
+
+    .decorationSettings>label {
+      display: block;
+      margin: 12px 0;
+      color: #665260;
+      font-size: 14px;
+    }
+
+    .decorationSettings>div {
+      margin: 14px 0;
+    }
+
+    .decorationSettings>div label {
+      display: block;
+      margin-bottom: 6px;
+      color: #665260;
+      font-size: 13px;
+    }
   </style>
 </head>
 
 <body>
-
   <h1>StoryPalette</h1>
   <p>写真を選んでストーリーを作ろう！</p>
   <div id="editorArea">
-
     <!-- 編集用ストーリー表示 -->
     <div class="story">
-      <img id="preview" alt="" style="display:none;">
+    </div>
+    <!-- 編集タブ -->
+    <!-- 元に戻す・やり直す -->
+    <!-- 選択した写真・文字を削除 -->
+    <!-- 選択した写真・文字を削除 -->
+    <div class="deleteControls">
+      <button type="button" id="deleteSelectedButton" onclick="deleteSelectedItem()" disabled>
+        🗑️ 写真か文字を選択してね
+      </button>
+    </div>
+    <!-- 写真・文字の整列 -->
+
+    <!-- 詳細ツールの開閉ボタン -->
+    <div class="toolToggleControls">
+      <button type="button" id="toolToggleButton" onclick="toggleAdvancedTools()" aria-expanded="false">
+        ⚙️ 詳細ツールを表示 ▼
+      </button>
     </div>
 
-    <!-- 編集タブ -->
+    <div class="alignControls">
+      <p>選択した写真・文字の位置を揃える</p>
+      <div>
+        <button type="button" onclick="alignSelectedItem('left')">
+          左揃え
+        </button>
+        <button type="button" onclick="alignSelectedItem('centerX')">
+          左右中央
+        </button>
+        <button type="button" onclick="alignSelectedItem('right')">
+          右揃え
+        </button>
+      </div>
+      <div>
+        <button type="button" onclick="alignSelectedItem('top')">
+          上揃え
+        </button>
+        <button type="button" onclick="alignSelectedItem('centerY')">
+          上下中央
+        </button>
+        <button type="button" onclick="alignSelectedItem('bottom')">
+          下揃え
+        </button>
+      </div>
+    </div>
+    <!-- 写真・文字のロック -->
+    <div class="lockControls">
+      <button type="button" onclick="toggleItemLock()">
+        🔒 選択した項目を固定・解除
+      </button>
+    </div>
+    <div class="historyControls">
+      <button type="button" id="undoButton" disabled>
+        ↶ 元に戻す
+      </button>
+      <button type="button" id="redoButton" disabled>
+        ↷ やり直す
+      </button>
+    </div>
+    <!-- 新しいストーリーを作る -->
+    <div class="newStoryControls">
+      <button type="button" onclick="newStory()">
+        ＋ 新規作成
+      </button>
+    </div>
     <div class="editTabs">
       <button type="button" class="tabButton active" onclick="showTab('photo', this)">📷 写真</button>
-
       <button type="button" class="tabButton" onclick="showTab('text', this)">✏️ 文字</button>
-
       <button type="button" class="tabButton" onclick="showTab('background', this)">🎨 背景</button>
     </div>
-
     <!-- 写真タブ -->
     <div id="photoTab" class="tabContent active">
-      <p>＋ 写真を追加</p>
-      <input type="file" accept="image/*" id="photo">
-
+      <label for="photo" class="addPhotoButton">
+        ＋ 写真を追加
+      </label>
+      <input type="file" accept="image/*" id="photo" style="display:none;">
       <p>写真の大きさ</p>
       <input type="range" id="photoSize" min="10" max="400" value="100" oninput="changeSize()">
 
-      <p>追加した写真</p>
-      <div id="photoList"></div>
+      <details class="editorAccordion">
+        <summary>📷 追加した写真の一覧</summary>
+
+        <div id="photoList"></div>
+      </details>
 
       <button type="button" onclick="duplicatePhoto()">
         写真を複製
-      </button>
-
-
-      <button type="button" onclick="removePhoto()">
+      </button> <button type="button" onclick="removePhoto()">
         選択した写真を削除
       </button>
-
       <div>
         <button type="button" onclick="movePhotoForward()">
           選択した写真を前面へ
         </button>
-
         <button type="button" onclick="movePhotoBackward()">
           選択した写真を背面へ
         </button>
       </div>
-
-
-      <p>写真と文字の重なり順</p>
-      <button type="button" onclick="setPhotoLayer('back')">
+      <p>写真と文字の重なり順</p> <button type="button" onclick="changePhotoLayerWithHistory('back')">
         写真を背面へ
       </button>
-      <button type="button" onclick="setPhotoLayer('front')">
+      <button type="button" onclick="changePhotoLayerWithHistory('front')">
         写真を前面へ
       </button>
-
     </div>
-
     <!-- 文字タブ -->
     <div id="textTab" class="tabContent">
       <!-- 複数文字の管理 -->
-      <p>文字の一覧</p>
-      <div id="textList"></div>
+
+      <details class="editorAccordion">
+        <summary>✏️ 文字の一覧</summary>
+
+        <div id="textList"></div>
+      </details>
 
       <button type="button" onclick="addText()">＋ 文字を追加</button>
-
       <button type="button" onclick="duplicateText()">文字を複製</button>
-
       <button type="button" onclick="removeText()">選択した文字を削除</button>
-
       <p>ストーリーに入れる文字</p>
       <textarea id="storyText" rows="3" oninput="changeText()"></textarea>
-
       <p>文字の色</p>
       <input type="color" id="textColor" value="#555555" oninput="changeTextColor()">
       <p>文字の大きさ</p>
       <input type="range" id="textSize" min="10" max="40" value="15" oninput="changeTextSize()">
-
       <div>
         <label for="textRotation">文字の回転：<span id="rotationValue">0°</span></label>
         <input type="range" id="textRotation" min="-180" max="180" value="0" oninput="changeTextRotation()">
       </div>
-
       <p>文字のフォント</p>
       <select id="textFont" onchange="changeTextFont()">
         <option value="sans-serif">ゴシック体</option>
@@ -350,287 +647,247 @@
         <option value="cursive">筆記体</option>
         <option value="monospace">等幅フォント</option>
       </select>
-
       <!-- 文字の装飾 -->
       <p>文字の装飾</p>
 
-      <label>
-        <input type="checkbox" id="textOutline" onchange="changeTextStyle()">
-        縁取りをつける
+      <!-- 文字の装飾 -->
+      <details class="editorAccordion textDecorationAccordion">
+        <summary>✨ 文字の装飾・詳細設定</summary>
 
-        <div>
-          <label for="outlineColor">縁取りの色</label>
-          <input type="color" id="outlineColor" value="#333333" oninput="changeTextStyle()">
+        <div class="decorationSettings">
+
+          <label>
+            <input type="checkbox" id="textOutline" onchange="changeTextStyle()">
+            縁取りをつける
+          </label>
+
+          <div>
+            <label for="outlineColor">縁取りの色</label>
+            <input type="color" id="outlineColor" value="#333333" oninput="changeTextStyle()">
+          </div>
+
+          <div>
+            <label for="outlineWidth">縁取りの太さ</label>
+            <input type="range" id="outlineWidth" min="1" max="8" value="2" oninput="changeTextStyle()">
+          </div>
+
+          <label>
+            <input type="checkbox" id="textShadow" onchange="changeTextStyle()">
+            影をつける
+          </label>
+
+
         </div>
+      </details>
 
-        <div>
-          <label for="outlineWidth">縁取りの太さ</label>
-          <input type="range" id="outlineWidth" min="1" max="8" value="2" oninput="changeTextStyle()">
-        </div>
+    </div> <!-- 背景タブ -->
 
-      </label>
-
-      <br>
-
-      <label>
-        <input type="checkbox" id="textShadow" onchange="changeTextStyle()">
-        影をつける
-      </label>
-
-    </div>
-
-
-    <!-- 背景タブ -->
     <div id="backgroundTab" class="tabContent">
       <p>背景の色</p>
-
       <button onclick="changeColor('#f8c8dc')">ピンク</button>
       <button onclick="changeColor('#c8e7ff')">水色</button>
       <button onclick="changeColor('#e9dfce')">ベージュ</button>
-
       <!-- 自由に背景色を選択 -->
-      <p>好きな色を選ぶ</p>
-      <input type="color" id="backgroundColor" value="#e9dfce" oninput="changeColor(this.value)">
-    </div>
-
-
-    <!-- 保存ボタン（どのタブでも表示） -->
+      <p>好きな色を選ぶ</p> <input type="color" id="backgroundColor" value="#e9dfce" onchange="changeColor(this.value)">
+    </div> <!-- 保存ボタン（どのタブでも表示） -->
     <br>
     <button onclick="saveStory()" class="saveButton">
       画像を保存する
     </button>
-
   </div> <!-- editorAreaを閉じる -->
-
   <!-- 完成画像の表示画面 -->
   <div id="saveArea" style="display:none; margin:20px auto;">
-
     <p>完成した画像を長押しして保存してね！</p>
-
     <img id="savedImage" alt="完成したストーリー" style="width:270px; max-width:100%;">
-
     <br>
-
     <button onclick="backToEdit()">
       ← 編集に戻る
     </button>
-
   </div>
-
   <script>
     const photo = document.getElementById("photo");
-    const preview = document.getElementById("preview");
-
-
     let selectedPhoto = null;
     let photoCounter = 0;
-
     const photoList = document.getElementById("photoList");
-
     photo.classList.add("photoUpload");
-
     photo.addEventListener("change", function () {
       const file = photo.files[0];
       if (!file) return;
-
       if (!file.type.startsWith("image/")) {
         alert("画像ファイルを選択してください");
         return;
       }
-
       const reader = new FileReader();
-
       reader.onload = function (event) {
         const img = document.createElement("img");
-
         img.className = "storyPhotoItem";
         img.alt = "追加した写真";
         img.draggable = false;
         img.style.display = "block";
-
         img.dataset.x = "0";
         img.dataset.y = "0";
         img.dataset.size = "100";
         img.dataset.name = "写真 " + (++photoCounter);
-
         img.onload = function () {
           updatePhotoItem(img);
         };
-
         img.src = event.target.result;
-
+        // 写真を追加する前の状態を保存
+        saveHistory();
         storyArea.appendChild(img);
-
         enablePhotoDrag(img);
         selectPhoto(img);
         setPhotoLayer(photoLayer);
       };
-
       reader.onerror = function () {
         alert("写真の読み込みに失敗しました");
       };
-
       reader.readAsDataURL(file);
-
       // 同じ写真を続けて追加できるようにする
       photo.value = "";
     });
-
     function selectPhoto(img) {
       document.querySelectorAll(".storyPhotoItem").forEach(function (item) {
         item.classList.remove("selected");
       });
-
       selectedPhoto = img;
-
+      // 文字の選択を解除する
+      document.querySelectorAll(".storyTextItem").forEach(function (el) {
+        el.classList.remove("selected");
+      });
+      selectedText = null;
+      refreshTextList();
       if (img) {
         img.classList.add("selected");
         document.getElementById("photoSize").value =
           img.dataset.size || "100";
       }
-
       refreshPhotoList();
     }
-
     function refreshPhotoList() {
       photoList.innerHTML = "";
-
       document.querySelectorAll(".storyPhotoItem").forEach(function (img, index) {
         const button = document.createElement("button");
-
         button.type = "button";
+        const lockIcon =
+          img.dataset.locked === "true" ? "🔒 " : "";
         button.textContent =
+          lockIcon +
           (index + 1) + "： " +
           (img.dataset.name || "写真 " + (index + 1));
         if (img === selectedPhoto) {
           button.classList.add("active");
         }
-
         button.addEventListener("click", function () {
           selectPhoto(img);
         });
-
         photoList.appendChild(button);
       });
-    }
-
-
-    function updatePhotoItem(img) {
+    } function updatePhotoItem(img) {
       if (!img.naturalWidth) return;
-
       const size = Number(img.dataset.size || 100) / 100;
       const rotation = Number(img.dataset.rotation || 0);
-
       const scale = Math.min(
         220 / img.naturalWidth,
         320 / img.naturalHeight
       ) * size;
-
       img.style.width = (img.naturalWidth * scale) + "px";
       img.style.height = (img.naturalHeight * scale) + "px";
-
       const x = Number(img.dataset.x || 0);
       const y = Number(img.dataset.y || 0);
-
       img.style.transform =
         `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotation}deg)`;
     }
-
-
-
     function enablePhotoDrag(img) {
       const pointers = new Map();
-
+      // 1回の指操作で履歴を1つだけ保存する
+      let gestureHistorySaved = false;
       let startX = 0;
       let startY = 0;
-
       let startDistance = 0;
       let startAngle = 0;
       let startSize = 100;
       let startRotation = 0;
-
       function getDistance(a, b) {
         return Math.hypot(b.x - a.x, b.y - a.y);
       }
-
       function getAngle(a, b) {
         return Math.atan2(
           b.y - a.y,
           b.x - a.x
         ) * 180 / Math.PI;
       }
-
       img.addEventListener("pointerdown", function (e) {
         e.preventDefault();
-
         selectPhoto(img);
-
+        // ロック中は指で動かせない
+        if (img.dataset.locked === "true") {
+          return;
+        }
         pointers.set(e.pointerId, {
           x: e.clientX,
           y: e.clientY
         });
-
         img.setPointerCapture(e.pointerId);
-
         if (pointers.size === 1) {
           startX = e.clientX - Number(img.dataset.x || 0);
           startY = e.clientY - Number(img.dataset.y || 0);
         }
-
         if (pointers.size === 2) {
           const [a, b] = [...pointers.values()];
-
           startDistance = getDistance(a, b);
           startAngle = getAngle(a, b);
-
           startSize = Number(img.dataset.size || 100);
           startRotation = Number(img.dataset.rotation || 0);
         }
       });
-
       img.addEventListener("pointermove", function (e) {
-        if (!pointers.has(e.pointerId)) return;
-
+        const previousPoint = pointers.get(e.pointerId);
+        if (!previousPoint) return;
+        // 指が実際に動いたときだけ処理する
+        if (
+          previousPoint.x === e.clientX &&
+          previousPoint.y === e.clientY
+        ) return;
+        // 動かす前の状態を1回だけ保存
+        if (!gestureHistorySaved) {
+          saveHistory();
+          gestureHistorySaved = true;
+        }
         pointers.set(e.pointerId, {
           x: e.clientX,
           y: e.clientY
         });
-
         if (pointers.size === 1) {
           img.dataset.x = String(e.clientX - startX);
           img.dataset.y = String(e.clientY - startY);
-
           updatePhotoItem(img);
+          // 中央に近づいたらスナップ
+          snapItemToCenter(img);
         }
-
         if (pointers.size === 2 && startDistance > 0) {
           const [a, b] = [...pointers.values()];
-
           const scale = getDistance(a, b) / startDistance;
           const angle = getAngle(a, b) - startAngle;
-
           const newSize = Math.max(
             10,
             Math.min(400, startSize * scale)
           );
-
           const newRotation = startRotation + angle;
-
           img.dataset.size = String(newSize);
           img.dataset.rotation = String(newRotation);
-
           updatePhotoItem(img);
-
           document.getElementById("photoSize").value = newSize;
         }
       });
-
       function endPointer(e) {
         pointers.delete(e.pointerId);
-
+        // すべての指を離したら次の操作に備える
+        if (pointers.size === 0) {
+          gestureHistorySaved = false;
+        }
         if (pointers.size === 1) {
           const remaining = [...pointers.values()][0];
-
           startX = remaining.x - Number(img.dataset.x || 0);
           startY = remaining.y - Number(img.dataset.y || 0);
         }
@@ -640,232 +897,339 @@
       img.addEventListener("pointercancel", endPointer);
     }
 
-
     function duplicatePhoto() {
       if (!selectedPhoto) return;
-
+      // 複製する前の状態を保存
+      saveHistory();
       const original = selectedPhoto;
       const copy = original.cloneNode(true);
-
       copy.classList.remove("selected");
-
-      copy.dataset.x = String(Number(original.dataset.x || 0) + 20);
-      copy.dataset.y = String(Number(original.dataset.y || 0) + 20);
+      const x = Number(original.dataset.x || 0);
+      const y = Number(original.dataset.y || 0);
+      // 右下に30pxずらす
+      let nextX = x + 30;
+      let nextY = y + 30;
+      // 中心位置が端に近づいたら反対側へ
+      if (nextX > 90) nextX = -90;
+      if (nextY > 160) nextY = -160;
+      copy.dataset.x = String(nextX);
+      copy.dataset.y = String(nextY);
       copy.dataset.name = "写真 " + (++photoCounter);
-
       storyArea.appendChild(copy);
-
       enablePhotoDrag(copy);
       updatePhotoItem(copy);
       selectPhoto(copy);
       setPhotoLayer(photoLayer);
     }
-
     function movePhotoForward() {
       if (!selectedPhoto) {
         alert("写真を選択してください");
         return;
       }
-
-      const photos = [...document.querySelectorAll(".storyPhotoItem")];
+      const photos = [
+        ...document.querySelectorAll(".storyPhotoItem")
+      ];
       const index = photos.indexOf(selectedPhoto);
-
       if (index < photos.length - 1) {
+        saveHistory();
         photos[index + 1].after(selectedPhoto);
       }
-
       refreshPhotoList();
-    }
-
-    function movePhotoBackward() {
+    } function movePhotoBackward() {
       if (!selectedPhoto) {
         alert("写真を選択してください");
         return;
       }
-
-      const photos = [...document.querySelectorAll(".storyPhotoItem")];
+      const photos = [
+        ...document.querySelectorAll(".storyPhotoItem")
+      ];
       const index = photos.indexOf(selectedPhoto);
-
       if (index > 0) {
+        saveHistory();
         photos[index - 1].before(selectedPhoto);
       }
-
       refreshPhotoList();
     }
-
     function removePhoto() {
       if (!selectedPhoto) return;
-
+      saveHistory();
       selectedPhoto.remove();
       selectedPhoto = null;
-
-      const remaining = document.querySelector(".storyPhotoItem");
-
+      const remaining =
+        document.querySelector(".storyPhotoItem");
       if (remaining) {
         selectPhoto(remaining);
       } else {
         refreshPhotoList();
       }
     }
-
     // 背景色変更
     function changeColor(color) {
-      // ストーリーの背景色を変更
-      document.querySelector(".story")
-        .style.backgroundColor = color;
-
-      // カラーピッカーの表示色も変更
-      document.getElementById("backgroundColor").value = color;
-    }
-
-    // 文字変更
-
+      const story = document.querySelector(".story");
+      const colorPicker =
+        document.getElementById("backgroundColor");
+      // 実際の背景色を取得
+      const currentColor = rgbToHex(
+        getComputedStyle(story).backgroundColor
+      );
+      // 同じ色なら履歴を保存しない
+      if (currentColor.toLowerCase() === color.toLowerCase()) {
+        return;
+      }
+      // 色を変える前の状態を保存
+      saveHistory();
+      // 背景色を変更
+      story.style.backgroundColor = color;
+      // カラーピッカーの色も合わせる
+      colorPicker.value = color;
+    }    // 文字変更
     function changeText() {
       if (!selectedText) return;
-
       selectedText.textContent =
         document.getElementById("storyText").value;
-
       refreshTextList();
-    }
-
-
-    // 画像保存
+    }    // 画像保存
     function saveStory() {
       const story = document.querySelector(".story");
-
       const canvas = document.createElement("canvas");
       canvas.width = 1080;
       canvas.height = 1920;
-
       const ctx = canvas.getContext("2d");
-
-      // 背景色
-      ctx.fillStyle =
-        getComputedStyle(story).backgroundColor;
-
-      ctx.fillRect(0, 0, 1080, 1920);
-
-
-      // 写真
-      function drawAllPhotos() {
-        document.querySelectorAll(".storyPhotoItem").forEach(function (img) {
-          if (!img.complete || !img.naturalWidth) return;
-
-          const size = Number(img.dataset.size || 100) / 100;
-          const rotation = Number(img.dataset.rotation || 0);
-
-          const scale = Math.min(
-            880 / img.naturalWidth,
-            1280 / img.naturalHeight
-          ) * size;
-
-          const w = img.naturalWidth * scale;
-          const h = img.naturalHeight * scale;
-
-          const x = Number(img.dataset.x || 0);
-          const y = Number(img.dataset.y || 0);
-
-          const centerX = 540 + x * 4;
-          const centerY = 960 + y * 4;
-
+      ctx.fillStyle = getComputedStyle(story).backgroundColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // 編集画面のDOM順に描画して、写真と文字の重なりを一致させる
+      Array.from(story.children).forEach(function (el) {
+        if (el.classList.contains("storyPhotoItem")) {
+          if (!el.complete || !el.naturalWidth) return;
+          const size = Number(el.dataset.size || 100) / 100;
+          const rotation = Number(el.dataset.rotation || 0);
+          const scale = Math.min(880 / el.naturalWidth, 1280 / el.naturalHeight) * size;
+          const w = el.naturalWidth * scale;
+          const h = el.naturalHeight * scale;
+          const x = Number(el.dataset.x || 0);
+          const y = Number(el.dataset.y || 0);
           ctx.save();
-
-          ctx.translate(centerX, centerY);
+          ctx.translate(540 + x * 4, 960 + y * 4);
           ctx.rotate(rotation * Math.PI / 180);
-
-          ctx.drawImage(
-            img,
-            -w / 2,
-            -h / 2,
-            w,
-            h
-          );
-
+          ctx.drawImage(el, -w / 2, -h / 2, w, h);
           ctx.restore();
-        });
-      }
-
-
-      drawAllPhotos();
-
-      document.querySelectorAll(".storyTextItem").forEach(function (el) {
-        const style = getComputedStyle(el);
-        const fontSize = parseFloat(style.fontSize) * 4;
-        const lineHeight = fontSize * 1.2;
-
-        const x = Number(el.dataset.x || 0);
-        const y = Number(el.dataset.y || 0);
-        const angle = Number(el.dataset.rotation || 0);
-
-        const top = parseFloat(style.top);
-
-        ctx.save();
-
-        ctx.translate(540 + x * 4, (top + y) * 4);
-        ctx.rotate(angle * Math.PI / 180);
-
-        ctx.font = `${fontSize}px ${style.fontFamily}`;
-        ctx.fillStyle = style.color;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-
-        if (el.classList.contains("shadow")) {
-          ctx.shadowColor = "rgba(0,0,0,0.6)";
-          ctx.shadowBlur = 12;
-          ctx.shadowOffsetX = 8;
-          ctx.shadowOffsetY = 8;
-        }
-
-        const lines = el.textContent.split("\n");
-
-        lines.forEach(function (line, index) {
-          const lineY = index * lineHeight;
-
-          if (el.classList.contains("outline")) {
-            ctx.lineWidth = Number(el.dataset.outlineWidth || 2) * 4;
-            ctx.strokeStyle = el.dataset.outlineColor || "#333333";
-            ctx.lineJoin = "round";
-            ctx.strokeText(line, 0, lineY);
+        } else if (el.classList.contains("storyTextItem")) {
+          const style = getComputedStyle(el);
+          const fontSize = parseFloat(style.fontSize) * 4;
+          const lineHeight = parseFloat(style.lineHeight) * 4 || fontSize * 1.2;
+          const x = Number(el.dataset.x || 0);
+          const y = Number(el.dataset.y || 0);
+          const angle = Number(el.dataset.rotation || 0);
+          const top = parseFloat(style.top) || 0;
+          const maxWidth = (parseFloat(style.maxWidth) || 240) * 4;
+          ctx.save();
+          ctx.translate(540 + x * 4, (top + y) * 4);
+          ctx.rotate(angle * Math.PI / 180);
+          ctx.font = `${style.fontWeight} ${fontSize}px ${style.fontFamily}`;
+          ctx.fillStyle = style.color;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "top";
+          if (el.classList.contains("shadow")) {
+            ctx.shadowColor = "rgba(0,0,0,0.6)";
+            ctx.shadowBlur = 12;
+            ctx.shadowOffsetX = 8;
+            ctx.shadowOffsetY = 8;
           }
-
-          ctx.fillText(line, 0, lineY);
-        });
-
-        ctx.restore();
+          const lines = [];
+          el.textContent.split("\n").forEach(function (paragraph) {
+            if (!paragraph) { lines.push(""); return; }
+            let line = "";
+            for (const char of paragraph) {
+              if (line && ctx.measureText(line + char).width > maxWidth) {
+                lines.push(line);
+                line = char;
+              } else {
+                line += char;
+              }
+            }
+            lines.push(line);
+          });
+          lines.forEach(function (line, i) {
+            const lineY = i * lineHeight;
+            if (el.classList.contains("outline")) {
+              ctx.lineWidth = Number(el.dataset.outlineWidth || 2) * 4;
+              ctx.strokeStyle = el.dataset.outlineColor || "#333333";
+              ctx.lineJoin = "round";
+              ctx.strokeText(line, 0, lineY);
+            }
+            ctx.fillText(line, 0, lineY);
+          });
+          ctx.restore();
+        }
       });
-
-
-      const imageData = canvas.toDataURL("image/png");
-
-      // iPhoneでも保存できるように画像を表示
       const savedImage = document.getElementById("savedImage");
       const saveArea = document.getElementById("saveArea");
-
-      savedImage.src = imageData;
+      savedImage.src = canvas.toDataURL("image/png");
       saveArea.style.display = "block";
       document.getElementById("editorArea").style.display = "none";
-
-      // 保存画面までスクロール
       saveArea.scrollIntoView({ behavior: "smooth" });
     }
-
     let photoLayer = "back";
-
-
+    /* 編集履歴の管理 */
+    const undoStack = [];
+    const redoStack = [];
+    const MAX_HISTORY = 30;
+    // 現在の編集状態を取得
+    function getEditorState() {
+      const story = document.querySelector(".story");
+      return {
+        backgroundColor: getComputedStyle(story).backgroundColor,
+        photoLayer: photoLayer,
+        items: [...story.children]
+          .filter(el =>
+            el.classList.contains("storyPhotoItem") ||
+            el.classList.contains("storyTextItem")
+          )
+          .map(el => ({
+            type: el.classList.contains("storyPhotoItem")
+              ? "photo"
+              : "text",
+            src: el.tagName === "IMG" ? el.src : null,
+            text: el.tagName !== "IMG" ? el.textContent : null,
+            style: el.getAttribute("style") || "",
+            dataset: { ...el.dataset },
+            outline: el.classList.contains("outline"),
+            shadow: el.classList.contains("shadow")
+          }))
+      };
+    }
+    // 編集前の状態を履歴に保存
+    function saveHistory() {
+      const state = JSON.stringify(getEditorState());
+      if (undoStack[undoStack.length - 1] === state) {
+        return;
+      }
+      undoStack.push(state);
+      if (undoStack.length > MAX_HISTORY) {
+        undoStack.shift();
+      }
+      redoStack.length = 0;
+      updateHistoryButtons();
+    }
+    // ボタンの有効・無効を切り替える
+    function updateHistoryButtons() {
+      document.getElementById("undoButton").disabled =
+        undoStack.length === 0;
+      document.getElementById("redoButton").disabled =
+        redoStack.length === 0;
+    }
+    /* 保存した編集状態を復元する */
+    function restoreEditorState(stateString) {
+      const state = JSON.parse(stateString);
+      const story = document.querySelector(".story");
+      // 今ある写真と文字を一度削除
+      story.querySelectorAll(
+        ".storyPhotoItem, .storyTextItem"
+      ).forEach(function (el) {
+        el.remove();
+      }); selectedPhoto = null;
+      selectedText = null;
+      // 復元後は新しい文字入力として扱う
+      textTypingHistorySaved = false;      // 背景色と重なり順の設定を復元
+      story.style.backgroundColor = state.backgroundColor;
+      photoLayer = state.photoLayer;
+      document.getElementById("backgroundColor").value =
+        rgbToHex(state.backgroundColor);
+      // 写真と文字を元の順番で復元
+      state.items.forEach(function (item) {
+        let el;
+        if (item.type === "photo") {
+          el = document.createElement("img");
+          el.className = "storyPhotoItem";
+          el.alt = "追加した写真";
+          el.draggable = false;
+          el.onload = function () {
+            updatePhotoItem(el);
+          };
+        } else {
+          el = document.createElement("p");
+          el.className = "storyTextItem";
+          el.textContent = item.text || "";
+        }
+        // 位置・大きさ・回転などを復元
+        el.setAttribute("style", item.style);
+        Object.entries(item.dataset).forEach(
+          function ([key, value]) {
+            el.dataset[key] = value;
+          }
+        );
+        // 文字の装飾を復元
+        if (item.outline) {
+          el.classList.add("outline");
+        }
+        if (item.shadow) {
+          el.classList.add("shadow");
+        }
+        story.appendChild(el);
+        if (item.type === "photo") {
+          enablePhotoDrag(el);
+          el.src = item.src;
+          if (el.complete && el.naturalWidth) {
+            updatePhotoItem(el);
+          }
+        } else {
+          enableTextDrag(el);
+        }
+      });
+      // 写真と文字の選択状態を更新
+      const photos = story.querySelectorAll(".storyPhotoItem");
+      const texts = story.querySelectorAll(".storyTextItem");
+      if (photos.length > 0) {
+        selectPhoto(photos[photos.length - 1]);
+      } else {
+        refreshPhotoList();
+      }
+      if (texts.length > 0) {
+        selectText(texts[texts.length - 1]);
+      } else {
+        document.getElementById("storyText").value = "";
+        refreshTextList();
+      }
+    }
+    /* 元に戻す */
+    function undo() {
+      if (undoStack.length === 0) return;
+      redoStack.push(JSON.stringify(getEditorState()));
+      const previousState = undoStack.pop();
+      restoreEditorState(previousState);
+      updateHistoryButtons();
+    }
+    /* やり直す */
+    function redo() {
+      if (redoStack.length === 0) return;
+      undoStack.push(JSON.stringify(getEditorState()));
+      const nextState = redoStack.pop();
+      restoreEditorState(nextState);
+      updateHistoryButtons();
+    }
+    /* ボタンに機能を設定 */
+    document.getElementById("undoButton")
+      .addEventListener("click", undo);
+    document.getElementById("redoButton")
+      .addEventListener("click", redo);
+    updateHistoryButtons(); function changePhotoLayerWithHistory(layer) {
+      if (photoLayer === layer) return;
+      saveHistory();
+      setPhotoLayer(layer);
+    }
     function setPhotoLayer(layer) {
       photoLayer = layer;
-
       const story = document.querySelector(".story");
-      const photos = [...story.querySelectorAll(".storyPhotoItem")];
-
+      const photos = [
+        ...story.querySelectorAll(".storyPhotoItem")
+      ];
       if (layer === "front") {
         photos.forEach(function (img) {
           story.appendChild(img);
         });
       } else {
-        const firstText = story.querySelector(".storyTextItem");
-
+        const firstText =
+          story.querySelector(".storyTextItem");
         photos.forEach(function (img) {
           if (firstText) {
             story.insertBefore(img, firstText);
@@ -875,168 +1239,147 @@
         });
       }
     }
-
-
     function backToEdit() {
       document.getElementById("saveArea").style.display = "none";
-
       document.getElementById("editorArea").style.display = "block";
-
       document.getElementById("editorArea").scrollIntoView({
         behavior: "smooth"
       });
     }
-
     function changeSize() {
       if (!selectedPhoto) return;
-
+      // ロック中はサイズを変更しない
+      if (isItemLocked(selectedPhoto)) {
+        document.getElementById("photoSize").value =
+          selectedPhoto.dataset.size || "100";
+        return;
+      }
       selectedPhoto.dataset.size =
         document.getElementById("photoSize").value;
-
       updatePhotoItem(selectedPhoto);
     }
-
     // 複数文字の管理
     let selectedText = null;
     let textCounter = 1;
-
     const storyArea = document.querySelector(".story");
     const textList = document.getElementById("textList");
-
     // 文字の選択
     function selectText(el) {
       if (!el) return;
-
       document.querySelectorAll(".storyTextItem").forEach(function (item) {
         item.classList.remove("selected");
       });
-
+      // 写真の選択を解除する
+      document.querySelectorAll(".storyPhotoItem").forEach(function (img) {
+        img.classList.remove("selected");
+      });
+      selectedPhoto = null;
+      refreshPhotoList();
       selectedText = el;
       selectedText.classList.add("selected");
-
       const style = getComputedStyle(el);
-
       document.getElementById("storyText").value = el.textContent;
       document.getElementById("textColor").value = rgbToHex(style.color);
       document.getElementById("textSize").value = parseFloat(style.fontSize);
       document.getElementById("textFont").value =
-        el.style.fontFamily || "sans-serif";
-
-
-      document.getElementById("textOutline").checked =
-        el.classList.contains("outline");
-
+        el.style.fontFamily || "sans-serif"; document.getElementById("textOutline").checked =
+          el.classList.contains("outline");
       document.getElementById("outlineColor").value =
         el.dataset.outlineColor || "#333333";
-
       document.getElementById("outlineWidth").value =
         el.dataset.outlineWidth || "2";
-
       document.getElementById("textShadow").checked =
         el.classList.contains("shadow");
-
       const angle = Number(el.dataset.rotation || 0);
-
       document.getElementById("textRotation").value = angle;
       document.getElementById("rotationValue").textContent =
         Math.round(angle) + "°";
-
       refreshTextList();
     }
-
     // CSSの色をカラーピッカー用に変換
     function rgbToHex(color) {
       const nums = color.match(/\d+/g);
       if (!nums || nums.length < 3) return "#555555";
-
       return "#" + nums.slice(0, 3).map(function (n) {
         return Number(n).toString(16).padStart(2, "0");
       }).join("");
     }
-
     // 文字一覧を更新
     function refreshTextList() {
       textList.innerHTML = "";
-
       document.querySelectorAll(".storyTextItem").forEach(function (el, index) {
         const button = document.createElement("button");
         button.type = "button";
+        const lockIcon =
+          el.dataset.locked === "true" ? "🔒 " : "";
         button.textContent =
-          (index + 1) + ": " + (el.textContent.slice(0, 12) || "空の文字");
-
+          lockIcon +
+          (index + 1) + ": " +
+          (el.textContent.slice(0, 12) || "空の文字");
         if (el === selectedText) {
           button.classList.add("active");
         }
-
         button.addEventListener("click", function () {
           selectText(el);
         });
-
         textList.appendChild(button);
       });
     }
-
     // 文字を追加
     function addText() {
       const el = document.createElement("p");
-
       el.className = "storyTextItem";
       el.textContent = "";
-
       el.style.top = "200px";
       el.style.color = "#555555";
       el.style.fontSize = "15px";
       el.style.fontFamily = "sans-serif";
-
       el.dataset.x = "0";
       el.dataset.y = "0";
-
-
+      saveHistory();
       storyArea.appendChild(el);
       enableTextDrag(el);
       selectText(el);
-
+      // 写真を前面に設定している場合も重なり順を維持
+      setPhotoLayer(photoLayer);
       document.getElementById("storyText").focus();
-
     }
-
     // 選択中の文字を削除
-
     function duplicateText() {
       if (!selectedText) {
         alert("複製する文字を選択してください");
         return;
       }
-
+      saveHistory();
       const original = selectedText;
       const copy = original.cloneNode(true);
-
       // 元の文字と同じIDにならないようにする
       copy.removeAttribute("id");
       copy.classList.remove("selected");
-
       // 少しずらして重ならないようにする
-      copy.dataset.x = String(Number(original.dataset.x || 0) + 20);
-      copy.dataset.y = String(Number(original.dataset.y || 0) + 20);
-
+      const x = Number(original.dataset.x || 0);
+      const y = Number(original.dataset.y || 0);
+      let nextX = x + 30;
+      let nextY = y + 30;
+      if (nextX > 90) nextX = -90;
+      if (nextY > 160) nextY = -160;
+      copy.dataset.x = String(nextX);
+      copy.dataset.y = String(nextY);
       storyArea.appendChild(copy);
-
+      setPhotoLayer(photoLayer);
       // 複製した文字もドラッグ・拡大・回転できるようにする
       enableTextDrag(copy);
       updateTextTransform(copy);
-
       // 複製した文字を選択する
       selectText(copy);
     }
-
     function removeText() {
       if (!selectedText) return;
-
+      // 削除する前の状態を保存
+      saveHistory();
       selectedText.remove();
-
       const remaining = document.querySelector(".storyTextItem");
       selectedText = null;
-
       if (remaining) {
         selectText(remaining);
       } else {
@@ -1044,187 +1387,171 @@
         refreshTextList();
       }
     }
-
     // 文字をドラッグできるようにする
-
     function enableTextDrag(el) {
       const pointers = new Map();
-
+      // 1回の指操作で履歴を1つだけ保存する
+      let gestureHistorySaved = false;
       let startX = 0;
       let startY = 0;
       let startDistance = 0;
       let startAngle = 0;
       let startFontSize = 15;
       let startRotation = 0;
-
       function getDistance(a, b) {
         return Math.hypot(b.x - a.x, b.y - a.y);
       }
-
       function getAngle(a, b) {
         return Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
       }
-
       el.addEventListener("pointerdown", function (e) {
         e.preventDefault();
         selectText(el);
-
+        // ロック中は指で動かせない
+        if (el.dataset.locked === "true") {
+          return;
+        }
         pointers.set(e.pointerId, {
           x: e.clientX,
           y: e.clientY
         });
-
         el.setPointerCapture(e.pointerId);
-
         if (pointers.size === 1) {
           startX = e.clientX - Number(el.dataset.x || 0);
           startY = e.clientY - Number(el.dataset.y || 0);
         }
-
         if (pointers.size === 2) {
           const [a, b] = [...pointers.values()];
-
           startDistance = getDistance(a, b);
           startAngle = getAngle(a, b);
           startFontSize = parseFloat(getComputedStyle(el).fontSize);
           startRotation = Number(el.dataset.rotation || 0);
         }
       });
-
       el.addEventListener("pointermove", function (e) {
-        if (!pointers.has(e.pointerId)) return;
-
+        const previousPoint = pointers.get(e.pointerId);
+        if (!previousPoint) return;
+        // 指が実際に動いたか確認
+        if (
+          previousPoint.x === e.clientX &&
+          previousPoint.y === e.clientY
+        ) return;
+        // 移動・拡大・回転前の状態を1回だけ保存
+        if (!gestureHistorySaved) {
+          saveHistory();
+          gestureHistorySaved = true;
+        }
         pointers.set(e.pointerId, {
           x: e.clientX,
           y: e.clientY
         });
-
         if (pointers.size === 1) {
           const x = e.clientX - startX;
           const y = e.clientY - startY;
-
           el.dataset.x = String(x);
           el.dataset.y = String(y);
-
           updateTextTransform(el);
+          // 中央に近づいたらスナップ
+          snapItemToCenter(el);
         }
-
         if (pointers.size === 2 && startDistance > 0) {
           const [a, b] = [...pointers.values()];
-
           const scale = getDistance(a, b) / startDistance;
           const angle = getAngle(a, b) - startAngle;
-
           const newSize = Math.max(
             8,
             Math.min(100, startFontSize * scale)
           );
-
           const newRotation = startRotation + angle;
-
           el.style.fontSize = newSize + "px";
           el.dataset.rotation = String(newRotation);
-
           updateTextTransform(el);
-
           document.getElementById("textSize").value = newSize;
           document.getElementById("textRotation").value =
             Math.max(-180, Math.min(180, newRotation));
-
           document.getElementById("rotationValue").textContent =
             Math.round(newRotation) + "°";
         }
-      });
-
-      function endPointer(e) {
+      }); function endPointer(e) {
         pointers.delete(e.pointerId);
-
+        // すべての指を離したらリセット
+        if (pointers.size === 0) {
+          gestureHistorySaved = false;
+        }
+        // 2本指から1本指になったときの位置調整
         if (pointers.size === 1) {
           const remaining = [...pointers.values()][0];
-
           startX = remaining.x - Number(el.dataset.x || 0);
           startY = remaining.y - Number(el.dataset.y || 0);
         }
-      }
-
-      el.addEventListener("pointerup", endPointer);
+      } el.addEventListener("pointerup", endPointer);
       el.addEventListener("pointercancel", endPointer);
     }
-
-
     // 最初は文字を選択しない
     refreshTextList();
-
-
-
     function changeTextColor() {
       if (!selectedText) return;
-
       selectedText.style.color =
         document.getElementById("textColor").value;
     }
-
     function changeTextRotation() {
       if (!selectedText) return;
-
-      const angle = Number(document.getElementById("textRotation").value);
+      // ロック中は回転できない
+      if (isItemLocked(selectedText)) {
+        const currentAngle =
+          Number(selectedText.dataset.rotation || 0);
+        document.getElementById("textRotation").value =
+          Math.max(-180, Math.min(180, currentAngle));
+        document.getElementById("rotationValue").textContent =
+          Math.round(currentAngle) + "°";
+        return;
+      }
+      const angle =
+        Number(document.getElementById("textRotation").value);
       selectedText.dataset.rotation = String(angle);
-
-      document.getElementById("rotationValue").textContent = angle + "°";
-
+      document.getElementById("rotationValue").textContent =
+        angle + "°";
       updateTextTransform(selectedText);
     }
-
-
     function updateTextTransform(el) {
       const x = Number(el.dataset.x || 0);
       const y = Number(el.dataset.y || 0);
       const angle = Number(el.dataset.rotation || 0);
-
       el.style.transform =
         `translate(calc(-50% + ${x}px), ${y}px) rotate(${angle}deg)`;
     }
-
-
     function changeTextSize() {
       if (!selectedText) return;
-
+      // ロック中は文字サイズを変更しない
+      if (isItemLocked(selectedText)) {
+        document.getElementById("textSize").value =
+          parseFloat(getComputedStyle(selectedText).fontSize);
+        return;
+      }
       selectedText.style.fontSize =
         document.getElementById("textSize").value + "px";
     }
-
     function changeTextFont() {
       if (!selectedText) return;
-
       selectedText.style.fontFamily =
         document.getElementById("textFont").value;
-    }
-
-
-    function changeTextStyle() {
+    } function changeTextStyle() {
       if (!selectedText) return;
-
       const outline = document.getElementById("textOutline").checked;
       const shadow = document.getElementById("textShadow").checked;
       const outlineColor = document.getElementById("outlineColor").value;
       const outlineWidth = document.getElementById("outlineWidth").value;
-
       selectedText.classList.toggle("outline", outline);
       selectedText.classList.toggle("shadow", shadow);
-
       selectedText.dataset.outlineColor = outlineColor;
       selectedText.dataset.outlineWidth = outlineWidth;
-
       updateTextOutline(selectedText);
     }
-
     function updateTextOutline(el) {
       const color = el.dataset.outlineColor || "#333333";
       const width = Number(el.dataset.outlineWidth || 2);
-
       if (el.classList.contains("outline")) {
         const shadows = [];
-
         for (let x = -width; x <= width; x++) {
           for (let y = -width; y <= width; y++) {
             if (x * x + y * y <= width * width) {
@@ -1232,42 +1559,545 @@
             }
           }
         }
-
         el.style.webkitTextStroke = "0px";
         el.style.textShadow = shadows.join(", ");
       } else {
         el.style.textShadow = "";
       }
-
       if (el.classList.contains("shadow")) {
         const existing = el.style.textShadow;
         el.style.textShadow =
           (existing ? existing + ", " : "") +
           "2px 2px 4px rgba(0,0,0,0.6)";
       }
-    }
-
-
-    function showTab(tabName, clickedButton) {
+    } function showTab(tabName, clickedButton) {
       // すべてのタブ内容を非表示
       document.querySelectorAll(".tabContent").forEach(function (tab) {
         tab.classList.remove("active");
       });
-
       // すべてのタブボタンの選択状態を解除
       document.querySelectorAll(".tabButton").forEach(function (button) {
         button.classList.remove("active");
       });
-
       // 選択したタブを表示
       document.getElementById(tabName + "Tab").classList.add("active");
-
       // 押したボタンを選択状態にする
       clickedButton.classList.add("active");
     }
+    /* 写真サイズのスライダー操作を履歴に保存 */
+    const photoSizeSlider = document.getElementById("photoSize");
+    // 指やマウスで操作を始めたとき
+    photoSizeSlider.addEventListener("pointerdown", function () {
+      if (!selectedPhoto) return;
+      saveHistory();
+    });
+    // キーボードでサイズを変更するとき
+    photoSizeSlider.addEventListener("keydown", function (e) {
+      if (!selectedPhoto) return;
+      const keys = [
+        "ArrowLeft", "ArrowRight",
+        "ArrowUp", "ArrowDown",
+        "Home", "End",
+        "PageUp", "PageDown"
+      ];
+      // 対象キーを押し始めた瞬間だけ履歴を保存
+      if (keys.includes(e.key) && !e.repeat) {
+        saveHistory();
+      }
+    });
+    /* 文字入力の履歴 */
+    const storyTextInput = document.getElementById("storyText");
+    let textTypingHistorySaved = false;
+    // 文字を書き始める前の状態を保存
+    storyTextInput.addEventListener("beforeinput", function () {
+      if (!selectedText || textTypingHistorySaved) return;
+      saveHistory();
+      textTypingHistorySaved = true;
+    });
+    // 入力欄から離れたら、次の編集に備える
+    storyTextInput.addEventListener("blur", function () {
+      textTypingHistorySaved = false;
+    });
+    /* 文字のデザイン変更履歴 */
+    const textHistoryControls = [
+      "textColor",
+      "textSize",
+      "textRotation",
+      "textFont",
+      "textOutline",
+      "outlineColor",
+      "outlineWidth",
+      "textShadow"
+    ];
+    textHistoryControls.forEach(function (id) {
+      const control = document.getElementById(id);
+      // タッチ・マウス操作の直前に保存
+      control.addEventListener("pointerdown", function () {
+        if (!selectedText) return;
+        saveHistory();
+      });
+      // キーボード操作の直前に保存
+      control.addEventListener("keydown", function (e) {
+        const keys = [
+          "ArrowLeft", "ArrowRight",
+          "ArrowUp", "ArrowDown",
+          "Home", "End",
+          "PageUp", "PageDown",
+          " ", "Enter"
+        ];
+        if (keys.includes(e.key) && !e.repeat) {
+          saveHistory();
+        }
+      });
+    });
+    /* 編集データの自動保存 */
+    let storyDraftDB = null;
+    let storyDraftTimer = null;
+    let draftSaveWarningShown = false;
+    // 現在の編集状態を保存
+    function saveStoryDraft() {
+      if (!storyDraftDB) return;
+      try {
+        const state = JSON.stringify(getEditorState());
+        const transaction = storyDraftDB.transaction(
+          "drafts",
+          "readwrite"
+        );
+        transaction.objectStore("drafts").put(
+          state,
+          "latest"
+        );
+        transaction.onerror = function () {
+          if (!draftSaveWarningShown) {
+            alert("自動保存に失敗しました。写真の容量が大きい可能性があります。");
+            draftSaveWarningShown = true;
+          }
+        };
+      } catch (error) {
+        console.error("自動保存エラー:", error);
+      }
+    }
+    // 編集が落ち着いてから保存する
+    function scheduleStoryDraftSave() {
+      clearTimeout(storyDraftTimer);
+      storyDraftTimer = setTimeout(function () {
+        saveStoryDraft();
+      }, 1000);
+    }
+    // 写真や文字の変更を監視
+    function startStoryDraftWatching() {
+      const story = document.querySelector(".story");
+      const observer = new MutationObserver(function () {
+        scheduleStoryDraftSave();
+      });
+      observer.observe(story, {
+        childList: true,
+        attributes: true,
+        characterData: true,
+        subtree: true
+      });
+    }
+    // 保存用データベースを開く
+    function initializeStoryDraft() {
+      if (!window.indexedDB) {
+        console.warn("このブラウザでは自動保存を利用できません");
+        return;
+      }
+      const request = indexedDB.open(
+        "StoryPaletteDraftDB",
+        1
+      );
+      request.onupgradeneeded = function (event) {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("drafts")) {
+          db.createObjectStore("drafts");
+        }
+      };
+      request.onsuccess = function (event) {
+        storyDraftDB = event.target.result;
+        const transaction = storyDraftDB.transaction(
+          "drafts",
+          "readonly"
+        );
+        const readRequest = transaction
+          .objectStore("drafts")
+          .get("latest");
+        readRequest.onsuccess = function () {
+          const savedState = readRequest.result;
+          if (savedState) {
+            const restore = confirm(
+              "前回の編集データがあります。復元しますか？"
+            );
+            if (restore) {
+              try {
+                restoreEditorState(savedState);
+                updateHistoryButtons();
+              } catch (error) {
+                console.error("復元エラー:", error);
+              }
+            } else {
+              // 復元しない場合は新しい編集状態で上書き
+              saveStoryDraft();
+            }
+          }
+          startStoryDraftWatching();
+        };
+        readRequest.onerror = function () {
+          startStoryDraftWatching();
+        };
+      };
+      request.onerror = function () {
+        console.error("自動保存データベースを開けませんでした");
+      };
+    }
+    // 自動保存を開始
+    initializeStoryDraft();
+    /* 新しいストーリーを作成 */
+    function newStory() {
+      const confirmed = confirm(
+        "現在の写真・文字・背景をすべて消して、" +
+        "新しいストーリーを作成しますか？\n\n" +
+        "この操作は元に戻せません。"
+      );
+      // キャンセルした場合は何もしない
+      if (!confirmed) return;
+      // 自動保存の準備ができているか確認
+      if (!storyDraftDB) {
+        alert(
+          "自動保存の準備ができていません。" +
+          "少し待ってからもう一度試してください。"
+        );
+        return;
+      }
+      // 保存予約を取り消す
+      clearTimeout(storyDraftTimer);
+      // 前回の編集データを削除
+      const transaction = storyDraftDB.transaction(
+        "drafts",
+        "readwrite"
+      );
+      transaction.objectStore("drafts").delete("latest");
+      // 削除が完了したらページを初期状態に戻す
+      transaction.oncomplete = function () {
+        window.location.reload();
+      };
+      transaction.onerror = function () {
+        alert(
+          "編集データの削除に失敗しました。" +
+          "もう一度試してください。"
+        );
+      };
+    }
+    /* 写真・文字の選択を解除する */
+    function deselectAllItems() {
+      // 写真の選択を解除
+      document.querySelectorAll(".storyPhotoItem").forEach(function (img) {
+        img.classList.remove("selected");
+      });
+      // 文字の選択を解除
+      document.querySelectorAll(".storyTextItem").forEach(function (el) {
+        el.classList.remove("selected");
+      });
+      selectedPhoto = null;
+      selectedText = null;
+      // 文字入力欄を空にする
+      document.getElementById("storyText").value = "";
+      // 一覧の選択表示を更新
+      refreshPhotoList();
+      refreshTextList();
+    }
+    // ストーリーの何もない部分をタップしたとき
+    storyArea.addEventListener("pointerdown", function (e) {
+      // 写真や文字をタップした場合は解除しない
+      if (e.target !== storyArea) return;
+      deselectAllItems();
+    });
+    /* 選択した写真または文字を削除 */
+    function deleteSelectedItem() {
+      // 写真が選択されている場合
+      if (selectedPhoto) {
+        removePhoto();
+        return;
+      }
+      // 文字が選択されている場合
+      if (selectedText) {
+        removeText();
+        return;
+      }
+      // 何も選択されていない場合
+      alert("削除する写真か文字を選択してください");
+    }
+    /* 選択状態に合わせて削除ボタンを更新 */
+    function updateDeleteButton() {
+      const button = document.getElementById("deleteSelectedButton");
+      const photoSelected =
+        selectedPhoto &&
+        selectedPhoto.isConnected &&
+        selectedPhoto.classList.contains("selected");
+      const textSelected =
+        selectedText &&
+        selectedText.isConnected &&
+        selectedText.classList.contains("selected");
+      if (photoSelected) {
+        button.textContent = "🗑️ 写真を削除";
+        button.disabled = false;
+      } else if (textSelected) {
+        button.textContent = "🗑️ 文字を削除";
+        button.disabled = false;
+      } else {
+        button.textContent = "🗑️ 写真か文字を選択してね";
+        button.disabled = true;
+      }
+    }
+    /* 写真や文字の選択・削除を監視 */
+    const deleteButtonObserver = new MutationObserver(function () {
+      updateDeleteButton();
+    });
+    deleteButtonObserver.observe(storyArea, {
+      childList: true,
+      attributes: true,
+      attributeFilter: ["class"],
+      subtree: true
+    });
+    // 最初の表示を設定
+    updateDeleteButton();
+    /* 写真・文字をタップしたら編集タブを切り替える */
+    storyArea.addEventListener("pointerdown", function (e) {
+      const tappedPhoto = e.target.closest(".storyPhotoItem");
+      const tappedText = e.target.closest(".storyTextItem");
+      const tabButtons = document.querySelectorAll(".tabButton");
+      // 写真をタップした場合
+      if (tappedPhoto) {
+        showTab("photo", tabButtons[0]);
+      }
+      // 文字をタップした場合
+      else if (tappedText) {
+        showTab("text", tabButtons[1]);
+      }
+    });
+    /* 中央ガイドラインの作成 */
+    const verticalGuide = document.createElement("div");
+    verticalGuide.className = "centerGuide vertical";
+    const horizontalGuide = document.createElement("div");
+    horizontalGuide.className = "centerGuide horizontal";
+    storyArea.appendChild(verticalGuide);
+    storyArea.appendChild(horizontalGuide);
+    /* ガイドラインを非表示にする */
+    function hideCenterGuides() {
+      verticalGuide.style.display = "none";
+      horizontalGuide.style.display = "none";
+    }
+    /* 写真や文字の中心位置を確認 */
+    function updateCenterGuides(item) {
+      const storyRect = storyArea.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      const centerX = storyRect.left + storyRect.width / 2;
+      const centerY = storyRect.top + storyRect.height / 2;
+      const itemCenterX = itemRect.left + itemRect.width / 2;
+      const itemCenterY = itemRect.top + itemRect.height / 2;
+      // 中央から8px以内ならガイド線を表示
+      const nearCenterX = Math.abs(itemCenterX - centerX) < 8;
+      const nearCenterY = Math.abs(itemCenterY - centerY) < 8;
+      verticalGuide.style.display =
+        nearCenterX ? "block" : "none";
+      horizontalGuide.style.display =
+        nearCenterY ? "block" : "none";
+    }
+    /* ドラッグ中に中央位置をチェック */
+    storyArea.addEventListener("pointermove", function (e) {
+      const item = e.target.closest(
+        ".storyPhotoItem, .storyTextItem"
+      );
+      if (!item) return;
+      // マウスを乗せただけでは表示しない
+      if (e.pointerType === "mouse" && e.buttons === 0) {
+        return;
+      }
+      updateCenterGuides(item);
+    });
+    /* 指を離したらガイド線を消す */
+    storyArea.addEventListener("pointerup", hideCenterGuides);
+    storyArea.addEventListener("pointercancel", hideCenterGuides);
+    storyArea.addEventListener("pointerleave", hideCenterGuides);
+    /* 写真・文字を中央にスナップさせる */
+    function snapItemToCenter(item) {
+      const storyRect = storyArea.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      const centerX = storyRect.left + storyRect.width / 2;
+      const centerY = storyRect.top + storyRect.height / 2;
+      const itemCenterX = itemRect.left + itemRect.width / 2;
+      const itemCenterY = itemRect.top + itemRect.height / 2;
+      const differenceX = centerX - itemCenterX;
+      const differenceY = centerY - itemCenterY;
+      // 中央から8px以内なら吸い付く
+      const snapDistance = 8;
+      // 画面上の距離を編集エリア内の座標に変換
+      const scaleX = storyRect.width / storyArea.offsetWidth;
+      const scaleY = storyRect.height / storyArea.offsetHeight;
+      let changed = false;
+      if (Math.abs(differenceX) <= snapDistance) {
+        item.dataset.x = String(
+          Number(item.dataset.x || 0) + differenceX / scaleX
+        );
+        changed = true;
+      }
+      if (Math.abs(differenceY) <= snapDistance) {
+        item.dataset.y = String(
+          Number(item.dataset.y || 0) + differenceY / scaleY
+        );
+        changed = true;
+      }
+      // 中央に吸い付いた位置を画面に反映
+      if (changed) {
+        if (item.classList.contains("storyPhotoItem")) {
+          updatePhotoItem(item);
+        } else if (item.classList.contains("storyTextItem")) {
+          updateTextTransform(item);
+        }
+      }
+    }
+    /* 選択した写真・文字を整列する */
+    function alignSelectedItem(position) {
+      const item =
+        document.querySelector(".storyPhotoItem.selected") ||
+        document.querySelector(".storyTextItem.selected");
+      if (!item) {
+        alert("先に写真か文字を選択してください");
+        return;
+      }
+      // ロック中は整列できない
+      if (isItemLocked(item)) {
+        alert("ロックを解除してから位置を変更してください");
+        return;
+      }
+      const storyRect = storyArea.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      // 編集画面の倍率を取得
+      const scaleX = storyRect.width / storyArea.offsetWidth;
+      const scaleY = storyRect.height / storyArea.offsetHeight;
+      // 画面端から10pxの余白
+      const marginX = 10 * scaleX;
+      const marginY = 10 * scaleY;
+      let dx = 0;
+      let dy = 0;
+      // 左右の整列
+      if (position === "left") {
+        dx = storyRect.left + marginX - itemRect.left;
+      } else if (position === "centerX") {
+        dx = (storyRect.left + storyRect.width / 2) -
+          (itemRect.left + itemRect.width / 2);
+      } else if (position === "right") {
+        dx = storyRect.right - marginX - itemRect.right;
+      }
+      // 上下の整列
+      else if (position === "top") {
+        dy = storyRect.top + marginY - itemRect.top;
+      } else if (position === "centerY") {
+        dy = (storyRect.top + storyRect.height / 2) -
+          (itemRect.top + itemRect.height / 2);
+      } else if (position === "bottom") {
+        dy = storyRect.bottom - marginY - itemRect.bottom;
+      }
+      // すでに揃っていれば何もしない
+      if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+        return;
+      }
+      // 移動前の状態を履歴に保存
+      saveHistory();
+      item.dataset.x = String(
+        Number(item.dataset.x || 0) + dx / scaleX
+      );
+      item.dataset.y = String(
+        Number(item.dataset.y || 0) + dy / scaleY
+      );
+      // 変更後の位置を画面に反映
+      if (item.classList.contains("storyPhotoItem")) {
+        updatePhotoItem(item);
+      } else {
+        updateTextTransform(item);
+      }
+    }
+    /* 選択した写真・文字のロック切り替え */
+    /* ロックされているか確認 */
+    function isItemLocked(item) {
+      return item && item.dataset.locked === "true";
+    }
+    function toggleItemLock() {
+      const item =
+        document.querySelector(".storyPhotoItem.selected") ||
+        document.querySelector(".storyTextItem.selected");
+      if (!item) {
+        alert("写真か文字を選択してください");
+        return;
+      }
+      // ロック変更前の状態を保存
+      saveHistory();
+      const isLocked = item.dataset.locked === "true";
+      item.dataset.locked = isLocked ? "false" : "true";
+      refreshPhotoList();
+      refreshTextList();
+      if (isLocked) {
+        alert("ロックを解除しました");
+      } else {
+        alert("位置をロックしました");
+      }
+    }
+    /* ロック状態に合わせて編集スライダーを切り替える */
+    function updateLockControls() {
+      const photo = document.querySelector(
+        ".storyPhotoItem.selected"
+      );
+      const text = document.querySelector(
+        ".storyTextItem.selected"
+      );
+      // 写真サイズのスライダー
+      const photoSize = document.getElementById("photoSize");
+      photoSize.disabled =
+        !photo || photo.dataset.locked === "true";
+      // 文字サイズ・回転のスライダー
+      const textSize = document.getElementById("textSize");
+      const textRotation = document.getElementById("textRotation");
+      const textLocked =
+        !text || text.dataset.locked === "true";
+      textSize.disabled = textLocked;
+      textRotation.disabled = textLocked;
+    }
+    /* 選択状態やロック状態の変化を監視 */
+    const lockControlsObserver = new MutationObserver(function () {
+      updateLockControls();
+    });
+    lockControlsObserver.observe(storyArea, {
+      childList: true,
+      attributes: true,
+      attributeFilter: ["class", "data-locked"],
+      subtree: true
+    });
+    // 最初の状態を反映
+    updateLockControls();
+
+    /* 詳細ツールの表示・非表示 */
+    function toggleAdvancedTools() {
+      const editor = document.getElementById("editorArea");
+      const button = document.getElementById("toolToggleButton");
+
+      const isCollapsed =
+        editor.classList.toggle("toolsCollapsed");
+
+      button.textContent = isCollapsed
+        ? "⚙️ 詳細ツールを表示 ▼"
+        : "⚙️ 詳細ツールを閉じる ▲";
+
+      button.setAttribute(
+        "aria-expanded",
+        String(!isCollapsed)
+      );
+    }
+
+    // ページを開いたときは折りたたんだ状態にする
+    document.getElementById("editorArea")
+      .classList.add("toolsCollapsed");
 
   </script>
-
 </body>
 
 </html>
