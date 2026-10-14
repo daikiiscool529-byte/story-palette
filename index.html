@@ -545,6 +545,225 @@
     .edgeGuide.bottom {
       bottom: 10px;
     }
+    /* プレビューボタン */
+    .previewButton {
+      background: #a87898;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 22px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    /* プレビュー中は選択枠を隠す */
+    .story.previewMode .storyPhotoItem.selected,
+    .story.previewMode .storyTextItem.selected {
+      outline: none !important;
+    }
+    /* 鍵・削除ボタンとガイドラインを隠す */
+    .story.previewMode .itemCornerActions,
+    .story.previewMode .centerGuide,
+    .story.previewMode .edgeGuide {
+      display: none !important;
+    }
+    /* プレビュー中は写真・文字を操作できない */
+    .story.previewMode .storyPhotoItem,
+    .story.previewMode .storyTextItem {
+      pointer-events: none;
+    }
+    /* 背景グラデーションの選択ボタン */
+    .gradientButtons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 12px 0 22px;
+    }
+    .gradientButtons button {
+      margin: 0;
+      padding: 14px 5px;
+      min-height: 65px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .gradientButtons .gradientHeisei {
+      background: linear-gradient(135deg, #ff9fcf, #ffe7f4, #c9b2ff, #a6e8ff);
+      color: #743a68;
+    }
+    .gradientButtons .gradientKorean {
+      background: linear-gradient(160deg, #fff8ee, #fce9ee, #e6e2fa, #d8e9e7);
+      color: #756776;
+    }
+    .gradientButtons .gradientY2K {
+      background: linear-gradient(145deg, #e5faff, #adc5e9, #d3bafb,
+          #8c95c7, #445a93);
+      color: #243b70;
+    }
+    /* 平成プリ風のデコレーション */
+    .story[data-decor-preset="heisei"]::before,
+    .story[data-decor-preset="heisei"]::after {
+      position: absolute;
+      z-index: 9000;
+      pointer-events: none;
+      color: #ff73b6;
+      font-weight: bold;
+      font-family: sans-serif;
+      font-size: 20px;
+      text-shadow:
+        1px 1px 0 #ffffff,
+        -1px -1px 0 #ffffff,
+        0 0 7px #ffffff;
+    }
+    /* 左上のキラキラ */
+    .story[data-decor-preset="heisei"]::before {
+      content: "✦ ♡ ✦";
+      top: 16px;
+      left: 12px;
+      transform: rotate(-12deg);
+    }
+    /* 右下のハート */
+    .story[data-decor-preset="heisei"]::after {
+      content: "♡ ✧ ♡";
+      bottom: 18px;
+      right: 12px;
+      transform: rotate(8deg);
+    }
+    /* 韓国コラージュ：白い写真フレーム */
+    .story[data-decor-preset="korean"] .storyPhotoItem {
+      box-shadow: 0 0 0 5px #fffaf5;
+    }
+    /* 韓国コラージュ：マスキングテープ共通 */
+    .story[data-decor-preset="korean"]::before,
+    .story[data-decor-preset="korean"]::after {
+      content: "";
+      position: absolute;
+      width: 78px;
+      height: 20px;
+      background:
+        repeating-linear-gradient(45deg,
+          rgba(255, 255, 255, 0.22) 0 5px,
+          transparent 5px 12px),
+        rgba(238, 210, 189, 0.82);
+      z-index: 9000;
+      pointer-events: none;
+    }
+    /* 左上のテープ */
+    .story[data-decor-preset="korean"]::before {
+      top: 26px;
+      left: 12px;
+      transform: rotate(-13deg);
+    }
+    /* 右下のテープ */
+    .story[data-decor-preset="korean"]::after {
+      bottom: 28px;
+      right: 12px;
+      transform: rotate(10deg);
+    }
+    /* Y2Kカメラ：REC表示とファインダー枠 */
+    .story[data-decor-preset="y2k"]::before {
+      content: "● REC";
+      position: absolute;
+      inset: 10px;
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      color: #ffffff;
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: left;
+      text-shadow: 1px 1px 3px #000000;
+      z-index: 9000;
+      pointer-events: none;
+    }
+    /* Y2Kカメラ：日時表示 */
+    .story[data-decor-preset="y2k"]::after {
+      content: attr(data-y2k-timestamp);
+      position: absolute;
+      bottom: 22px;
+      right: 20px;
+      color: #ffffff;
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 3px #000000;
+      z-index: 9000;
+      pointer-events: none;
+    }
+    /* 写真フィルター選択 */
+    .photoFilterControls {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin: 12px 0 18px;
+    }
+    .photoFilterControls button {
+      margin: 0;
+      min-height: 46px;
+      border-radius: 10px;
+      background: #f3e8ef;
+      color: #665260;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    /* 選択中のフィルター */
+    .photoFilterControls button.active {
+      background: #a87898;
+      color: white;
+      outline: 2px solid #d9adc5;
+    }
+    /* Y2Kカメラ風グレイン */
+    .y2kGrainOverlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      z-index: 8900;
+      pointer-events: none;
+      background-repeat: repeat;
+    }
+    /* グレインの調整欄 */
+    .y2kGrainControls {
+      margin: 12px 0 20px;
+      padding: 12px;
+      background: #f3edf5;
+      border-radius: 10px;
+    }
+    .y2kGrainControls label {
+      display: block;
+      font-size: 13px;
+      color: #665260;
+    }
+    .y2kGrainControls input {
+      width: 90%;
+    }
+    /* Y2Kフラッシュ＆光漏れ */
+    .y2kLightOverlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 8850;
+      display: none;
+      pointer-events: none;
+    }
+    /* 光の強さ調整 */
+    .y2kLightControls {
+      margin: 12px 0 20px;
+      padding: 12px;
+      background: #f3edf5;
+      border-radius: 10px;
+    }
+    .y2kLightControls label {
+      display: block;
+      font-size: 13px;
+      color: #665260;
+    }
+    .y2kLightControls input {
+      width: 90%;
+    }
   </style>
 </head>
 <body>
@@ -554,6 +773,9 @@
     <!-- 編集用ストーリー表示 -->
     <div class="story">
     </div>
+    <button type="button" id="previewToggleButton" onclick="toggleStoryPreview()" class="previewButton">
+      👁️ プレビューを見る
+    </button>
     <!-- 編集タブ -->
     <!-- 元に戻す・やり直す -->
     <!-- 選択した写真・文字を削除 -->
@@ -620,6 +842,29 @@
         ＋ 写真を追加
       </label>
       <input type="file" accept="image/*" id="photo" style="display:none;">
+      <p>✨ 写真フィルター</p>
+      <div class="photoFilterControls">
+        <button type="button" data-filter="none" onclick="applyPhotoFilter('none')">
+          オリジナル
+        </button>
+        <button type="button" data-filter="heisei" onclick="applyPhotoFilter('heisei')">
+          💗 平成プリ
+        </button>
+        <button type="button" data-filter="korean" onclick="applyPhotoFilter('korean')">
+          🧸 韓国風
+        </button>
+        <button type="button" data-filter="y2k" onclick="applyPhotoFilter('y2k')">
+          📸 Y2K
+        </button>
+      </div>
+      <div class="photoFilterStrengthControls">
+        <label for="photoFilterStrength">
+          フィルターの強さ：
+          <span id="photoFilterStrengthValue">100%</span>
+        </label>
+        <input type="range" id="photoFilterStrength" min="0" max="100" step="5" value="100"
+          oninput="changePhotoFilterStrength()">
+      </div>
       <p>写真の大きさ</p>
       <input type="range" id="photoSize" min="10" max="400" value="100" oninput="changeSize()">
       <details class="editorAccordion">
@@ -699,6 +944,42 @@
       </details>
     </div> <!-- 背景タブ -->
     <div id="backgroundTab" class="tabContent">
+      <p>💖 平成プリ風デコレーション</p>
+      <button type="button" id="heiseiDecorButton" onclick="toggleHeiseiDecor()">
+        ✨ ハート＆キラキラを追加
+      </button>
+      <button type="button" id="koreanDecorButton" onclick="toggleKoreanDecor()">
+        🧸 韓国コラージュを追加
+      </button>
+      <button type="button" id="y2kDecorButton" onclick="toggleY2KDecor()">
+        📹 Y2Kカメラ風を追加
+      </button>
+      <div class="y2kGrainControls">
+        <label for="y2kGrainStrength">
+          📸 Y2K 粒子感：
+          <span id="y2kGrainValue">40%</span>
+        </label>
+        <input type="range" id="y2kGrainStrength" min="0" max="100" step="5" value="40" oninput="changeY2KGrain()">
+      </div>
+      <div class="y2kLightControls">
+        <label for="y2kLightStrength">
+          ✨ Y2K フラッシュ＆光漏れ：
+          <span id="y2kLightValue">45%</span>
+        </label>
+        <input type="range" id="y2kLightStrength" min="0" max="100" step="5" value="45" oninput="changeY2KLight()">
+      </div>
+      <p>✨ 背景スタイル</p>
+      <div class="gradientButtons">
+        <button type="button" onclick="applyGradientBackground('heisei')" class="gradientHeisei">
+          💗 平成プリ
+        </button>
+        <button type="button" onclick="applyGradientBackground('korean')" class="gradientKorean">
+          🧸 韓国コラージュ
+        </button>
+        <button type="button" onclick="applyGradientBackground('y2k')" class="gradientY2K">
+          📸 Y2Kカメラ
+        </button>
+      </div>
       <p>背景の色</p>
       <button onclick="changeColor('#f8c8dc')">ピンク</button>
       <button onclick="changeColor('#c8e7ff')">水色</button>
@@ -779,6 +1060,8 @@
           img.dataset.size || "100";
       }
       refreshPhotoList();
+      updatePhotoFilterButtons();
+      updatePhotoFilterStrengthUI();
     }
     function refreshPhotoList() {
       photoList.innerHTML = "";
@@ -1055,6 +1338,54 @@
       }
     }
     // 背景色変更
+    /* 背景グラデーションのプリセット */
+    const gradientPresets = {
+      heisei: {
+        angle: 135,
+        stops: [
+          { at: 0, color: "#ff9fcf" },
+          { at: 38, color: "#ffe7f4" },
+          { at: 72, color: "#c9b2ff" },
+          { at: 100, color: "#a6e8ff" }
+        ]
+      },
+      korean: {
+        angle: 160,
+        stops: [
+          { at: 0, color: "#fff8ee" },
+          { at: 38, color: "#fce9ee" },
+          { at: 72, color: "#e6e2fa" },
+          { at: 100, color: "#d8e9e7" }
+        ]
+      },
+      y2k: {
+        angle: 145,
+        stops: [
+          { at: 0, color: "#e5faff" },
+          { at: 24, color: "#adc5e9" },
+          { at: 50, color: "#d3bafb" },
+          { at: 74, color: "#8c95c7" },
+          { at: 100, color: "#445a93" }
+        ]
+      }
+    };
+    /* グラデーション背景を適用 */
+    function applyGradientBackground(name, recordHistory = true) {
+      const preset = gradientPresets[name];
+      if (!preset) return;
+      const story = document.querySelector(".story");
+      if (story.dataset.bgPreset === name) return;
+      if (recordHistory) saveHistory();
+      const colors = preset.stops.map(function (stop) {
+        return stop.color + " " + stop.at + "%";
+      }).join(", ");
+      story.style.backgroundImage =
+        `linear-gradient(${preset.angle}deg, ${colors})`;
+      story.style.backgroundColor = preset.stops[0].color;
+      story.dataset.bgPreset = name;
+      document.getElementById("backgroundColor").value =
+        preset.stops[0].color;
+    }
     function changeColor(color) {
       const story = document.querySelector(".story");
       const colorPicker =
@@ -1064,13 +1395,18 @@
         getComputedStyle(story).backgroundColor
       );
       // 同じ色なら履歴を保存しない
-      if (currentColor.toLowerCase() === color.toLowerCase()) {
+      if (
+        !story.dataset.bgPreset &&
+        currentColor.toLowerCase() === color.toLowerCase()
+      ) {
         return;
       }
       // 色を変える前の状態を保存
       saveHistory();
       // 背景色を変更
       story.style.backgroundColor = color;
+      story.style.backgroundImage = "none";
+      delete story.dataset.bgPreset;
       // カラーピッカーの色も合わせる
       colorPicker.value = color;
     }    // 文字変更
@@ -1086,7 +1422,32 @@
       canvas.width = 1080;
       canvas.height = 1920;
       const ctx = canvas.getContext("2d");
-      ctx.fillStyle = getComputedStyle(story).backgroundColor;
+      const preset = gradientPresets[story.dataset.bgPreset];
+      if (preset) {
+        const rad = preset.angle * Math.PI / 180;
+        const dx = Math.sin(rad);
+        const dy = -Math.cos(rad);
+        const length =
+          Math.abs(canvas.width * dx) +
+          Math.abs(canvas.height * dy);
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const gradient = ctx.createLinearGradient(
+          cx - dx * length / 2,
+          cy - dy * length / 2,
+          cx + dx * length / 2,
+          cy + dy * length / 2
+        );
+        preset.stops.forEach(function (stop) {
+          gradient.addColorStop(
+            stop.at / 100,
+            stop.color
+          );
+        });
+        ctx.fillStyle = gradient;
+      } else {
+        ctx.fillStyle = getComputedStyle(story).backgroundColor;
+      }
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       // 編集画面のDOM順に描画して、写真と文字の重なりを一致させる
       Array.from(story.children).forEach(function (el) {
@@ -1102,7 +1463,21 @@
           ctx.save();
           ctx.translate(540 + x * 4, 960 + y * 4);
           ctx.rotate(rotation * Math.PI / 180);
+          // 韓国コラージュ：写真の白いフレーム
+          if (story.dataset.decorPreset === "korean") {
+            ctx.fillStyle = "#fffaf5";
+            ctx.fillRect(
+              -w / 2 - 20,
+              -h / 2 - 20,
+              w + 40,
+              h + 40
+            );
+          }
+          // 写真に設定されたフィルターを保存画像に反映
+          ctx.save();
+          ctx.filter = el.style.filter || "none";
           ctx.drawImage(el, -w / 2, -h / 2, w, h);
+          ctx.restore();
           ctx.restore();
         } else if (el.classList.contains("storyTextItem")) {
           const style = getComputedStyle(el);
@@ -1153,6 +1528,132 @@
           ctx.restore();
         }
       });
+      // Y2Kフラッシュ＆光漏れをPNGに反映
+      if (story.dataset.decorPreset === "y2k") {
+        const strength = Number(
+          story.dataset.y2kLightStrength ?? "45"
+        );
+        if (strength > 0) {
+          ctx.save();
+          ctx.globalAlpha = strength / 100;
+          // 編集画面と同じCanvasを4倍で描画
+          ctx.drawImage(
+            y2kLightCanvas,
+            0, 0,
+            canvas.width,
+            canvas.height
+          );
+          ctx.restore();
+        }
+      }
+      // Y2Kの粒子感をPNGにも反映
+      if (story.dataset.decorPreset === "y2k") {
+        const strength = Number(
+          story.dataset.grainStrength ?? "40"
+        );
+        if (strength > 0) {
+          ctx.save();
+          // 編集画面270×480に合わせた座標で描画
+          ctx.scale(4, 4);
+          ctx.globalAlpha = strength / 100;
+          const pattern = ctx.createPattern(
+            y2kGrainCanvas,
+            "repeat"
+          );
+          if (pattern) {
+            ctx.fillStyle = pattern;
+            ctx.fillRect(0, 0, 270, 480);
+          }
+          ctx.restore();
+        }
+      }
+      // 平成プリの装飾を保存画像にも描画
+      if (story.dataset.decorPreset === "heisei") {
+        ctx.save();
+        ctx.fillStyle = "#ff73b6";
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 8;
+        ctx.lineJoin = "round";
+        ctx.font = "bold 80px sans-serif";
+        // 左上のキラキラ
+        ctx.translate(48, 144);
+        ctx.rotate(-12 * Math.PI / 180);
+        ctx.strokeText("✦ ♡ ✦", 0, 0);
+        ctx.fillText("✦ ♡ ✦", 0, 0);
+        ctx.restore();
+        ctx.save();
+        ctx.fillStyle = "#ff73b6";
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 8;
+        ctx.lineJoin = "round";
+        ctx.font = "bold 80px sans-serif";
+        ctx.textAlign = "right";
+        // 右下のハート
+        ctx.translate(1032, 1840);
+        ctx.rotate(8 * Math.PI / 180);
+        ctx.strokeText("♡ ✧ ♡", 0, 0);
+        ctx.fillText("♡ ✧ ♡", 0, 0);
+        ctx.restore();
+      }
+      // 韓国コラージュ：テープの描画
+      if (story.dataset.decorPreset === "korean") {
+        function drawKoreanTape(x, y, angle) {
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(angle * Math.PI / 180);
+          const w = 312;
+          const h = 80;
+          // 半透明のテープ
+          ctx.fillStyle = "rgba(238,210,189,0.82)";
+          ctx.fillRect(-w / 2, -h / 2, w, h);
+          // テープの斜め模様
+          ctx.strokeStyle = "rgba(255,255,255,0.22)";
+          ctx.lineWidth = 16;
+          ctx.beginPath();
+          ctx.rect(-w / 2, -h / 2, w, h);
+          ctx.clip();
+          for (let i = -w; i < w; i += 48) {
+            ctx.beginPath();
+            ctx.moveTo(i, -h / 2);
+            ctx.lineTo(i + h, h / 2);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+        drawKoreanTape(204, 144, -13);
+        drawKoreanTape(876, 1768, 10);
+      }
+      // Y2Kカメラ装飾をPNGにも描画
+      if (story.dataset.decorPreset === "y2k") {
+        ctx.save();
+        // 白いファインダー枠
+        ctx.strokeStyle = "rgba(255,255,255,0.85)";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(40, 40, 1000, 1840);
+        // RECの赤い丸
+        ctx.fillStyle = "#ff4242";
+        ctx.beginPath();
+        ctx.arc(92, 108, 13, 0, Math.PI * 2);
+        ctx.fill();
+        // RECの文字
+        ctx.font = "bold 56px monospace";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "rgba(0,0,0,0.7)";
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText("REC", 125, 110);
+        // 撮影日時
+        ctx.font = "bold 44px monospace";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "alphabetic";
+        ctx.fillText(
+          story.dataset.y2kTimestamp || "",
+          1000,
+          1820
+        );
+        ctx.restore();
+      }
       const savedImage = document.getElementById("savedImage");
       const saveArea = document.getElementById("saveArea");
       savedImage.src = canvas.toDataURL("image/png");
@@ -1170,7 +1671,12 @@
       const story = document.querySelector(".story");
       return {
         backgroundColor: getComputedStyle(story).backgroundColor,
+        backgroundPreset: story.dataset.bgPreset || "",
         photoLayer: photoLayer,
+        decorPreset: story.dataset.decorPreset || "",
+        grainStrength: story.dataset.grainStrength || "40",
+        y2kLightStrength: story.dataset.y2kLightStrength ?? "45",
+        y2kTimestamp: story.dataset.y2kTimestamp || "",
         items: [...story.children]
           .filter(el =>
             el.classList.contains("storyPhotoItem") ||
@@ -1223,7 +1729,23 @@
       // 復元後は新しい文字入力として扱う
       textTypingHistorySaved = false;      // 背景色と重なり順の設定を復元
       story.style.backgroundColor = state.backgroundColor;
+      story.style.backgroundImage = "none";
+      delete story.dataset.bgPreset;
+      if (
+        state.backgroundPreset &&
+        gradientPresets[state.backgroundPreset]
+      ) {
+        applyGradientBackground(state.backgroundPreset, false);
+      }
       photoLayer = state.photoLayer;
+      story.dataset.decorPreset = state.decorPreset || "";
+      story.dataset.grainStrength = state.grainStrength || "40";
+      story.dataset.y2kLightStrength =
+        state.y2kLightStrength ?? "45";
+      story.dataset.y2kTimestamp = state.y2kTimestamp || "";
+      updateHeiseiDecorButton();
+      updateKoreanDecorButton();
+      updateY2KDecorButton();
       document.getElementById("backgroundColor").value =
         rgbToHex(state.backgroundColor);
       // 写真と文字を元の順番で復元
@@ -1336,6 +1858,124 @@
       document.getElementById("editorArea").scrollIntoView({
         behavior: "smooth"
       });
+    }
+    /* 写真フィルターの設定 */
+    const photoFilterPresets = {
+      none: "none",
+      // 平成プリ：明るく鮮やか
+      heisei:
+        "brightness(1.15) saturate(1.35) contrast(1.06)",
+      // 韓国風：淡く柔らかい
+      korean:
+        "brightness(1.08) saturate(0.72) contrast(0.88) sepia(0.06)",
+      // Y2K：強いコントラストと青み
+      y2k:
+        "brightness(1.08) contrast(1.32) saturate(0.82) hue-rotate(12deg)"
+    };
+    /* 選択した写真にフィルターを適用 */
+    /* フィルターの強さに応じたCSSを作る */
+    function buildPhotoFilterCss(preset, strength) {
+      const t = Math.max(0, Math.min(100, strength)) / 100;
+      if (preset === "none" || t === 0) {
+        return "none";
+      }
+      function blend(normal, filtered) {
+        return normal + (filtered - normal) * t;
+      }
+      if (preset === "heisei") {
+        return `
+      brightness(${blend(1, 1.15)})
+      saturate(${blend(1, 1.35)})
+      contrast(${blend(1, 1.06)})
+    `;
+      }
+      if (preset === "korean") {
+        return `
+      brightness(${blend(1, 1.08)})
+      saturate(${blend(1, 0.72)})
+      contrast(${blend(1, 0.88)})
+      sepia(${blend(0, 0.06)})
+    `;
+      }
+      if (preset === "y2k") {
+        return `
+      brightness(${blend(1, 1.08)})
+      contrast(${blend(1, 1.32)})
+      saturate(${blend(1, 0.82)})
+      hue-rotate(${12 * t}deg)
+    `;
+      }
+      return "none";
+    }
+    function applyPhotoFilter(preset) {
+      if (!selectedPhoto) {
+        alert("先に写真を選択してください");
+        return;
+      }
+      if (isItemLocked(selectedPhoto)) {
+        alert("ロックを解除してください");
+        return;
+      }
+      if (!(preset in photoFilterPresets)) return;
+      const current =
+        selectedPhoto.dataset.filterPreset || "none";
+      if (current === preset) return;
+      // フィルター変更前を履歴に保存
+      saveHistory();
+      selectedPhoto.dataset.filterPreset = preset;
+      // 写真ごとにフィルターの強さを保存
+      const strength = Number(
+        selectedPhoto.dataset.filterStrength ?? "100"
+      );
+      selectedPhoto.dataset.filterStrength = String(strength);
+      selectedPhoto.style.filter =
+        buildPhotoFilterCss(preset, strength);
+      updatePhotoFilterButtons();
+    }
+    /* 選択中のフィルターボタンを表示 */
+    function updatePhotoFilterButtons() {
+      const current = selectedPhoto
+        ? (selectedPhoto.dataset.filterPreset || "none")
+        : "";
+      document.querySelectorAll(
+        ".photoFilterControls button"
+      ).forEach(function (button) {
+        button.classList.toggle(
+          "active",
+          button.dataset.filter === current
+        );
+      });
+    }
+    /* フィルターの強さを変更 */
+    function changePhotoFilterStrength() {
+      if (!selectedPhoto) return;
+      if (isItemLocked(selectedPhoto)) return;
+      const slider =
+        document.getElementById("photoFilterStrength");
+      const strength = Number(slider.value);
+      const preset =
+        selectedPhoto.dataset.filterPreset || "none";
+      selectedPhoto.dataset.filterStrength =
+        String(strength);
+      selectedPhoto.style.filter =
+        buildPhotoFilterCss(preset, strength);
+      document.getElementById(
+        "photoFilterStrengthValue"
+      ).textContent = strength + "%";
+    }
+    /* 選択した写真の強さを画面に反映 */
+    function updatePhotoFilterStrengthUI() {
+      const slider =
+        document.getElementById("photoFilterStrength");
+      const valueLabel =
+        document.getElementById("photoFilterStrengthValue");
+      const strength = selectedPhoto
+        ? Number(selectedPhoto.dataset.filterStrength ?? "100")
+        : 100;
+      slider.value = strength;
+      valueLabel.textContent = strength + "%";
+      slider.disabled =
+        !selectedPhoto || isItemLocked(selectedPhoto);
     }
     function changeSize() {
       if (!selectedPhoto) return;
@@ -2233,6 +2873,279 @@
         }
       );
     }
+    /* プレビューモードの切り替え */
+    function toggleStoryPreview() {
+      const story = document.querySelector(".story");
+      const button = document.getElementById("previewToggleButton");
+      const isPreview = story.classList.toggle("previewMode");
+      if (isPreview) {
+        // 編集用ガイドラインを消す
+        hideAllSnapGuides();
+        button.textContent = "✏️ 編集に戻る";
+      } else {
+        button.textContent = "👁️ プレビューを見る";
+        // 編集用の操作ボタンを元に戻す
+        updateItemCornerActions();
+      }
+    }
+    /* 平成プリ装飾のON・OFF */
+    function toggleHeiseiDecor() {
+      const story = document.querySelector(".story");
+      saveHistory();
+      if (story.dataset.decorPreset === "heisei") {
+        delete story.dataset.decorPreset;
+      } else {
+        story.dataset.decorPreset = "heisei";
+      }
+      updateHeiseiDecorButton();
+      updateKoreanDecorButton();
+      updateY2KDecorButton();
+    }
+    /* ボタンの表示を更新 */
+    function updateHeiseiDecorButton() {
+      const story = document.querySelector(".story");
+      const button = document.getElementById("heiseiDecorButton");
+      if (!button) return;
+      const enabled = story.dataset.decorPreset === "heisei";
+      button.textContent = enabled
+        ? "✓ ハート＆キラキラを外す"
+        : "✨ ハート＆キラキラを追加";
+    }
+    /* 韓国コラージュ装飾のON・OFF */
+    function toggleKoreanDecor() {
+      const story = document.querySelector(".story");
+      saveHistory();
+      if (story.dataset.decorPreset === "korean") {
+        delete story.dataset.decorPreset;
+      } else {
+        story.dataset.decorPreset = "korean";
+      }
+      updateKoreanDecorButton();
+      updateHeiseiDecorButton();
+      updateY2KDecorButton();
+    }
+    /* 韓国コラージュボタンの表示 */
+    function updateKoreanDecorButton() {
+      const story = document.querySelector(".story");
+      const button =
+        document.getElementById("koreanDecorButton");
+      if (!button) return;
+      const enabled =
+        story.dataset.decorPreset === "korean";
+      button.textContent = enabled
+        ? "✓ 韓国コラージュを外す"
+        : "🧸 韓国コラージュを追加";
+    }
+    /* Y2Kカメラ装飾のON・OFF */
+    function toggleY2KDecor() {
+      const story = document.querySelector(".story");
+      saveHistory();
+      if (story.dataset.decorPreset === "y2k") {
+        delete story.dataset.decorPreset;
+        delete story.dataset.y2kTimestamp;
+      } else {
+        story.dataset.decorPreset = "y2k";
+        // 選択した瞬間の日時を記録
+        const now = new Date();
+        const pad = function (n) {
+          return String(n).padStart(2, "0");
+        };
+        story.dataset.y2kTimestamp =
+          now.getFullYear() + "." +
+          pad(now.getMonth() + 1) + "." +
+          pad(now.getDate()) + " " +
+          pad(now.getHours()) + ":" +
+          pad(now.getMinutes());
+      }
+      updateY2KDecorButton();
+      updateHeiseiDecorButton();
+      updateKoreanDecorButton();
+    }
+    /* ボタン表示の更新 */
+    function updateY2KDecorButton() {
+      const story = document.querySelector(".story");
+      const button = document.getElementById("y2kDecorButton");
+      if (!button) return;
+      const enabled = story.dataset.decorPreset === "y2k";
+      button.textContent = enabled
+        ? "✓ Y2Kカメラ風を外す"
+        : "📹 Y2Kカメラ風を追加";
+    }
+    /* フィルター強度の変更履歴 */
+    const filterStrengthSlider =
+      document.getElementById("photoFilterStrength");
+    // スライダーを動かす前に履歴を保存
+    filterStrengthSlider.addEventListener("pointerdown", function () {
+      if (!selectedPhoto || isItemLocked(selectedPhoto)) return;
+      saveHistory();
+    });
+    // キーボード操作にも対応
+    filterStrengthSlider.addEventListener("keydown", function (e) {
+      if (!selectedPhoto || isItemLocked(selectedPhoto)) return;
+      const keys = [
+        "ArrowLeft", "ArrowRight",
+        "ArrowUp", "ArrowDown",
+        "Home", "End", "PageUp", "PageDown"
+      ];
+      if (keys.includes(e.key) && !e.repeat) {
+        saveHistory();
+      }
+    });
+    /* Y2Kグレイン用の粒子画像を作成 */
+    const y2kGrainCanvas = document.createElement("canvas");
+    y2kGrainCanvas.width = 96;
+    y2kGrainCanvas.height = 96;
+    const grainCtx = y2kGrainCanvas.getContext("2d");
+    const grainImage = grainCtx.createImageData(96, 96);
+    for (let i = 0; i < grainImage.data.length; i += 4) {
+      const shade = Math.random() < 0.5 ? 0 : 255;
+      grainImage.data[i] = shade;
+      grainImage.data[i + 1] = shade;
+      grainImage.data[i + 2] = shade;
+      grainImage.data[i + 3] = 90;
+    }
+    grainCtx.putImageData(grainImage, 0, 0);
+    /* 編集画面に粒子を重ねる */
+    const y2kGrainOverlay = document.createElement("div");
+    y2kGrainOverlay.className = "y2kGrainOverlay";
+    y2kGrainOverlay.style.backgroundImage =
+      `url("${y2kGrainCanvas.toDataURL("image/png")}")`;
+    storyArea.appendChild(y2kGrainOverlay);
+    /* 粒子の強さ・表示を更新 */
+    function updateY2KGrain() {
+      const strength = Number(
+        storyArea.dataset.grainStrength ?? "40"
+      );
+      const slider = document.getElementById("y2kGrainStrength");
+      slider.value = strength;
+      document.getElementById("y2kGrainValue").textContent =
+        strength + "%";
+      const isY2K = storyArea.dataset.decorPreset === "y2k";
+      y2kGrainOverlay.style.display =
+        isY2K && strength > 0 ? "block" : "none";
+      y2kGrainOverlay.style.opacity = String(strength / 100);
+    }
+    /* スライダーを動かしたとき */
+    function changeY2KGrain() {
+      const slider = document.getElementById("y2kGrainStrength");
+      storyArea.dataset.grainStrength = slider.value;
+      updateY2KGrain();
+    }
+    /* 装飾切り替えや復元にも追従 */
+    const grainObserver = new MutationObserver(updateY2KGrain);
+    grainObserver.observe(storyArea, {
+      attributes: true,
+      attributeFilter: [
+        "data-decor-preset",
+        "data-grain-strength"
+      ]
+    });
+    updateY2KGrain();
+    /* 粒子感の変更前に履歴を保存 */
+    const grainSlider = document.getElementById("y2kGrainStrength");
+    grainSlider.addEventListener("pointerdown", function () {
+      saveHistory();
+    });
+    grainSlider.addEventListener("keydown", function (e) {
+      const keys = [
+        "ArrowLeft", "ArrowRight",
+        "ArrowUp", "ArrowDown",
+        "Home", "End",
+        "PageUp", "PageDown"
+      ];
+      if (keys.includes(e.key) && !e.repeat) {
+        saveHistory();
+      }
+    });
+    /* Y2Kフラッシュ＆光漏れのCanvas */
+    const y2kLightCanvas = document.createElement("canvas");
+    y2kLightCanvas.width = 270;
+    y2kLightCanvas.height = 480;
+    y2kLightCanvas.className = "y2kLightOverlay";
+    const lightCtx = y2kLightCanvas.getContext("2d");
+    /* 柔らかい光を描画する共通関数 */
+    function drawY2KGlow(x, y, radius, colorStops) {
+      const gradient = lightCtx.createRadialGradient(
+        x, y, 0,
+        x, y, radius
+      );
+      colorStops.forEach(function (stop) {
+        gradient.addColorStop(stop[0], stop[1]);
+      });
+      lightCtx.fillStyle = gradient;
+      lightCtx.fillRect(0, 0, 270, 480);
+    }
+    /* 白いフラッシュ */
+    drawY2KGlow(128, 95, 230, [
+      [0, "rgba(255,255,255,0.72)"],
+      [0.4, "rgba(255,255,255,0.20)"],
+      [1, "rgba(255,255,255,0)"]
+    ]);
+    /* 左下のピンクの光漏れ */
+    drawY2KGlow(0, 425, 210, [
+      [0, "rgba(255,120,155,0.62)"],
+      [0.5, "rgba(255,170,190,0.20)"],
+      [1, "rgba(255,170,190,0)"]
+    ]);
+    /* 右上の青紫のにじみ */
+    drawY2KGlow(270, 30, 175, [
+      [0, "rgba(170,155,255,0.40)"],
+      [0.6, "rgba(180,200,255,0.12)"],
+      [1, "rgba(180,200,255,0)"]
+    ]);
+    storyArea.appendChild(y2kLightCanvas);
+    /* エフェクトの表示状態を更新 */
+    function updateY2KLight() {
+      const strength = Number(
+        storyArea.dataset.y2kLightStrength ?? "45"
+      );
+      const slider =
+        document.getElementById("y2kLightStrength");
+      slider.value = strength;
+      document.getElementById(
+        "y2kLightValue"
+      ).textContent = strength + "%";
+      const isY2K =
+        storyArea.dataset.decorPreset === "y2k";
+      y2kLightCanvas.style.display =
+        isY2K && strength > 0 ? "block" : "none";
+      y2kLightCanvas.style.opacity =
+        String(strength / 100);
+    }
+    /* スライダーを動かしたとき */
+    function changeY2KLight() {
+      const slider =
+        document.getElementById("y2kLightStrength");
+      storyArea.dataset.y2kLightStrength = slider.value;
+      updateY2KLight();
+    }
+    /* 装飾の切り替えにも追従 */
+    const y2kLightObserver =
+      new MutationObserver(updateY2KLight);
+    y2kLightObserver.observe(storyArea, {
+      attributes: true,
+      attributeFilter: [
+        "data-decor-preset",
+        "data-y2k-light-strength"
+      ]
+    });
+    updateY2KLight();
+    /* フラッシュ強度の変更履歴 */
+    const y2kLightSlider =
+      document.getElementById("y2kLightStrength");
+    y2kLightSlider.addEventListener("pointerdown", function () {
+      saveHistory();
+    });
+    y2kLightSlider.addEventListener("keydown", function (e) {
+      const keys = [
+        "ArrowLeft", "ArrowRight",
+        "ArrowUp", "ArrowDown",
+        "Home", "End", "PageUp", "PageDown"
+      ];
+      if (keys.includes(e.key) && !e.repeat) {
+        saveHistory();
+      }
+    });
   </script>
 </body>
 </html>
