@@ -6,8 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>StoryPalette</title>
   <style>
+    @font-face {
+      font-family: "Nico Moji Plus";
+      src: url("https://aws2000.net/font/nicomoji/nicomoji-plus_v0.9.woff") format("woff");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
     body {
-      font-family: sans-serif;
+      font-family: "Nico Moji Plus", sans-serif;
       background: #f8edf2;
       text-align: center;
       padding: 16px;
@@ -17,6 +25,10 @@
 
     * {
       box-sizing: border-box;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
     }
 
     .story {
@@ -53,7 +65,7 @@
       padding: 0;
       color: #555555;
       font-size: 15px;
-      font-family: sans-serif;
+      font-family: "Nico Moji Plus", sans-serif;
       line-height: 1.2;
       text-align: center;
       white-space: pre-wrap;
@@ -415,22 +427,25 @@
       position: absolute;
       z-index: 20000;
       display: none;
-      gap: 4px;
+      width: 34px;
+      height: 16px;
+      gap: 2px;
       align-items: center;
+      justify-content: flex-end;
       pointer-events: auto;
     }
 
     /* 小さな鍵・削除ボタン */
     .itemCornerActions button {
-      width: 26px;
-      height: 26px;
+      width: 16px;
+      height: 16px;
       padding: 0;
       margin: 0;
       border: none;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.95);
       color: #665260;
-      font-size: 12px;
+      font-size: 6px;
       line-height: 1;
       display: flex;
       align-items: center;
@@ -443,7 +458,60 @@
     .itemCornerActions .cornerDelete {
       background: #333333;
       color: white;
-      font-size: 18px;
+      font-size: 10px;
+    }
+
+    /* 写真上の装飾アイテム用の右下操作ポップアップ */
+    .itemCornerActions.stickerActions {
+      left: auto !important;
+      top: auto !important;
+      right: 6px;
+      bottom: 6px;
+      width: auto;
+      height: auto;
+      gap: 3px;
+      padding: 2px 4px;
+      border: 1px solid rgba(220, 197, 212, 0.9);
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 2px 9px rgba(75, 48, 65, 0.18);
+      backdrop-filter: blur(8px);
+    }
+
+    .itemCornerActions.stickerActions button {
+      width: auto;
+      min-width: 42px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 5px;
+      font-size: 8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .itemCornerActions.stickerActions .cornerFont {
+      background: #eee5ed;
+      color: #725c70;
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    .itemCornerActions.stickerActions .cornerLock {
+      background: #f6eaf1;
+      color: #80566d;
+      opacity: 1;
+      filter: none;
+    }
+
+    .itemCornerActions.stickerActions .cornerLock.isLocked {
+      background: #80566d;
+      color: #fff;
+    }
+
+    .itemCornerActions.stickerActions .cornerDelete {
+      background: #d96b9f;
+      color: #fff;
+      font-size: 8px;
     }
 
     /* 詳細ツールの開閉ボタン */
@@ -526,6 +594,15 @@
       color: #665260;
       font-size: 13px;
     }
+    #textTab #customTextEntry .textDecorationHeading { margin: 4px 0 2px; font-size: 10px; line-height: 1.1; }
+    #textTab #customTextEntry .textDecorationAccordion { margin: 2px 0 5px; border-radius: 8px; }
+    #textTab #customTextEntry .textDecorationAccordion summary { padding: 6px 8px; font-size: 10px; line-height: 1.15; }
+    #textTab #customTextEntry .decorationSettings { padding: 6px 8px; font-size: 9px; }
+    #textTab #customTextEntry .decorationSettings>label { margin: 3px 0; font-size: 9px; line-height: 1.2; }
+    #textTab #customTextEntry .decorationSettings>div { display: grid; grid-template-columns: 74px minmax(0,1fr); align-items: center; gap: 4px; margin: 4px 0; }
+    #textTab #customTextEntry .decorationSettings>div label { margin: 0; font-size: 8px; line-height: 1.1; }
+    #textTab #customTextEntry .decorationSettings input[type="color"] { width: 20px; height: 20px; margin: 0; padding: 2px; }
+    #textTab #customTextEntry .decorationSettings input[type="range"] { width: 100%; height: 13px; margin: 0 !important; padding: 0; }
 
     /* 選択中の写真・文字を見やすくする */
     .storyPhotoItem.selected,
@@ -543,18 +620,19 @@
 
     /* 右上の操作ボタンを少しコンパクトに */
     .itemCornerActions {
-      gap: 3px;
+      gap: 2px;
     }
 
     .itemCornerActions button {
-      width: 24px;
-      height: 24px;
-      font-size: 11px;
+      width: 16px;
+      height: 16px;
+      font-size: 6px;
       opacity: 0.95;
     }
 
+    .itemCornerActions .cornerLock { font-size: 6px; }
     .itemCornerActions .cornerDelete {
-      font-size: 17px;
+      font-size: 10px;
     }
 
     /* 押したときの反応 */
@@ -729,7 +807,7 @@
 
     /* 韓国コラージュ：白い写真フレーム */
     .story[data-decor-preset="korean"] .storyPhotoItem {
-      box-shadow: 0 0 0 5px #fffaf5;
+      box-shadow: 0 0 0 calc(5px * var(--decor-scale, 1)) rgba(255,250,245,var(--decor-opacity, 1));
     }
 
     /* 韓国コラージュ：マスキングテープ共通 */
@@ -796,15 +874,48 @@
       pointer-events: none;
     }
 
+    /* 追加の装飾プリセット */
+    .story[data-decor-preset="scrapbook"]::before,
+    .story[data-decor-preset="scrapbook"]::after,
+    .story[data-decor-preset="softSparkle"]::before,
+    .story[data-decor-preset="softSparkle"]::after,
+    .story[data-decor-preset="polaroid"]::before,
+    .story[data-decor-preset="polaroid"]::after {
+      position: absolute; z-index: 9000; pointer-events: none;
+    }
+    .story[data-decor-preset="scrapbook"]::before { content: "✂  ─ ─ ─"; top: 18px; left: 14px; color: #9a715c; font-size: 14px; transform: rotate(-8deg); }
+    .story[data-decor-preset="scrapbook"]::after { content: "MEMORIES  •  TODAY"; right: 12px; bottom: 20px; padding: 5px 7px; border: 1px solid #b89b7d; background: rgba(255,250,238,.82); color: #806b56; font: 9px monospace; transform: rotate(4deg); }
+    .story[data-decor-preset="softSparkle"]::before { content: "✧     ✦"; top: 14%; right: 10%; color: #fff; font-size: 24px; text-shadow: 0 0 8px #fff, 0 0 14px #df9fc4; transform: rotate(12deg); }
+    .story[data-decor-preset="softSparkle"]::after { content: "✦     ✧"; left: 8%; bottom: 16%; color: #fff; font-size: 20px; text-shadow: 0 0 8px #fff, 0 0 14px #df9fc4; transform: rotate(-10deg); }
+    .story[data-decor-preset="polaroid"] .storyPhotoItem { box-shadow: 0 0 0 7px #fff, 0 5px 18px rgba(42,35,42,.24); }
+    .story[data-decor-preset="polaroid"]::before { content: "✉"; top: 17px; right: 16px; color: #fff; font-size: 25px; text-shadow: 0 1px 5px #68576a; transform: rotate(12deg); }
+    .story[data-decor-preset="polaroid"]::after { content: "with love"; left: 16px; bottom: 20px; color: #fff; font: italic 16px cursive; text-shadow: 0 1px 5px #68576a; transform: rotate(-7deg); }
+    .story[data-decor-preset]::before,
+    .story[data-decor-preset]::after {
+      translate: var(--decor-x, 0px) var(--decor-y, 0px);
+      scale: var(--decor-scale, 1);
+      rotate: var(--decor-rotation, 0deg);
+      opacity: var(--decor-opacity, 1);
+    }
+    .story[data-decor-preset="polaroid"] .storyPhotoItem { box-shadow: 0 0 0 calc(7px * var(--decor-scale, 1)) rgba(255,255,255,var(--decor-opacity, 1)), 0 5px 18px rgba(42,35,42,.24); }
+
     /* 写真フィルター選択 */
     .photoFilterControls {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      flex-wrap: nowrap;
       gap: 8px;
-      margin: 12px 0 18px;
+      margin: 12px -2px 14px;
+      padding: 4px 2px 9px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
     }
 
     .photoFilterControls button {
+      flex: 0 0 112px;
       margin: 0;
       min-height: 46px;
       border-radius: 10px;
@@ -812,6 +923,7 @@
       color: #665260;
       font-size: 13px;
       font-weight: bold;
+      scroll-snap-align: start;
     }
 
     /* 選択中のフィルター */
@@ -820,6 +932,12 @@
       color: white;
       outline: 2px solid #d9adc5;
     }
+    #effectTab .y2kGrainControls, #effectTab .y2kLightControls { display: none; margin: 2px 0 4px; padding: 4px 6px; border-radius: 8px; }
+    #effectTab.y2kCameraActive .y2kGrainControls,
+    #effectTab.y2kCameraActive .y2kLightControls { display: block; }
+    #effectTab.y2kCameraActive .photoFilterStrengthControls { display: none; }
+    #effectTab .y2kGrainControls label, #effectTab .y2kLightControls label { margin: 0; font-size: 9px; line-height: 1.1; }
+    #effectTab .y2kGrainControls input, #effectTab .y2kLightControls input { width: 100%; height: 12px; margin: 2px 0 0 !important; padding: 0; }
 
     /* Y2Kカメラ風グレイン */
     .y2kGrainOverlay {
@@ -936,326 +1054,208 @@
       color: #887b87;
     }
 
-    /* StoryPalette: compact story-editor layout */
-    :root {
-      color-scheme: light;
-      --sp-ink: #493844;
-      --sp-muted: #8e7888;
-      --sp-accent: #cf6f9f;
-      --sp-safe-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    html,
+    /* StoryPalette compact editor layout */
+    :root { --sp-safe-bottom: env(safe-area-inset-bottom, 0px); }
+    html, body { width: 100%; height: 100%; min-height: 100%; overflow: hidden; overscroll-behavior: none; }
     body {
-      width: 100%;
-      height: 100%;
-      min-height: 100%;
-      overflow: hidden;
-      overscroll-behavior: none;
-    }
-
-    body {
-      padding: 0;
-      color: var(--sp-ink);
+      padding: 0; color: #493844;
       background: radial-gradient(ellipse at 50% 28%, #fffafd 0, #f8edf4 55%, #f1e4ee 100%);
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      font-family: "Nico Moji Plus", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
       -webkit-text-size-adjust: 100%;
     }
-
-    body > h1,
-    body > p {
-      display: none;
-    }
-
+    body > h1, body > p { display: none; }
     #editorArea {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      min-height: 0;
+      position: fixed; inset: 0; width: 100%; height: 100vh; height: 100dvh; min-height: 0;
       padding: calc(8px + env(safe-area-inset-top, 0px)) 12px calc(8px + var(--sp-safe-bottom));
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; gap: 8px; overflow: hidden;
     }
-
     .storyTopbar {
-      z-index: 30;
-      flex: 0 0 48px;
-      width: min(100%, 560px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 5px;
-      padding: 0 2px;
+      z-index: 30; flex: 0 0 48px; width: min(100%, 560px); display: flex; align-items: center;
+      justify-content: space-between; gap: 5px; padding: 0 2px;
     }
-
-    .storyBrand {
-      margin-right: auto;
-      color: #684e61;
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: .02em;
-      white-space: nowrap;
-    }
-
-    .storyTopActions {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
+    .storyBrand { margin-right: auto; color: #684e61; font-size: 15px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
+    .storyTopActions { display: flex; align-items: center; gap: 4px; }
     .storyTopbar button {
-      min-width: 38px;
-      height: 38px;
-      margin: 0;
-      padding: 0 9px;
-      border: 1px solid rgba(133, 101, 123, .15);
-      border-radius: 13px;
-      color: #664d60;
-      background: rgba(255, 255, 255, .78);
-      box-shadow: 0 2px 8px rgba(76, 48, 70, .06);
-      font-size: 17px;
-      font-weight: 700;
-      touch-action: manipulation;
+      min-width: 38px; height: 38px; margin: 0; padding: 0 9px; border: 1px solid rgba(133,101,123,.15);
+      border-radius: 13px; color: #664d60; background: rgba(255,255,255,.78);
+      box-shadow: 0 2px 8px rgba(76,48,70,.06); font-size: 17px; font-weight: 700; touch-action: manipulation;
     }
-
-    .storyTopbar button:disabled {
-      opacity: .42;
-    }
-
-    .storyTopbar .topSaveButton {
-      min-width: 58px;
-      padding: 0 13px;
-      border-color: transparent;
-      color: white;
-      background: linear-gradient(135deg, #e886ad, #c568a0);
-      font-size: 13px;
-    }
-
-    .story {
-      flex: 0 1 auto;
-      width: auto;
-      height: min(64dvh, calc((100vw - 24px) * 16 / 9));
-      min-height: 0;
-      max-width: min(100%, calc((100dvh - 164px) * 9 / 16));
-      max-height: calc(100dvh - 164px);
-      aspect-ratio: 9 / 16;
-      margin: auto;
-      border-radius: 22px;
-      box-shadow: 0 16px 46px rgba(75, 46, 68, .2);
-      isolation: isolate;
-    }
-
-    .previewButton,
-    .deleteControls,
-    .toolToggleControls,
-    .newStoryControls {
-      display: none !important;
-    }
-
-    .alignControls {
-      display: none;
-    }
-
+    .storyTopbar button:disabled { opacity: .42; }
+    .storyTopbar .topSaveButton { min-width: 58px; padding: 0 13px; border-color: transparent; color: white; background: linear-gradient(135deg,#e886ad,#c568a0); font-size: 13px; }
+    .story { flex: 0 1 auto; width: auto; height: min(64dvh, calc((100vw - 24px) * 16 / 9)); min-height: 0; max-width: min(100%, calc((100dvh - 164px) * 9 / 16)); max-height: calc(100dvh - 164px); aspect-ratio: 9 / 16; margin: auto; border-radius: 22px; box-shadow: 0 16px 46px rgba(75,46,68,.2); isolation: isolate; }
+    .decorMoveOverlay { position: absolute; inset: 0; z-index: 9001; display: none; background: transparent; cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent; }
+    .decorMoveOverlay:active { cursor: grabbing; }
+    #editorArea.panelOpen[data-active-panel="decor"] .story.decorMoveMode:not([data-decor-locked="true"]) .decorMoveOverlay { display: block; }
+    .story.decorPresetSelected { outline: 2px dashed #a87898; outline-offset: 3px; }
+    .combinedToolsHeading { margin: 5px 0 7px; color: #765e70; font-size: 10px; font-weight: 700; text-align: left; }
+    .combinedItemsPanel { border-top: 1px solid #f0dfe8; margin-top: 10px; padding-top: 7px; }
+    .previewButton, .deleteControls, .toolToggleControls, .newStoryControls { display: none !important; }
+    .alignControls { display: none; }
     .editTabs {
-      z-index: 30;
-      flex: 0 0 auto;
-      width: min(100%, 560px);
-      max-width: 560px;
-      margin: 0;
-      padding: 5px;
-      gap: 5px;
-      border: 1px solid rgba(132, 99, 123, .12);
-      border-radius: 19px;
-      background: rgba(255, 255, 255, .86);
-      box-shadow: 0 5px 22px rgba(76, 48, 70, .1);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      z-index: 30; flex: 0 0 auto; width: min(100%,560px); max-width: 560px; margin: 0; padding: 4px; gap: 4px;
+      justify-content: flex-start; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      border: 1px solid rgba(132,99,123,.12); border-radius: 16px; background: rgba(255,255,255,.86);
+      box-shadow: 0 5px 22px rgba(76,48,70,.1); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
     }
-
-    .tabButton {
-      min-height: 49px;
-      margin: 0;
-      padding: 7px 5px;
-      border: 0;
-      border-radius: 14px;
-      color: #806e7d;
-      background: transparent;
-      font-size: 12px;
-      font-weight: 700;
-      touch-action: manipulation;
-    }
-
-    .tabButton.active {
-      color: #a34f7f;
-      background: #fbeaf2;
-    }
-
-    .tabContent,
-    .tabContent.active {
-      display: none;
-    }
-
+    .tabButton { flex: 1 0 auto; min-width: 44px; min-height: 44px; margin: 0; padding: 6px 4px; border: 0; border-radius: 12px; color: #806e7d; background: transparent; font-size: 11px; font-weight: 700; touch-action: manipulation; }
+    .tabButton.active { color: #a34f7f; background: #fbeaf2; }
+    .tabContent, .tabContent.active { display: none; }
     #editorArea.panelOpen .tabContent.active {
-      position: fixed;
-      z-index: 25;
-      left: 0;
-      right: 0;
-      bottom: calc(72px + var(--sp-safe-bottom));
-      display: block;
-      width: min(100%, 560px);
-      max-width: 560px;
-      max-height: min(42dvh, 390px);
-      margin: 0 auto;
-      padding: 16px 16px 20px;
-      overflow: auto;
-      overscroll-behavior: contain;
-      border: 1px solid rgba(132, 99, 123, .14);
-      border-bottom: 0;
-      border-radius: 22px 22px 0 0;
-      background: rgba(255, 255, 255, .97);
-      box-shadow: 0 -12px 36px rgba(76, 48, 70, .16);
-      -webkit-overflow-scrolling: touch;
-      text-align: left;
+      position: fixed; z-index: 25; left: 0; right: 0; bottom: calc(84px + var(--sp-safe-bottom)); display: block;
+      width: min(100%,560px); max-width: 560px; max-height: min(42dvh,390px); margin: 0 auto; padding: 16px 16px 20px;
+      overflow: auto; overscroll-behavior: contain; border: 1px solid rgba(132,99,123,.14); border-bottom: 0;
+      border-radius: 22px 22px 0 0; background: rgba(255,255,255,.97); box-shadow: 0 -12px 36px rgba(76,48,70,.16);
+      -webkit-overflow-scrolling: touch; text-align: left;
     }
+    .tabContent p { margin: 13px 0 8px; }
+    .tabContent button, .tabContent select, .tabContent label { touch-action: manipulation; }
+    .textEntryModes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 10px; }
+    .textEntryMode { margin: 0 !important; padding: 7px 6px !important; border: 1px solid #eadce5 !important; border-radius: 9px !important; background: #f8f1f5 !important; color: #806e7d !important; font-size: 11px; font-weight: 700; }
+    .textEntryModes .textEntryMode { min-height: 22px; padding: 4px 6px !important; }
+    .textEntryMode.active { border-color: #d782ac !important; background: #fbeaf2 !important; color: #a34f7f !important; }
+    .textEntryPane[hidden] { display: none !important; }
+    #textTab .textStyleControls { display: grid; gap: 2px; margin: 2px 0 4px; }
+    #textTab .textColorFontRow { display: grid; grid-template-columns: 22px 20px 42px minmax(0,1fr); align-items: center; gap: 3px; }
+    #textTab .textStyleControls label { margin: 0; color: #806e7d; font-size: 8px; line-height: 1; }
+    #textTab .textStyleControls input[type="color"] { width: 18px; height: 18px; margin: 0; padding: 1px; }
+    #textTab .textStyleControls input[type="range"] { width: 100%; height: 12px; margin: 0 !important; padding: 0; accent-color: #cf6f9f; }
+    #textTab .textStyleControls select { width: 100%; min-height: 20px; margin: 0; padding: 2px 4px; font-size: 8px; line-height: 1; }
+    #textTab .textRangeRow { display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: center; gap: 4px; }
+    #textTab #customTextEntry > p { margin: 5px 0 3px; font-size: 9px; line-height: 1.1; }
+    #textTab #customTextEntry > button { min-height: 22px; margin: 1px; padding: 3px 5px; font-size: 8px; }
+    #textTab #storyText { min-height: 38px; padding: 5px; font-size: 10px; line-height: 1.2; }
+    .textPresetGrid { display: grid; width: calc(100% + 18px); margin-inline: -9px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .textPresetGrid button { min-width: 0; min-height: 42px; margin: 0; padding: 6px 7px; border: 1px solid #eadce5; border-radius: 9px; background: #fffafd; color: #665260; font-size: 10px; line-height: 1.35; }
+    .textPresetGrid button small { display: block; margin-top: 2px; color: #9b8291; font-size: 9px; }
+    .tabContent input[type="range"] { width: min(100%,340px); margin: 8px 0 14px; accent-color: #cf6f9f; }
+    .tabContent textarea { width: 100%; max-width: none; border: 1px solid #ead8e3; border-radius: 12px; font: inherit; }
+    .tabContent .addPhotoButton { display: block; width: 100%; padding: 13px; border-radius: 14px; text-align: center; }
+    .photoFilterControls, .stylePresetButtons, .gradientButtons { display: flex; flex-wrap: wrap; gap: 6px; }
+    .photoFilterControls button, .stylePresetButtons button, .gradientButtons button { flex: 1 1 42%; min-height: 42px; margin: 0; border-radius: 12px; }
+    .photoFilterControls { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; }
+    .photoFilterStrengthControls { margin: 0 0 2px; }
+    .photoFilterStrengthControls label { display: block; margin: 0; color: #806e7d; font-size: 9px; line-height: 1.15; }
+    .photoFilterStrengthControls input[type="range"],
+    .decorAdjustRow input[type="range"],
+    #effectTab .y2kGrainControls input[type="range"],
+    #effectTab .y2kLightControls input[type="range"] { display: block; width: 100%; height: 14px; margin: 2px 0 0 !important; padding: 0; accent-color: #cf6f9f; appearance: none; -webkit-appearance: none; background: transparent; }
+    .photoFilterStrengthControls input[type="range"]::-webkit-slider-runnable-track,
+    .decorAdjustRow input[type="range"]::-webkit-slider-runnable-track,
+    #effectTab .y2kGrainControls input[type="range"]::-webkit-slider-runnable-track,
+    #effectTab .y2kLightControls input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, #cf6f9f 0 var(--range-fill, 100%), #414042 var(--range-fill, 100%) 100%); }
+    .photoFilterStrengthControls input[type="range"]::-webkit-slider-thumb,
+    .decorAdjustRow input[type="range"]::-webkit-slider-thumb,
+    #effectTab .y2kGrainControls input[type="range"]::-webkit-slider-thumb,
+    #effectTab .y2kLightControls input[type="range"]::-webkit-slider-thumb { width: 14px; height: 14px; margin-top: -5px; border: 0; border-radius: 50%; background: #cf6f9f; -webkit-appearance: none; }
+    .photoFilterStrengthControls input[type="range"]::-moz-range-track,
+    .decorAdjustRow input[type="range"]::-moz-range-track,
+    #effectTab .y2kGrainControls input[type="range"]::-moz-range-track,
+    #effectTab .y2kLightControls input[type="range"]::-moz-range-track { height: 4px; border-radius: 4px; background: #414042; }
+    .photoFilterStrengthControls input[type="range"]::-moz-range-progress,
+    .decorAdjustRow input[type="range"]::-moz-range-progress,
+    #effectTab .y2kGrainControls input[type="range"]::-moz-range-progress,
+    #effectTab .y2kLightControls input[type="range"]::-moz-range-progress { height: 4px; border-radius: 4px; background: #cf6f9f; }
+    .photoFilterStrengthControls input[type="range"]::-moz-range-thumb,
+    .decorAdjustRow input[type="range"]::-moz-range-thumb,
+    #effectTab .y2kGrainControls input[type="range"]::-moz-range-thumb,
+    #effectTab .y2kLightControls input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border: 0; border-radius: 50%; background: #cf6f9f; }
+    .photoFilterControls { margin-top: 2px; }
+    .photoFilterControls button { flex: 0 0 92px; min-height: 32px; white-space: normal; scroll-snap-align: start; }
+    .decorPresetControls { display: flex; flex-wrap: nowrap; gap: 6px; margin: 8px -2px 12px; padding: 3px 2px 8px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: thin; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; touch-action: pan-x; }
+    .decorPresetControls button { flex: 0 0 86px; min-height: 31px; margin: 0; padding: 3px 4px; border: 1px solid #eedce7; background: #f8edf3; color: #71586a; font-size: 9px; line-height: 1.2; white-space: nowrap; scroll-snap-align: start; touch-action: pan-x; }
+    .decorPresetControls button.active { border-color: #c96d9e; background: #fbe3ef; color: #9b4777; box-shadow: 0 0 0 1px #c96d9e inset; }
+    .decorAdjustControls { display: grid; gap: 3px; margin: 4px 0 8px; }
+    .decorAdjustRow { display: grid; grid-template-columns: 56px minmax(0,1fr) 32px; align-items: center; gap: 6px; min-height: 23px; }
+    .decorAdjustRow label, .decorAdjustRow output { color: #806e7d; font-size: 9px; line-height: 1; white-space: nowrap; }
+    .decorAdjustRow output { color: #a34f7f; text-align: right; }
+    .decorAdjustRow input[type="range"] { display: block; width: 100%; height: 14px; margin: 0 !important; padding: 0; accent-color: #cf6f9f; appearance: none; -webkit-appearance: none; background: transparent; }
+    .decorAdjustRow input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, #cf6f9f 0 var(--range-fill, 50%), #414042 var(--range-fill, 50%) 100%); }
+    .decorAdjustRow input[type="range"]::-webkit-slider-thumb { width: 14px; height: 14px; margin-top: -5px; border: 0; border-radius: 50%; background: #cf6f9f; -webkit-appearance: none; }
+    .decorAdjustRow input[type="range"]::-moz-range-track { height: 4px; border-radius: 4px; background: #414042; }
+    .decorAdjustRow input[type="range"]::-moz-range-progress { height: 4px; border-radius: 4px; background: #cf6f9f; }
+    .decorAdjustRow input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border: 0; border-radius: 50%; background: #cf6f9f; }
+    .saveButton, .historyControls { display: none !important; }
+    .advancedAlignment { margin-top: 14px; }
+    .advancedAlignment .alignControls { display: block; width: 100%; max-width: none; margin: 10px 0 0; padding: 8px 0; background: transparent; }
+    #saveArea { position: fixed; z-index: 100; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 12px; margin: 0 !important; padding: 24px 16px calc(24px + var(--sp-safe-bottom)); background: #f8edf4; }
+    #saveArea[style*="display: block"] { display: flex !important; }
+    #savedImage { width: auto !important; height: min(68dvh,620px); max-width: 90vw !important; object-fit: contain; border-radius: 18px; box-shadow: 0 12px 36px rgba(75,46,68,.2); }
+    #saveArea button { min-height: 44px; border: 0; border-radius: 14px; color: white; background: #c568a0; font-weight: 700; }
+    @media (max-height: 620px) { #editorArea { gap: 4px; } .storyTopbar { flex-basis: 42px; } .story { max-height: calc(100dvh - 140px); } .tabButton { min-height: 42px; } }
+    @media (min-width: 700px) { #editorArea { padding-top: calc(14px + env(safe-area-inset-top,0px)); } .story { max-height: calc(100dvh - 190px); } }
 
-    .tabContent p {
-      margin: 13px 0 8px;
-    }
+    /* Toolbar and controls scaled to roughly 70% */
+    .storyTopbar { flex-basis: 34px; width: min(70%,392px); gap: 3px; }
+    .storyBrand { font-size: 11px; }
+    .storyTopActions { gap: 3px; }
+    .storyTopbar button { min-width: 24px; height: 24px; padding: 0 5px; border-radius: 8px; font-size: 11px; }
+    .storyTopbar .topSaveButton { min-width: 37px; padding: 0 7px; font-size: 9px; }
+    .story { height: min(75dvh, calc((100vw - 24px) * 16 / 9)); max-width: min(100%, calc((100dvh - 102px) * 9 / 16)); max-height: calc(100dvh - 102px); border-radius: 16px; }
+    .editTabs { width: min(70%,392px); padding: 3px; gap: 3px; border-radius: 12px; }
+    .tabButton { min-width: 40px; min-height: 30px; padding: 4px 3px; border-radius: 8px; font-size: 8px; }
+    #editorArea.panelOpen .tabContent.active { bottom: calc(84px + var(--sp-safe-bottom)); width: min(70%,392px); max-width: 392px; max-height: min(30dvh,273px); padding: 9px; border-radius: 14px 14px 0 0; }
+    .tabContent button { min-height: 25px; margin: 2px; padding: 4px 6px; border-radius: 7px; font-size: 9px; }
+    .photoFilterControls button, .stylePresetButtons button, .gradientButtons button { min-height: 26px; }
+    .photoFilterControls button { flex-basis: 84px; min-height: 29px; }
+    .decorPresetControls button { flex-basis: 78px; min-height: 27px; padding: 3px; font-size: 8px; }
+    .tabContent .addPhotoButton { padding: 9px; border-radius: 10px; font-size: 11px; }
+    .tabContent textarea { padding: 6px; border-radius: 9px; font-size: 11px; }
+    .trendStickerSection { margin: 8px 0 15px; padding: 10px; border: 1px solid #f0d9e5; border-radius: 13px; background: linear-gradient(145deg,#fffafd,#fff3f8); }
+    .trendStickerSection > p { margin: 0 0 6px; }
+    .trendStickerButtons { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; }
+    .trendStickerButtons button { min-width: 0; min-height: 27px; margin: 0; padding: 3px 2px; border: 1px solid #f0dce7; border-radius: 7px; color: #755a6c; background: #fff; font-size: 8px; }
+    #savedImage { height: min(48dvh,434px); }
+    #saveArea button { min-height: 31px; padding: 6px 9px; border-radius: 10px; font-size: 10px; }
+    @media (max-height: 620px) { .storyTopbar { flex-basis: 30px; } .story { height: min(75dvh, calc((100vw - 24px) * 16 / 9)); max-height: calc(100dvh - 88px); } .tabButton { min-height: 30px; } }
 
-    .tabContent button,
-    .tabContent select,
-    .tabContent label {
-      touch-action: manipulation;
-    }
+    .collageTemplatePicker { margin: 0; }
+    .collageTemplatePicker > p { margin: 0 0 7px; font-weight: 700; }
+    .collageTemplatePicker > p.stylePresetHelp { margin: 0 0 9px; color: #8d7786; font-size: 10px; }
+    .collageTemplateGrid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, 74px); grid-auto-columns: 142px; gap: 7px; overflow-x: auto; padding: 2px 2px 7px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
+    .collageTemplateChoice { display: flex; align-items: center; gap: 7px; min-width: 0; margin: 0 !important; padding: 5px !important; border: 1px solid #eadce5 !important; border-radius: 12px !important; background: #fff !important; color: #665260 !important; text-align: left; scroll-snap-align: start; }
+    .collageTemplateChoice.active { border-color: #c96d9e !important; background: #fff3f8 !important; box-shadow: 0 0 0 1px #c96d9e inset; }
+    .collageTemplateThumb { position: relative; display: block; flex: 0 0 40px; width: 40px; height: 60px; overflow: hidden; border-radius: 6px; background: #f5eef0; box-shadow: 0 1px 3px #0002; }
+    .collageTemplateThumb::before, .collageTemplateThumb::after { content: ""; position: absolute; display: block; background: #fff; border: 1px solid #ddd; box-shadow: 1px 2px 3px #0002; }
+    .collageTemplateThumb::before { left: 5px; top: 7px; width: 17px; height: 23px; transform: rotate(-8deg); }
+    .collageTemplateThumb::after { right: 3px; bottom: 5px; width: 16px; height: 24px; transform: rotate(7deg); }
+    .thumb-blue { background: linear-gradient(135deg,#dbe4eb,#edf0f2); }
+    .thumb-pink { background: linear-gradient(135deg,#ffe4ef,#f6c9db); }
+    .thumb-film { background: repeating-linear-gradient(0deg,#262835 0 7px,#fff 7px 9px,#262835 9px 17px); }
+    .thumb-grid { background: #f5ece2; }
+    .thumb-grid::before { left: 4px; top: 5px; width: 10px; height: 13px; transform:none; }
+    .thumb-grid::after { right: 4px; bottom: 5px; width: 10px; height: 13px; transform:none; }
+    .collageTemplateName { min-width: 0; font-size: 10px; line-height: 1.25; }
+    .collageTemplateName small { display: block; margin-top: 3px; color: #988692; font-size: 9px; line-height: 1.2; }
+    .collageTemplateThumb.hasPreview::before, .collageTemplateThumb.hasPreview::after { display: none; }
+    .collageMiniSlot { position: absolute; display: block; box-sizing: border-box; border: 1px solid rgba(90,72,82,.42); border-radius: 1px; background: linear-gradient(145deg,#fff 0 23%,#d4c6cf 24% 82%,#fff 83%); box-shadow: 0 1px 2px #0004; }
+    .collageMiniSlot.film { border-color: #faf7f0; background: repeating-linear-gradient(0deg,#343344 0 4px,#fff 4px 5px,#343344 5px 9px); }
+    .collageMiniSlot.round { border-radius: 50%; }
+    .story .collageTemplateArt { position: absolute; left: 0; top: 0; z-index: 0; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: fill; transform: none; pointer-events: none; user-select: none; }
+    .collageSlot { position: absolute; z-index: auto; overflow: visible; box-shadow: 0 4px 10px rgba(48,43,52,.25); }
+    .collageSlot.polaroid, .collageSlot.instax { padding: 6px 6px 25px; background: #fff; }
+    .collageSlot.paper { padding: 5px; background: #fffaf1; }
+    .collageSlot.film { padding: 7px 9px; background: #242735; }
+    .collagePhotoMask { position: absolute; inset: 6px 6px 25px; overflow: hidden; background: rgba(255,255,255,.62); border-radius: inherit; }
+    .collageSlot.paper .collagePhotoMask { inset: 5px; }
+    .collageSlot.film .collagePhotoMask { inset: 7px 9px; }
+    .collagePhotoMask > .storyPhotoItem { position: absolute; left: 50%; top: 50%; max-width: none; max-height: none; object-fit: cover; touch-action: none; }
+    .collageSlot .slotAddButton { position: absolute; z-index: 2; left: 50%; top: 50%; width: 36px; height: 36px; min-width: 36px; min-height: 36px; margin: 0; padding: 0; transform: translate(-50%,-50%); border: 1px dashed rgba(115,91,110,.55); border-radius: 50%; background: rgba(255,255,255,.88); color: #8c6480; font-size: 22px; line-height: 1; box-shadow: 0 2px 7px #0002; }
+    .collageSlot.has-photo .slotAddButton { left: auto; top: 3px; right: 3px; width: 24px; height: 24px; min-width: 24px; min-height: 24px; transform: none; border: 0; background: rgba(255,255,255,.9); font-size: 15px; }
+    .collageSlot.round { border-radius: 50%; }
+    .collageSlot.round .collagePhotoMask { border-radius: 50%; }
+    .collageSlot.square { border-radius: 5px; }
+    .collageSlot.film::before, .collageSlot.film::after { content: ""; position: absolute; z-index: 1; left: 2px; right: 2px; height: 4px; background: repeating-linear-gradient(90deg,#fff 0 5px,transparent 5px 10px); }
+    .collageSlot.film::before { top: 1px; } .collageSlot.film::after { bottom: 1px; }
+    .collageSlot.taped::after { content: ""; position: absolute; top: -5px; left: 50%; width: 35px; height: 12px; transform: translateX(-50%) rotate(-4deg); background: rgba(247,216,167,.78); box-shadow: 0 1px 2px #0002; }
+    .collageSlot.selected { outline: 1px dashed rgba(105,70,95,.8); outline-offset: 3px; }
+    #editorArea.panelOpen #styleTab.active { max-height: min(30dvh,260px); padding: 10px; }
+    @media (max-width: 380px) { .collageTemplateGrid { grid-auto-columns: 132px; gap: 6px; grid-template-rows: repeat(2,72px); } .collageTemplateChoice { gap: 5px; } .collageTemplateThumb { flex-basis: 36px; width: 36px; height: 54px; } .collageTemplateName { font-size: 9px; } .collageTemplateName small { font-size: 8px; } }
 
-    .tabContent input[type="range"] {
-      width: min(100%, 340px);
-      margin: 8px 0 14px;
-      accent-color: var(--sp-accent);
-    }
-
-    .tabContent textarea {
-      width: 100%;
-      max-width: none;
-      border: 1px solid #ead8e3;
-      border-radius: 12px;
-      font: inherit;
-    }
-
-    .tabContent .addPhotoButton {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      border-radius: 14px;
-      text-align: center;
-    }
-
-    .photoFilterControls,
-    .stylePresetButtons,
-    .gradientButtons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .photoFilterControls button,
-    .stylePresetButtons button,
-    .gradientButtons button {
-      flex: 1 1 42%;
-      min-height: 42px;
-      margin: 0;
-      border-radius: 12px;
-    }
-
-    .saveButton {
-      display: none !important;
-    }
-
-    .historyControls {
-      display: none;
-    }
-
-    .advancedAlignment {
-      margin-top: 14px;
-    }
-
-    .advancedAlignment .alignControls {
-      display: block;
-      width: 100%;
-      max-width: none;
-      margin: 10px 0 0;
-      padding: 8px 0;
-      background: transparent;
-    }
-
-    #saveArea {
-      position: fixed;
-      z-index: 100;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 12px;
-      margin: 0 !important;
-      padding: 24px 16px calc(24px + var(--sp-safe-bottom));
-      background: #f8edf4;
-    }
-
-    #saveArea[style*="display: block"] {
-      display: flex !important;
-    }
-
-    #savedImage {
-      width: auto !important;
-      height: min(68dvh, 620px);
-      max-width: 90vw !important;
-      object-fit: contain;
-      border-radius: 18px;
-      box-shadow: 0 12px 36px rgba(75, 46, 68, .2);
-    }
-
-    #saveArea button {
-      min-height: 44px;
-      border: 0;
-      border-radius: 14px;
-      color: white;
-      background: #c568a0;
-      font-weight: 700;
-    }
-
-    @media (max-height: 620px) {
-      #editorArea {
-        gap: 4px;
-      }
-
-      .storyTopbar {
-        flex-basis: 42px;
-      }
-
-      .story {
-        max-height: calc(100dvh - 132px);
-      }
-
-      .tabButton {
-        min-height: 42px;
-      }
-    }
-
-    @media (min-width: 700px) {
-      #editorArea {
-        padding-top: calc(14px + env(safe-area-inset-top, 0px));
-      }
-
-      .story {
-        max-height: calc(100dvh - 190px);
-      }
-    }
+    /* Keep the editor in a centered, phone-sized column on wide screens. */
+    #editorArea { left: 50%; right: auto; width: min(100vw,430px); transform: translateX(-50%); overflow-x: hidden; }
+    .storyTopbar, .editTabs { width: min(92%,392px); }
+    #editorArea.panelOpen .tabContent.active { width: min(92%,392px); max-width: 392px; }
+    #editorArea.panelOpen #styleTab.active { max-height: min(30dvh,260px); }
   </style>
 </head>
 
@@ -1337,9 +1337,11 @@
       </button>
     </div>
     <div class="editTabs">
-      <button type="button" id="photoTabButton" class="tabButton active" onclick="showTab('photo', this)">📷 写真</button>
-      <button type="button" id="backgroundTabButton" class="tabButton" onclick="showTab('background', this)">🎨 背景</button>
-      <button type="button" id="styleTabButton" class="tabButton" onclick="showTab('style', this)">✦ スタイル</button>
+      <button type="button" id="photoTabButton" class="tabButton active" onclick="showTab('photo', this)">写真</button>
+      <button type="button" id="textTabButton" class="tabButton" onclick="showTab('text', this)">文字</button>
+      <button type="button" id="effectTabButton" class="tabButton" onclick="showTab('effect', this)">効果</button>
+      <button type="button" id="decorTabButton" class="tabButton" onclick="showTab('decor', this)">装飾・アイテム</button>
+      <button type="button" id="styleTabButton" class="tabButton" onclick="showTab('style', this)">スタイル</button>
     </div>
     <!-- 写真タブ -->
     <div id="photoTab" class="tabContent active">
@@ -1347,29 +1349,6 @@
         ＋ 写真を追加
       </label>
       <input type="file" accept="image/*" id="photo" style="display:none;">
-      <p>✨ 写真フィルター</p>
-      <div class="photoFilterControls">
-        <button type="button" data-filter="none" onclick="applyPhotoFilter('none')">
-          オリジナル
-        </button>
-        <button type="button" data-filter="heisei" onclick="applyPhotoFilter('heisei')">
-          💗 平成プリ
-        </button>
-        <button type="button" data-filter="korean" onclick="applyPhotoFilter('korean')">
-          🧸 韓国風
-        </button>
-        <button type="button" data-filter="y2k" onclick="applyPhotoFilter('y2k')">
-          📸 Y2K
-        </button>
-      </div>
-      <div class="photoFilterStrengthControls">
-        <label for="photoFilterStrength">
-          フィルターの強さ：
-          <span id="photoFilterStrengthValue">100%</span>
-        </label>
-        <input type="range" id="photoFilterStrength" min="0" max="100" step="5" value="100"
-          oninput="changePhotoFilterStrength()">
-      </div>
       <p>写真の大きさ</p>
       <input type="range" id="photoSize" min="10" max="400" value="100" oninput="changeSize()">
       <details class="editorAccordion">
@@ -1396,35 +1375,175 @@
         写真を前面へ
       </button>
     </div>
+    <div id="effectTab" class="tabContent">
+      <div class="y2kGrainControls">
+        <label for="y2kGrainStrength">Y2K 粒子感：<span id="y2kGrainValue">40%</span></label>
+        <input type="range" id="y2kGrainStrength" min="0" max="100" step="5" value="40" oninput="changeY2KGrain()">
+      </div>
+      <div class="y2kLightControls">
+        <label for="y2kLightStrength">Y2K フラッシュ＆光漏れ：<span id="y2kLightValue">45%</span></label>
+        <input type="range" id="y2kLightStrength" min="0" max="100" step="5" value="45" oninput="changeY2KLight()">
+      </div>
+      <div class="photoFilterStrengthControls">
+        <label for="photoFilterStrength">フィルターの強さ：<span id="photoFilterStrengthValue">100%</span></label>
+        <input type="range" id="photoFilterStrength" min="0" max="100" step="5" value="100" oninput="changePhotoFilterStrength()">
+      </div>
+      <div class="photoFilterControls">
+        <button type="button" data-filter="none" onclick="applyPhotoFilter('none')">オリジナル</button>
+        <button type="button" id="y2kDecorButton" data-decor-preset-button="y2k" onclick="toggleY2KDecor()">Y2Kカメラ</button>
+        <button type="button" data-filter="heisei" onclick="applyPhotoFilter('heisei')">平成プリ</button>
+        <button type="button" data-filter="korean" onclick="applyPhotoFilter('korean')">韓国風</button>
+        <button type="button" data-filter="y2k" onclick="applyPhotoFilter('y2k')">Y2K</button>
+        <button type="button" data-filter="disposable" onclick="applyPhotoFilter('disposable')">使い捨てフラッシュ</button>
+        <button type="button" data-filter="goldfilm" onclick="applyPhotoFilter('goldfilm')">ゴールドフィルム</button>
+        <button type="button" data-filter="pastel" onclick="applyPhotoFilter('pastel')">パステルデュオ</button>
+        <button type="button" data-filter="holo" onclick="applyPhotoFilter('holo')">ホロカラー</button>
+        <button type="button" data-filter="pearlGlow" onclick="applyPhotoFilter('pearlGlow')">パールグロウ</button>
+        <button type="button" data-filter="softFocus" onclick="applyPhotoFilter('softFocus')">ソフトフォーカス</button>
+        <button type="button" data-filter="cleanCool" onclick="applyPhotoFilter('cleanCool')">クリーンクール</button>
+        <button type="button" data-filter="warmFlash" onclick="applyPhotoFilter('warmFlash')">ウォームフラッシュ</button>
+        <button type="button" data-filter="ccdBlue" onclick="applyPhotoFilter('ccdBlue')">CCDブルー</button>
+        <button type="button" data-filter="digicam2000" onclick="applyPhotoFilter('digicam2000')">2000sデジカメ</button>
+        <button type="button" data-filter="instantFilm" onclick="applyPhotoFilter('instantFilm')">インスタントフィルム</button>
+        <button type="button" data-filter="fadedMatte" onclick="applyPhotoFilter('fadedMatte')">フェイデッドマット</button>
+        <button type="button" data-filter="directFlash" onclick="applyPhotoFilter('directFlash')">直射フラッシュ</button>
+        <button type="button" data-filter="candidSoft" onclick="applyPhotoFilter('candidSoft')">カンディッドソフト</button>
+        <button type="button" data-filter="seoulStudio" onclick="applyPhotoFilter('seoulStudio')">ソウルスタジオ</button>
+        <button type="button" data-filter="milkTea" onclick="applyPhotoFilter('milkTea')">ミルクティー</button>
+        <button type="button" data-filter="roseBloom" onclick="applyPhotoFilter('roseBloom')">ローズブルーム</button>
+        <button type="button" data-filter="coolTone" onclick="applyPhotoFilter('coolTone')">クールトーン</button>
+        <button type="button" data-filter="peachSkin" onclick="applyPhotoFilter('peachSkin')">ピーチスキン</button>
+        <button type="button" data-filter="lavenderDream" onclick="applyPhotoFilter('lavenderDream')">ラベンダードリーム</button>
+        <button type="button" data-filter="midnightBlue" onclick="applyPhotoFilter('midnightBlue')">ミッドナイトブルー</button>
+        <button type="button" data-filter="monoFilm" onclick="applyPhotoFilter('monoFilm')">モノクロフィルム</button>
+        <button type="button" data-filter="washedVintage" onclick="applyPhotoFilter('washedVintage')">ウォッシュドヴィンテージ</button>
+        <button type="button" data-filter="silverMetal" onclick="applyPhotoFilter('silverMetal')">シルバーメタル</button>
+      </div>
+    </div>
+    <div id="decorTab" class="tabContent">
+      <p class="combinedToolsHeading">装飾</p>
+      <div class="decorPresetControls" aria-label="デコレーションプリセット">
+        <button type="button" id="heiseiDecorButton" data-decor-preset-button="heisei" onclick="toggleHeiseiDecor()">平成プリ</button>
+        <button type="button" id="koreanDecorButton" data-decor-preset-button="korean" onclick="toggleKoreanDecor()">韓国コラージュ</button>
+        <button type="button" data-decor-preset-button="scrapbook" onclick="toggleDecorPreset('scrapbook')">スクラップブック</button>
+        <button type="button" data-decor-preset-button="softSparkle" onclick="toggleDecorPreset('softSparkle')">ソフトきらめき</button>
+        <button type="button" data-decor-preset-button="polaroid" onclick="toggleDecorPreset('polaroid')">ポラロイド</button>
+      </div>
+      <div class="decorAdjustControls" aria-label="装飾の調整">
+        <div class="decorAdjustRow">
+          <label for="decorScaleStrength">サイズ</label>
+          <input type="range" id="decorScaleStrength" min="40" max="180" step="5" value="100" oninput="changeDecorAdjustment('scale')">
+          <output id="decorScaleValue" for="decorScaleStrength">100%</output>
+        </div>
+        <div class="decorAdjustRow">
+          <label for="decorOpacityStrength">濃さ</label>
+          <input type="range" id="decorOpacityStrength" min="0" max="100" step="5" value="100" oninput="changeDecorAdjustment('opacity')">
+          <output id="decorOpacityValue" for="decorOpacityStrength">100%</output>
+        </div>
+        <div class="decorAdjustRow">
+          <label for="decorRotationStrength">回転</label>
+          <input type="range" id="decorRotationStrength" min="-180" max="180" step="5" value="0" oninput="changeDecorAdjustment('rotation')">
+          <output id="decorRotationValue" for="decorRotationStrength">0°</output>
+        </div>
+      </div>
+      <button type="button" id="decorMoveModeButton" class="decorMoveModeButton" aria-pressed="false" onclick="toggleDecorMoveMode()">装飾を写真上で動かす</button>
+      <p class="combinedToolsHeading">アイテム</p>
+    <section class="combinedItemsPanel" aria-label="追加アイテム">
+      <section class="trendStickerSection" aria-label="韓国フォトカードの追加アイテム">
+        <div class="trendStickerButtons">
+          <button type="button" onclick="addQuickSticker('sparkle')">✦ きらめき</button>
+          <button type="button" onclick="addQuickSticker('bow')">🎀 リボン</button>
+          <button type="button" onclick="addQuickSticker('heart')">♡ ハート</button>
+          <button type="button" onclick="addQuickSticker('star')">★ 星</button>
+          <button type="button" onclick="addQuickSticker('date')">📅 日付スタンプ</button>
+          <button type="button" onclick="addQuickSticker('korean')">오늘의 한 컷 (今日の1カット)</button>
+          <button type="button" onclick="addQuickSticker('crystal')">💎 クリスタル</button>
+          <button type="button" onclick="addQuickSticker('bear')">🧸 くま</button>
+          <button type="button" onclick="addQuickSticker('bunny')">🐰 うさぎ</button>
+          <button type="button" onclick="addQuickSticker('cloud')">☁️ くも</button>
+          <button type="button" onclick="addQuickSticker('wings')">🪽 エンジェル</button>
+          <button type="button" onclick="addQuickSticker('flower')">🌼 お花</button>
+          <button type="button" onclick="addQuickSticker('lace')">୨୧ レース</button>
+          <button type="button" onclick="addQuickSticker('pearl')">˚₊ パール</button>
+          <button type="button" onclick="addQuickSticker('caption')">💬 吹き出し</button>
+          <button type="button" onclick="addQuickSticker('cute')">오늘도 귀여워 (今日もかわいい)</button>
+          <button type="button" onclick="addQuickSticker('birthday')">🎂 バースデー</button>
+          <button type="button" onclick="addQuickSticker('mail')">💌 ラブレター</button>
+          <button type="button" onclick="addQuickSticker('koreanMood')">오늘의 무드 (今日のムード)</button>
+          <button type="button" onclick="addQuickSticker('youthMemo')">青春の記録</button>
+          <button type="button" onclick="addQuickSticker('fourCut')">인생네컷 (人生4カット)</button>
+          <button type="button" onclick="addQuickSticker('bestie')">우리 우정 (私たちの友情)</button>
+          <button type="button" onclick="addQuickSticker('shineToday')">오늘도 빛나 (今日も輝いて)</button>
+          <button type="button" onclick="addQuickSticker('happyCharge')">행복 충전 (幸せチャージ)</button>
+          <button type="button" onclick="addQuickSticker('favoriteMoment')">최애 순간 (推しの瞬間)</button>
+          <button type="button" onclick="addQuickSticker('jjukkumi')">뽀짝 모먼트 (きゅんかわモーメント)</button>
+          <button type="button" onclick="addQuickSticker('saveAngle')">저장각 (保存したい瞬間)</button>
+          <button type="button" onclick="addQuickSticker('chakkak')">찰칵! (カシャッ！)</button>
+          <button type="button" onclick="addQuickSticker('lovelyDay')">사랑스러운 날 (愛らしい日)</button>
+          <button type="button" onclick="addQuickSticker('luckyDay')">행운 가득 (幸運いっぱい)</button>
+          <button type="button" onclick="addQuickSticker('memoryArchive')">추억 저장 (思い出を保存)</button>
+          <button type="button" onclick="addQuickSticker('filmMark')">フィルムマーク</button>
+          <button type="button" onclick="addQuickSticker('soulmate')">너와 나 (あなたと私)</button>
+          <button type="button" onclick="addQuickSticker('daebak')">대박! (最高！)</button>
+          <button type="button" onclick="addQuickSticker('cuteAlert')">귀여움 주의 (かわいさ注意)</button>
+          <button type="button" onclick="addQuickSticker('moodSpoon')">감성 한 스푼 (感性ひとさじ)</button>
+          <button type="button" onclick="addQuickSticker('heartDoodle')">ハート落書き</button>
+          <button type="button" onclick="addQuickSticker('flowerFrame')">花のフレーム</button>
+          <button type="button" onclick="addQuickSticker('twinkleTrail')">きらめきライン</button>
+          <button type="button" onclick="addQuickSticker('ribbonLabel')">リボンタグ</button>
+          <button type="button" onclick="addQuickSticker('washiTape')">マスキングテープ</button>
+          <button type="button" onclick="addQuickSticker('holoTicket')">ホロチケット</button>
+          <button type="button" onclick="addQuickSticker('ticketStub')">티켓 (チケット)</button>
+          <button type="button" onclick="addQuickSticker('starBurst')">별 반짝 (星きらり)</button>
+          <button type="button" onclick="addQuickSticker('cloudMemo')">구름 메모 (雲メモ)</button>
+          <button type="button" onclick="addQuickSticker('pearlChain')">진주 체인 (パールチェーン)</button>
+          <button type="button" onclick="addQuickSticker('bowClip')">리본 핀 (リボンピン)</button>
+          <button type="button" onclick="addQuickSticker('miniPolaroid')">미니 폴라 (ミニポラ)</button>
+        </div>
+      </section>
+      <details class="editorAccordion stickerItemsAccordion" open>
+        <summary>追加したアイテム一覧</summary>
+        <div id="stickerList"></div>
+      </details>
+      <p class="stylePresetHelp">文字の入力や色・サイズ調整は「文字」ツールから行えます。</p>
+    </section>
+
+    </div>
     <!-- 文字タブ -->
     <div id="textTab" class="tabContent">
-      <!-- 複数文字の管理 -->
-      <details class="editorAccordion">
-        <summary>✏️ 文字の一覧</summary>
-        <div id="textList"></div>
-      </details>
+      <div class="textEntryModes" role="tablist" aria-label="文字の入力方法">
+        <button type="button" class="textEntryMode active" id="customTextModeButton" role="tab" aria-selected="true" onclick="setTextEntryMode('custom')">自分で入力</button>
+        <button type="button" class="textEntryMode" id="presetTextModeButton" role="tab" aria-selected="false" onclick="setTextEntryMode('presets')">既存文字入力</button>
+      </div>
+      <section id="customTextEntry" class="textEntryPane">
       <button type="button" onclick="addText()">＋ 文字を追加</button>
       <button type="button" onclick="duplicateText()">文字を複製</button>
       <button type="button" onclick="removeText()">選択した文字を削除</button>
       <p>ストーリーに入れる文字</p>
       <textarea id="storyText" rows="3" oninput="changeText()"></textarea>
-      <p>文字の色</p>
-      <input type="color" id="textColor" value="#555555" oninput="changeTextColor()">
-      <p>文字の大きさ</p>
-      <input type="range" id="textSize" min="10" max="40" value="15" oninput="changeTextSize()">
-      <div>
-        <label for="textRotation">文字の回転：<span id="rotationValue">0°</span></label>
-        <input type="range" id="textRotation" min="-180" max="180" value="0" oninput="changeTextRotation()">
+      <div class="textStyleControls">
+        <div class="textColorFontRow">
+          <label for="textColor">色</label>
+          <input type="color" id="textColor" value="#555555" oninput="changeTextColor()">
+          <label for="textFont">フォント</label>
+          <select id="textFont" onchange="changeTextFont()">
+            <option value="Nico Moji Plus">ニコモジ＋</option>
+            <option value="sans-serif">ゴシック体</option>
+            <option value="serif">明朝体</option>
+            <option value="cursive">筆記体</option>
+            <option value="monospace">等幅フォント</option>
+          </select>
+        </div>
+        <div class="textRangeRow">
+          <label for="textSize">大きさ</label>
+          <input type="range" id="textSize" min="10" max="40" value="15" oninput="changeTextSize()">
+        </div>
+        <div class="textRangeRow">
+          <label for="textRotation">回転 <span id="rotationValue">0°</span></label>
+          <input type="range" id="textRotation" min="-180" max="180" value="0" oninput="changeTextRotation()">
+        </div>
       </div>
-      <p>文字のフォント</p>
-      <select id="textFont" onchange="changeTextFont()">
-        <option value="sans-serif">ゴシック体</option>
-        <option value="serif">明朝体</option>
-        <option value="cursive">筆記体</option>
-        <option value="monospace">等幅フォント</option>
-      </select>
       <!-- 文字の装飾 -->
-      <p>文字の装飾</p>
       <!-- 文字の装飾 -->
       <details class="editorAccordion textDecorationAccordion">
         <summary>✨ 文字の装飾・詳細設定</summary>
@@ -1447,93 +1566,75 @@
           </label>
         </div>
       </details>
-    </div> <!-- 背景タブ -->
-    <div id="backgroundTab" class="tabContent">
-
-      <!-- 世界観をまとめて設定 -->
-      <div class="stylePresetSection">
-        <p>🎨 ワンタップで世界観を作る</p>
-
-        <div class="stylePresetButtons">
-          <button type="button" class="stylePresetHeisei" onclick="applyStylePreset('heisei')">
-            💗 平成プリ
-          </button>
-
-          <button type="button" class="stylePresetKorean" onclick="applyStylePreset('korean')">
-            🧸 韓国コラージュ
-          </button>
-
-          <button type="button" class="stylePresetY2K" onclick="applyStylePreset('y2k')">
-            📸 Y2Kカメラ
-          </button>
+      </section>
+      <section id="presetTextEntry" class="textEntryPane" hidden>
+        <div class="textPresetGrid">
+          <button type="button" onclick="addPresetText('오늘도 빛나')">오늘도 빛나 <small>（今日も輝いて）</small></button>
+          <button type="button" onclick="addPresetText('오늘의 기록')">오늘의 기록 <small>（今日の記録）</small></button>
+          <button type="button" onclick="addPresetText('우리의 순간')">우리의 순간 <small>（私たちの瞬間）</small></button>
+          <button type="button" onclick="addPresetText('행복한 하루')">행복한 하루 <small>（幸せな一日）</small></button>
+          <button type="button" onclick="addPresetText('소중한 오늘')">소중한 오늘 <small>（大切な今日）</small></button>
+          <button type="button" onclick="addPresetText('좋아하는 것들')">좋아하는 것들 <small>（好きなものたち）</small></button>
+          <button type="button" onclick="addPresetText('청춘 기록')">청춘 기록 <small>（青春の記録）</small></button>
+          <button type="button" onclick="addPresetText('함께라서 좋아')">함께라서 좋아 <small>（一緒だから好き）</small></button>
+          <button type="button" onclick="addPresetText('사랑해')">사랑해 <small>（大好き）</small></button>
+          <button type="button" onclick="addPresetText('여행의 시작')">여행의 시작 <small>（旅のはじまり）</small></button>
+          <button type="button" onclick="addPresetText('기억하고 싶은 날')">기억하고 싶은 날 <small>（覚えていたい日）</small></button>
+          <button type="button" onclick="addPresetText('오늘의 한 컷')">오늘의 한 컷 <small>（今日の1カット）</small></button>
+          <button type="button" onclick="addPresetText('little moments')">little moments <small>（小さな瞬間）</small></button>
+          <button type="button" onclick="addPresetText('today\'s mood')">today's mood <small>（今日の気分）</small></button>
+          <button type="button" onclick="addPresetText('my favorite')">my favorite <small>（お気に入り）</small></button>
+          <button type="button" onclick="addPresetText('best day ever')">best day ever <small>（最高の日）</small></button>
         </div>
+        <div id="textStickerPresetGrid" class="textPresetGrid"></div>
+      </section>
+    </div> <!-- 文字タブ -->
+    <div id="styleTab" class="tabContent">
+      <input type="color" id="backgroundColor" value="#e9dfce" hidden aria-hidden="true">
+      <section class="collageTemplatePicker" aria-label="AIコラージュテンプレート">
+        <div class="collageTemplateGrid">
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('bluePostcard')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">ブルー・ポラロイド<small>重ね貼り／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('seoulFourCut')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">ソウル4カット<small>縦フィルム／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('pinkDiary')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">ピンク・ダイアリー<small>デコポラ／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('y2kFilm')"><span class="collageTemplateThumb thumb-film"></span><span class="collageTemplateName">Y2Kフィルム<small>4コマ／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('junkJournal')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">ジャンクジャーナル<small>紙もの／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('creamAlbum')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">クリーム・アルバム<small>やさしい台紙／2枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('airmailPostcard')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">エアメール・ポストカード<small>旅の記録／2枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('denimScrap')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">デニム・スクラップ<small>ステッカー／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('softFocus')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">ソフトフォーカス<small>丸窓／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('photoDumpGrid')"><span class="collageTemplateThumb thumb-grid"></span><span class="collageTemplateName">フォトダンプ・グリッド<small>6枚／整列</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('cherryBlossom')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">さくらメモリー<small>春色ポラ／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('seoulGrid')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">ソウル・グリッド<small>2×2レイアウト／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('candyOval')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">キャンディ・オーバル<small>楕円フォト／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('filmTickets')"><span class="collageTemplateThumb thumb-film"></span><span class="collageTemplateName">フィルムチケット<small>チケット風／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('vintageLedger')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">ヴィンテージ台帳<small>スクラップ／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('cloudAlbum')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">クラウド・アルバム<small>大きめ写真／2枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('neonContact')"><span class="collageTemplateThumb thumb-film"></span><span class="collageTemplateName">ネオン・コンタクト<small>縦フィルム／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('cafeReceipt')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">カフェ・レシート<small>ポラロイド／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('mirrorballMix')"><span class="collageTemplateThumb thumb-grid"></span><span class="collageTemplateName">ミラーボール・ミックス<small>大小ミックス／5枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('bestieDuo')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">ベスティ・デュオ<small>左右ペア／2枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('postcardRouge')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">ルージュ・エアメール<small>切手と消印／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('flowerMarket')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">フラワーマーケット<small>花束と手書きラベル／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('laceLetter')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">レース・ラブレター<small>レース縁と封ろう／2枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('moonDream')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">ムーンライト・ドリーム<small>月と星座のコラージュ／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('ticketPop')"><span class="collageTemplateThumb thumb-film"></span><span class="collageTemplateName">ポップ・コンサートチケット<small>ライブチケットと星／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('travelJournal')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">トラベル・ジャーナル<small>地図と旅のスタンプ／4枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('cafeScrap')"><span class="collageTemplateThumb thumb-blue"></span><span class="collageTemplateName">カフェ・スクラップブック<small>コーヒー染めとメニュー札／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('holoParty')"><span class="collageTemplateThumb thumb-film"></span><span class="collageTemplateName">ホログラム・パーティ<small>メタリック星と光沢ライン／5枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('comicBesties')"><span class="collageTemplateThumb thumb-pink"></span><span class="collageTemplateName">コミック・ベスティーズ<small>吹き出しとポップアート／3枚</small></span></button>
+          <button type="button" class="collageTemplateChoice" onclick="applyCollageTemplate('memoryBook')"><span class="collageTemplateThumb thumb-grid"></span><span class="collageTemplateName">メモリーブック・デラックス<small>重ね紙・シール・手帳風／5枚</small></span></button>
+        </div>
+      </section>
 
-        <p class="stylePresetHelp">
-          背景・装飾・写真の色味をまとめて変更
-        </p>
-      </div>
-
-      <p>💖 平成プリ風デコレーション</p>
-      <button type="button" id="heiseiDecorButton" onclick="toggleHeiseiDecor()">
-        ✨ ハート＆キラキラを追加
-      </button>
-      <button type="button" id="koreanDecorButton" onclick="toggleKoreanDecor()">
-        🧸 韓国コラージュを追加
-      </button>
-      <button type="button" id="y2kDecorButton" onclick="toggleY2KDecor()">
-        📹 Y2Kカメラ風を追加
-      </button>
-      <div class="y2kGrainControls">
-        <label for="y2kGrainStrength">
-          📸 Y2K 粒子感：
-          <span id="y2kGrainValue">40%</span>
-        </label>
-        <input type="range" id="y2kGrainStrength" min="0" max="100" step="5" value="40" oninput="changeY2KGrain()">
-      </div>
-      <div class="y2kLightControls">
-        <label for="y2kLightStrength">
-          ✨ Y2K フラッシュ＆光漏れ：
-          <span id="y2kLightValue">45%</span>
-        </label>
-        <input type="range" id="y2kLightStrength" min="0" max="100" step="5" value="45" oninput="changeY2KLight()">
-      </div>
-      <p>✨ 背景スタイル</p>
-      <div class="gradientButtons">
-        <button type="button" onclick="applyGradientBackground('heisei')" class="gradientHeisei">
-          💗 平成プリ
-        </button>
-        <button type="button" onclick="applyGradientBackground('korean')" class="gradientKorean">
-          🧸 韓国コラージュ
-        </button>
-        <button type="button" onclick="applyGradientBackground('y2k')" class="gradientY2K">
-          📸 Y2Kカメラ
-        </button>
-      </div>
-      <p>背景の色</p>
-      <button onclick="changeColor('#f8c8dc')">ピンク</button>
-      <button onclick="changeColor('#c8e7ff')">水色</button>
-      <button onclick="changeColor('#e9dfce')">ベージュ</button>
-      <!-- 自由に背景色を選択 -->
-      <p>好きな色を選ぶ</p> <input type="color" id="backgroundColor" value="#e9dfce" onchange="changeColor(this.value)">
-    </div> <!-- 保存ボタン（どのタブでも表示） -->
+    </div>
+    <!-- 保存ボタン（どのタブでも表示） -->
     <br>
     <button onclick="saveStory()" class="saveButton">
       画像を保存する
     </button>
   </div> <!-- editorAreaを閉じる -->
-  <script>
+<script>
     (() => {
-      const alignment = document.querySelector(".alignControls");
-      const textPanel = document.getElementById("textTab");
-      if (alignment && textPanel) {
-        const details = document.createElement("details");
-        details.className = "editorAccordion advancedAlignment";
-        const summary = document.createElement("summary");
-        summary.textContent = "位置合わせ・詳細操作";
-        details.appendChild(summary);
-        details.appendChild(alignment);
-        textPanel.appendChild(details);
-      }
       document.getElementById("editorArea").classList.remove("panelOpen");
     })();
   </script>
@@ -1554,6 +1655,8 @@
     photo.classList.add("photoUpload");
     photo.addEventListener("change", function () {
       const file = photo.files[0];
+      const slotId = photo.dataset.collageTarget || "";
+      delete photo.dataset.collageTarget;
       if (!file) return;
       if (!file.type.startsWith("image/")) {
         alert("画像ファイルを選択してください");
@@ -1574,6 +1677,23 @@
           updatePhotoItem(img);
         };
         img.src = event.target.result;
+        if (slotId) {
+          const slotFrame = storyArea.querySelector(`.collageSlot[data-slot-id="${slotId}"]`);
+          const slotMask = slotFrame && slotFrame.querySelector(".collagePhotoMask");
+          if (!slotMask) return;
+          saveHistory();
+          const previous = slotMask.querySelector(".storyPhotoItem");
+          if (previous) previous.remove();
+          img.dataset.collageSlot = slotId;
+          img.dataset.size = "100";
+          img.dataset.rotation = "0";
+          slotMask.appendChild(img);
+          enablePhotoDrag(img);
+          updateCollagePhoto(img);
+          selectPhoto(img);
+          setPhotoLayer(photoLayer);
+          return;
+        }
         // 写真を追加する前の状態を保存
         saveHistory();
         storyArea.appendChild(img);
@@ -1588,7 +1708,20 @@
       // 同じ写真を続けて追加できるようにする
       photo.value = "";
     });
+    const regularPhotoButton = document.querySelector(".addPhotoButton");
+    if (regularPhotoButton) {
+      regularPhotoButton.addEventListener("click", function () {
+        delete photo.dataset.collageTarget;
+      });
+    }
+    function clearDecorPresetSelection() {
+      selectedDecorPreset = false;
+      const story = document.querySelector(".story");
+      if (story) story.classList.remove("decorPresetSelected", "decorMoveMode");
+      updateDecorMoveModeButton();
+    }
     function selectPhoto(img) {
+      clearDecorPresetSelection();
       document.querySelectorAll(".storyPhotoItem").forEach(function (item) {
         item.classList.remove("selected");
       });
@@ -1599,6 +1732,7 @@
       });
       selectedText = null;
       refreshTextList();
+      refreshStickerList();
       if (img) {
         img.classList.add("selected");
         document.getElementById("photoSize").value =
@@ -1629,6 +1763,11 @@
       });
     } function updatePhotoItem(img) {
       if (!img.naturalWidth) return;
+      if (img.dataset.collageSlot) {
+        updateCollagePhoto(img);
+        updateItemCornerActions();
+        return;
+      }
       const size = Number(img.dataset.size || 100) / 100;
       const rotation = Number(img.dataset.rotation || 0);
       const scale = Math.min(
@@ -1834,9 +1973,26 @@
       copy.dataset.x = String(nextX);
       copy.dataset.y = String(nextY);
       copy.dataset.name = "写真 " + (++photoCounter);
-      storyArea.appendChild(copy);
+      const sourceSlot = original.dataset.collageSlot;
+      const template = collageTemplates[storyArea.dataset.collageTemplate];
+      const emptySlot = sourceSlot && template && template.slots.find(function (slot) {
+        const frame = storyArea.querySelector(`.collageSlot[data-slot-id="${slot.id}"]`);
+        return frame && !frame.querySelector(".storyPhotoItem");
+      });
+      if (emptySlot) {
+        copy.dataset.collageSlot = emptySlot.id;
+        copy.dataset.x = "0";
+        copy.dataset.y = "0";
+        copy.dataset.size = "100";
+        copy.dataset.rotation = "0";
+        storyArea.querySelector(`.collageSlot[data-slot-id="${emptySlot.id}"] .collagePhotoMask`).appendChild(copy);
+      } else {
+        delete copy.dataset.collageSlot;
+        storyArea.appendChild(copy);
+      }
       enablePhotoDrag(copy);
-      updatePhotoItem(copy);
+      if (copy.dataset.collageSlot) updateCollagePhoto(copy);
+      else updatePhotoItem(copy);
       selectPhoto(copy);
       setPhotoLayer(photoLayer);
     }
@@ -1851,7 +2007,10 @@
       const index = photos.indexOf(selectedPhoto);
       if (index < photos.length - 1) {
         saveHistory();
-        photos[index + 1].after(selectedPhoto);
+        const moving = selectedPhoto.dataset.collageSlot ? selectedPhoto.closest(".collageSlot") : selectedPhoto;
+        const next = photos[index + 1];
+        const nextLayer = next.dataset.collageSlot ? next.closest(".collageSlot") : next;
+        nextLayer.after(moving);
       }
       refreshPhotoList();
     } function movePhotoBackward() {
@@ -1865,14 +2024,21 @@
       const index = photos.indexOf(selectedPhoto);
       if (index > 0) {
         saveHistory();
-        photos[index - 1].before(selectedPhoto);
+        const moving = selectedPhoto.dataset.collageSlot ? selectedPhoto.closest(".collageSlot") : selectedPhoto;
+        const previous = photos[index - 1];
+        const previousLayer = previous.dataset.collageSlot ? previous.closest(".collageSlot") : previous;
+        previousLayer.before(moving);
       }
       refreshPhotoList();
     }
     function removePhoto() {
       if (!selectedPhoto) return;
       saveHistory();
+      const slotFrame = selectedPhoto.dataset.collageSlot
+        ? selectedPhoto.closest(".collageSlot")
+        : null;
       selectedPhoto.remove();
+      if (slotFrame) slotFrame.classList.remove("has-photo");
       selectedPhoto = null;
       const remaining =
         document.querySelector(".storyPhotoItem");
@@ -1960,9 +2126,22 @@
       selectedText.textContent =
         document.getElementById("storyText").value;
       refreshTextList();
+      refreshStickerList();
     }    // 画像保存
-    function saveStory() {
+    async function saveStory() {
+      if (document.fonts && document.fonts.load) {
+        try {
+          await document.fonts.load('15px "Nico Moji Plus"');
+        } catch (_) {
+          // フォントの取得に失敗した場合も、システムフォントで保存を続ける
+        }
+      }
       const story = document.querySelector(".story");
+      const decorScale = Number(story.dataset.decorScale || 100) / 100;
+      const decorOpacity = Number(story.dataset.decorOpacity || 100) / 100;
+      const decorRotation = Number(story.dataset.decorRotation || 0);
+      const decorX = Number(story.dataset.decorX || 0);
+      const decorY = Number(story.dataset.decorY || 0);
       const canvas = document.createElement("canvas");
       canvas.width = 1080;
       canvas.height = 1920;
@@ -1994,10 +2173,24 @@
         ctx.fillStyle = getComputedStyle(story).backgroundColor;
       }
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const collageArt = story.querySelector(".collageTemplateArt");
+      if (collageArt) {
+        try {
+          if (collageArt.decode) await collageArt.decode();
+          ctx.drawImage(collageArt, 0, 0, canvas.width, canvas.height);
+        } catch (_) {
+          // 背景の装飾を描けなくても写真と文字の保存は続ける
+        }
+      }
+      drawCollageSlotBases(ctx, story.dataset.collageTemplate);
       // 編集画面のDOM順に描画して、写真と文字の重なりを一致させる
-      Array.from(story.children).forEach(function (el) {
+      Array.from(story.querySelectorAll(".storyPhotoItem, .storyTextItem")).forEach(function (el) {
         if (el.classList.contains("storyPhotoItem")) {
           if (!el.complete || !el.naturalWidth) return;
+          if (el.dataset.collageSlot) {
+            drawCollageSlotPhoto(ctx, el);
+            return;
+          }
           const size = Number(el.dataset.size || 100) / 100;
           const rotation = Number(el.dataset.rotation || 0);
           const scale = Math.min(880 / el.naturalWidth, 1280 / el.naturalHeight) * size;
@@ -2009,14 +2202,18 @@
           ctx.translate(540 + x * 4, 960 + y * 4);
           ctx.rotate(rotation * Math.PI / 180);
           // 韓国コラージュ：写真の白いフレーム
-          if (story.dataset.decorPreset === "korean") {
+          if (story.dataset.decorPreset === "korean" || story.dataset.decorPreset === "polaroid") {
+            const framePadding = (story.dataset.decorPreset === "polaroid" ? 28 : 20) * decorScale;
+            ctx.save();
+            ctx.globalAlpha = decorOpacity;
             ctx.fillStyle = "#fffaf5";
             ctx.fillRect(
-              -w / 2 - 20,
-              -h / 2 - 20,
-              w + 40,
-              h + 40
+              -w / 2 - framePadding,
+              -h / 2 - framePadding,
+              w + framePadding * 2,
+              h + framePadding * 2
             );
+            ctx.restore();
           }
           // 写真に設定されたフィルターを保存画像に反映
           ctx.save();
@@ -2060,8 +2257,43 @@
             }
             lines.push(line);
           });
+          const badgePadX = Number(el.dataset.badgePadX || 0) * 4;
+          const badgePadY = Number(el.dataset.badgePadY || 0) * 4;
+          if (el.dataset.badgeFill) {
+            const textWidth = lines.reduce((widest, line) =>
+              Math.max(widest, ctx.measureText(line).width), 0);
+            const badgeWidth = textWidth + badgePadX * 2;
+            const badgeHeight = lines.length * lineHeight + badgePadY * 2;
+            const badgeRadius = Math.min(
+              Number(el.dataset.badgeRadius || 6) * 4,
+              badgeWidth / 2,
+              badgeHeight / 2
+            );
+            const left = -badgeWidth / 2;
+            const top = 0;
+            const right = left + badgeWidth;
+            const bottom = top + badgeHeight;
+            ctx.save();
+            ctx.shadowColor = "rgba(69,45,62,.18)";
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.moveTo(left + badgeRadius, top);
+            ctx.arcTo(right, top, right, bottom, badgeRadius);
+            ctx.arcTo(right, bottom, left, bottom, badgeRadius);
+            ctx.arcTo(left, bottom, left, top, badgeRadius);
+            ctx.arcTo(left, top, right, top, badgeRadius);
+            ctx.closePath();
+            ctx.fillStyle = el.dataset.badgeFill;
+            ctx.fill();
+            if (el.dataset.badgeBorder) {
+              ctx.lineWidth = 4;
+              ctx.strokeStyle = el.dataset.badgeBorder;
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
           lines.forEach(function (line, i) {
-            const lineY = i * lineHeight;
+            const lineY = badgePadY + i * lineHeight;
             if (el.classList.contains("outline")) {
               ctx.lineWidth = Number(el.dataset.outlineWidth || 2) * 4;
               ctx.strokeStyle = el.dataset.outlineColor || "#333333";
@@ -2073,6 +2305,7 @@
           ctx.restore();
         }
       });
+      drawCollageSlotFrames(ctx, story.dataset.collageTemplate);
       // Y2Kフラッシュ＆光漏れをPNGに反映
       if (story.dataset.decorPreset === "y2k") {
         const strength = Number(
@@ -2112,14 +2345,20 @@
           ctx.restore();
         }
       }
+      // ドラッグした装飾の位置をPNGへ反映
+      ctx.save();
+      ctx.translate(canvas.width / 2 + decorX * 4, canvas.height / 2 + decorY * 4);
+      ctx.rotate(decorRotation * Math.PI / 180);
+      ctx.globalAlpha = decorOpacity;
+      ctx.translate(-canvas.width / 2, -canvas.height / 2);
       // 平成プリの装飾を保存画像にも描画
       if (story.dataset.decorPreset === "heisei") {
         ctx.save();
         ctx.fillStyle = "#ff73b6";
         ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 8 * decorScale;
         ctx.lineJoin = "round";
-        ctx.font = "bold 80px sans-serif";
+        ctx.font = "bold " + (80 * decorScale) + "px sans-serif";
         // 左上のキラキラ
         ctx.translate(48, 144);
         ctx.rotate(-12 * Math.PI / 180);
@@ -2129,9 +2368,9 @@
         ctx.save();
         ctx.fillStyle = "#ff73b6";
         ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 8 * decorScale;
         ctx.lineJoin = "round";
-        ctx.font = "bold 80px sans-serif";
+        ctx.font = "bold " + (80 * decorScale) + "px sans-serif";
         ctx.textAlign = "right";
         // 右下のハート
         ctx.translate(1032, 1840);
@@ -2146,14 +2385,14 @@
           ctx.save();
           ctx.translate(x, y);
           ctx.rotate(angle * Math.PI / 180);
-          const w = 312;
-          const h = 80;
+          const w = 312 * decorScale;
+          const h = 80 * decorScale;
           // 半透明のテープ
           ctx.fillStyle = "rgba(238,210,189,0.82)";
           ctx.fillRect(-w / 2, -h / 2, w, h);
           // テープの斜め模様
           ctx.strokeStyle = "rgba(255,255,255,0.22)";
-          ctx.lineWidth = 16;
+          ctx.lineWidth = 16 * decorScale;
           ctx.beginPath();
           ctx.rect(-w / 2, -h / 2, w, h);
           ctx.clip();
@@ -2171,6 +2410,9 @@
       // Y2Kカメラ装飾をPNGにも描画
       if (story.dataset.decorPreset === "y2k") {
         ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.scale(decorScale, decorScale);
+        ctx.translate(-canvas.width / 2, -canvas.height / 2);
         // 白いファインダー枠
         ctx.strokeStyle = "rgba(255,255,255,0.85)";
         ctx.lineWidth = 4;
@@ -2199,6 +2441,54 @@
         );
         ctx.restore();
       }
+      if (story.dataset.decorPreset === "scrapbook") {
+        ctx.save();
+        ctx.scale(decorScale, decorScale);
+        ctx.fillStyle = "#9a715c";
+        ctx.font = "56px sans-serif";
+        ctx.translate(56, 112);
+        ctx.rotate(-8 * Math.PI / 180);
+        ctx.fillText("✂  ─ ─ ─", 0, 0);
+        ctx.restore();
+        ctx.save();
+        ctx.scale(decorScale, decorScale);
+        ctx.translate(1020, 1840);
+        ctx.rotate(4 * Math.PI / 180);
+        ctx.fillStyle = "#806b56";
+        ctx.fillRect(-345, -54, 340, 62);
+        ctx.strokeStyle = "#b89b7d";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(-345, -54, 340, 62);
+        ctx.font = "36px monospace";
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#fffaf0";
+        ctx.fillText("MEMORIES  •  TODAY", -16, -12);
+        ctx.restore();
+      }
+      if (story.dataset.decorPreset === "softSparkle") {
+        ctx.save();
+        ctx.scale(decorScale, decorScale);
+        ctx.font = "bold 100px sans-serif";
+        ctx.fillStyle = "#fff";
+        ctx.shadowColor = "#df9fc4";
+        ctx.shadowBlur = 28;
+        ctx.fillText("✧     ✦", 700, 280);
+        ctx.fillText("✦     ✧", 60, 1680);
+        ctx.restore();
+      }
+      if (story.dataset.decorPreset === "polaroid") {
+        ctx.save();
+        ctx.scale(decorScale, decorScale);
+        ctx.fillStyle = "#fff";
+        ctx.shadowColor = "rgba(42,35,42,.4)";
+        ctx.shadowBlur = 20;
+        ctx.font = "100px sans-serif";
+        ctx.fillText("✉", 900, 120);
+        ctx.font = "italic 64px cursive";
+        ctx.fillText("with love", 64, 1840);
+        ctx.restore();
+      }
+      ctx.restore();
       const savedImage = document.getElementById("savedImage");
       const saveArea = document.getElementById("saveArea");
       savedImage.src = canvas.toDataURL("image/png");
@@ -2217,12 +2507,19 @@
       return {
         backgroundColor: getComputedStyle(story).backgroundColor,
         backgroundPreset: story.dataset.bgPreset || "",
+        collageTemplate: story.dataset.collageTemplate || "",
         photoLayer: photoLayer,
         decorPreset: story.dataset.decorPreset || "",
+        decorLocked: story.dataset.decorLocked || "false",
+        decorX: story.dataset.decorX || "0",
+        decorY: story.dataset.decorY || "0",
+        decorScale: story.dataset.decorScale || "100",
+        decorOpacity: story.dataset.decorOpacity || "100",
+        decorRotation: story.dataset.decorRotation || "0",
         grainStrength: story.dataset.grainStrength || "40",
         y2kLightStrength: story.dataset.y2kLightStrength ?? "45",
         y2kTimestamp: story.dataset.y2kTimestamp || "",
-        items: [...story.children]
+        items: [...story.querySelectorAll(".storyPhotoItem, .storyTextItem")]
           .filter(el =>
             el.classList.contains("storyPhotoItem") ||
             el.classList.contains("storyTextItem")
@@ -2230,7 +2527,9 @@
           .map(el => ({
             type: el.classList.contains("storyPhotoItem")
               ? "photo"
-              : "text",
+              : el.classList.contains("storyStickerItem")
+                ? "sticker"
+                : "text",
             src: el.tagName === "IMG" ? el.src : null,
             text: el.tagName !== "IMG" ? el.textContent : null,
             style: el.getAttribute("style") || "",
@@ -2269,13 +2568,16 @@
         ".storyPhotoItem, .storyTextItem"
       ).forEach(function (el) {
         el.remove();
-      }); selectedPhoto = null;
+      });
+      story.querySelectorAll(".collageTemplateArt, .collageSlot").forEach(el => el.remove());
+      selectedPhoto = null;
       selectedText = null;
       // 復元後は新しい文字入力として扱う
       textTypingHistorySaved = false;      // 背景色と重なり順の設定を復元
       story.style.backgroundColor = state.backgroundColor;
       story.style.backgroundImage = "none";
       delete story.dataset.bgPreset;
+      delete story.dataset.collageTemplate;
       if (
         state.backgroundPreset &&
         gradientPresets[state.backgroundPreset]
@@ -2283,7 +2585,25 @@
         applyGradientBackground(state.backgroundPreset, false);
       }
       photoLayer = state.photoLayer;
+      if (state.collageTemplate && collageTemplates[state.collageTemplate]) {
+        applyCollageTemplate(state.collageTemplate, false, true);
+      }
       story.dataset.decorPreset = state.decorPreset || "";
+      story.dataset.decorLocked = state.decorLocked || "false";
+      selectedDecorPreset = false;
+      story.classList.remove("decorPresetSelected", "decorMoveMode");
+      updateDecorMoveModeButton();
+      story.dataset.decorX = state.decorX || "0";
+      story.dataset.decorY = state.decorY || "0";
+      story.dataset.decorScale = state.decorScale || "100";
+      story.dataset.decorOpacity = state.decorOpacity || "100";
+      story.dataset.decorRotation = state.decorRotation || "0";
+      story.style.setProperty("--decor-x", story.dataset.decorX + "px");
+      story.style.setProperty("--decor-y", story.dataset.decorY + "px");
+      story.style.setProperty("--decor-scale", String(Number(story.dataset.decorScale) / 100));
+      story.style.setProperty("--decor-opacity", String(Number(story.dataset.decorOpacity) / 100));
+      story.style.setProperty("--decor-rotation", story.dataset.decorRotation + "deg");
+      updateDecorAdjustControls();
       story.dataset.grainStrength = state.grainStrength || "40";
       story.dataset.y2kLightStrength =
         state.y2kLightStrength ?? "45";
@@ -2306,7 +2626,9 @@
           };
         } else {
           el = document.createElement("p");
-          el.className = "storyTextItem";
+          el.className = item.type === "sticker"
+            ? "storyTextItem storyStickerItem"
+            : "storyTextItem";
           el.textContent = item.text || "";
         }
         // 位置・大きさ・回転などを復元
@@ -2323,7 +2645,13 @@
         if (item.shadow) {
           el.classList.add("shadow");
         }
-        story.appendChild(el);
+        if (item.type === "photo" && item.dataset && item.dataset.collageSlot) {
+          const slot = story.querySelector(`.collageSlot[data-slot-id="${item.dataset.collageSlot}"]`);
+          const mask = slot && slot.querySelector(".collagePhotoMask");
+          (mask || story).appendChild(el);
+        } else {
+          story.appendChild(el);
+        }
         if (item.type === "photo") {
           enablePhotoDrag(el);
           el.src = item.src;
@@ -2347,6 +2675,7 @@
       } else {
         document.getElementById("storyText").value = "";
         refreshTextList();
+        refreshStickerList();
       }
     }
     /* 元に戻す */
@@ -2378,9 +2707,9 @@
     function setPhotoLayer(layer) {
       photoLayer = layer;
       const story = document.querySelector(".story");
-      const photos = [
-        ...story.querySelectorAll(".storyPhotoItem")
-      ];
+      const photos = [...new Set([...story.querySelectorAll(".storyPhotoItem")].map(function (img) {
+        return img.dataset.collageSlot ? img.closest(".collageSlot") : img;
+      }).filter(Boolean))];
       if (layer === "front") {
         photos.forEach(function (img) {
           story.appendChild(img);
@@ -2406,16 +2735,34 @@
     }
     /* 写真フィルターの設定 */
     const photoFilterPresets = {
-      none: "none",
-      // 平成プリ：明るく鮮やか
-      heisei:
-        "brightness(1.15) saturate(1.35) contrast(1.06)",
-      // 韓国風：淡く柔らかい
-      korean:
-        "brightness(1.08) saturate(0.72) contrast(0.88) sepia(0.06)",
-      // Y2K：強いコントラストと青み
-      y2k:
-        "brightness(1.08) contrast(1.32) saturate(0.82) hue-rotate(12deg)"
+      none: {},
+      heisei: { brightness: 1.15, saturate: 1.35, contrast: 1.06 },
+      korean: { brightness: 1.08, saturate: 0.72, contrast: 0.88, sepia: 0.06 },
+      y2k: { brightness: 1.08, contrast: 1.32, saturate: 0.82, hue: 12 },
+      disposable: { brightness: 1.14, contrast: 1.16, saturate: 0.88, sepia: 0.08 },
+      goldfilm: { brightness: 1.05, contrast: 1.12, saturate: 0.94, sepia: 0.22 },
+      pastel: { brightness: 1.10, contrast: 0.92, saturate: 0.70, sepia: 0.08 },
+      holo: { brightness: 1.08, contrast: 1.12, saturate: 1.18, hue: 18 },
+      pearlGlow: { brightness: 1.10, contrast: 0.94, saturate: 0.82, sepia: 0.04, blur: 0.25 },
+      softFocus: { brightness: 1.06, contrast: 0.91, saturate: 0.86, blur: 0.45 },
+      cleanCool: { brightness: 1.04, contrast: 1.03, saturate: 0.92, hue: -5 },
+      warmFlash: { brightness: 1.18, contrast: 1.10, saturate: 1.08, sepia: 0.08 },
+      ccdBlue: { brightness: 1.03, contrast: 1.18, saturate: 0.83, hue: 14 },
+      digicam2000: { brightness: 1.04, contrast: 1.18, saturate: 1.08, hue: -7 },
+      instantFilm: { brightness: 1.07, contrast: 0.92, saturate: 0.86, sepia: 0.10 },
+      fadedMatte: { brightness: 1.08, contrast: 0.82, saturate: 0.75, sepia: 0.10 },
+      directFlash: { brightness: 1.20, contrast: 1.25, saturate: 0.90 },
+      candidSoft: { brightness: 1.10, contrast: 0.92, saturate: 0.84, blur: 0.20 },
+      seoulStudio: { brightness: 1.08, contrast: 0.98, saturate: 0.88, sepia: 0.04 },
+      milkTea: { brightness: 1.06, contrast: 0.91, saturate: 0.72, sepia: 0.19 },
+      roseBloom: { brightness: 1.08, contrast: 0.94, saturate: 0.92, hue: 8 },
+      coolTone: { brightness: 1.03, contrast: 1.03, saturate: 0.86, hue: 15 },
+      peachSkin: { brightness: 1.10, contrast: 0.95, saturate: 0.91, sepia: 0.11, hue: -7 },
+      lavenderDream: { brightness: 1.08, contrast: 0.90, saturate: 0.80, hue: 24 },
+      midnightBlue: { brightness: 0.86, contrast: 1.22, saturate: 0.82, hue: 17 },
+      monoFilm: { brightness: 1.04, contrast: 1.15, saturate: 0 },
+      washedVintage: { brightness: 1.08, contrast: 0.82, saturate: 0.70, sepia: 0.22 },
+      silverMetal: { brightness: 1.04, contrast: 1.30, saturate: 0.55, grayscale: 0.12, hue: -5 }
     };
     /* 選択した写真にフィルターを適用 */
     /* フィルターの強さに応じたCSSを作る */
@@ -2424,33 +2771,18 @@
       if (preset === "none" || t === 0) {
         return "none";
       }
-      function blend(normal, filtered) {
-        return normal + (filtered - normal) * t;
-      }
-      if (preset === "heisei") {
-        return `
-      brightness(${blend(1, 1.15)})
-      saturate(${blend(1, 1.35)})
-      contrast(${blend(1, 1.06)})
-    `;
-      }
-      if (preset === "korean") {
-        return `
-      brightness(${blend(1, 1.08)})
-      saturate(${blend(1, 0.72)})
-      contrast(${blend(1, 0.88)})
-      sepia(${blend(0, 0.06)})
-    `;
-      }
-      if (preset === "y2k") {
-        return `
-      brightness(${blend(1, 1.08)})
-      contrast(${blend(1, 1.32)})
-      saturate(${blend(1, 0.82)})
-      hue-rotate(${12 * t}deg)
-    `;
-      }
-      return "none";
+      const values = photoFilterPresets[preset];
+      if (!values) return "none";
+      function blend(normal, filtered) { return normal + (filtered - normal) * t; }
+      return [
+        `brightness(${blend(1, values.brightness ?? 1)})`,
+        `contrast(${blend(1, values.contrast ?? 1)})`,
+        `saturate(${blend(1, values.saturate ?? 1)})`,
+        `sepia(${blend(0, values.sepia ?? 0)})`,
+        `grayscale(${blend(0, values.grayscale ?? 0)})`,
+        `hue-rotate(${(values.hue ?? 0) * t}deg)`,
+        `blur(${(values.blur ?? 0) * t}px)`
+      ].join(" ");
     }
     function applyPhotoFilter(preset) {
       if (!selectedPhoto) {
@@ -2498,6 +2830,7 @@
       const slider =
         document.getElementById("photoFilterStrength");
       const strength = Number(slider.value);
+      slider.style.setProperty("--range-fill", strength + "%");
       const preset =
         selectedPhoto.dataset.filterPreset || "none";
       selectedPhoto.dataset.filterStrength =
@@ -2518,6 +2851,7 @@
         ? Number(selectedPhoto.dataset.filterStrength ?? "100")
         : 100;
       slider.value = strength;
+      slider.style.setProperty("--range-fill", strength + "%");
       valueLabel.textContent = strength + "%";
       slider.disabled =
         !selectedPhoto || isItemLocked(selectedPhoto);
@@ -2536,12 +2870,267 @@
     }
     // 複数文字の管理
     let selectedText = null;
+    let selectedDecorPreset = false;
     let textCounter = 1;
     const storyArea = document.querySelector(".story");
     const textList = document.getElementById("textList");
+    const stickerList = document.getElementById("stickerList");
+    const textStickerKinds = new Set([
+      "date", "korean", "caption", "cute", "birthday", "koreanMood", "youthMemo",
+      "fourCut", "bestie", "shineToday", "happyCharge", "favoriteMoment", "jjukkumi",
+      "saveAngle", "chakkak", "lovelyDay", "luckyDay", "memoryArchive", "soulmate",
+      "daebak", "cuteAlert", "moodSpoon", "heartDoodle", "flowerFrame", "twinkleTrail",
+      "ribbonLabel", "washiTape", "holoTicket", "ticketStub", "cloudMemo", "bowClip", "miniPolaroid"
+    ]);
+    const textStickerPresetGrid = document.getElementById("textStickerPresetGrid");
+    if (textStickerPresetGrid) {
+      document.querySelectorAll(".trendStickerButtons button[onclick]").forEach(function (button) {
+        const match = button.getAttribute("onclick").match(/addQuickSticker\('([^']+)'\)/);
+        if (match && textStickerKinds.has(match[1])) textStickerPresetGrid.appendChild(button);
+      });
+    }
+    function updateDecorAdjustControls() {
+      const scale = Number(storyArea.dataset.decorScale || 100);
+      const opacity = Number(storyArea.dataset.decorOpacity || 100);
+      const rotation = Number(storyArea.dataset.decorRotation || 0);
+      const values = [
+        ["decorScaleStrength", "decorScaleValue", scale, "%"],
+        ["decorOpacityStrength", "decorOpacityValue", opacity, "%"],
+        ["decorRotationStrength", "decorRotationValue", rotation, "°"]
+      ];
+      values.forEach(([inputId, outputId, value, suffix]) => {
+        const input = document.getElementById(inputId);
+        const output = document.getElementById(outputId);
+        if (input) {
+          input.value = String(value);
+          input.disabled = storyArea.dataset.decorLocked === "true";
+          const min = Number(input.min || 0);
+          const max = Number(input.max || 100);
+          const progress = max > min ? ((value - min) / (max - min)) * 100 : 0;
+          input.style.setProperty("--range-fill", progress + "%");
+        }
+        if (output) output.value = value + suffix;
+      });
+      storyArea.style.setProperty("--decor-scale", String(scale / 100));
+      storyArea.style.setProperty("--decor-opacity", String(opacity / 100));
+      storyArea.style.setProperty("--decor-rotation", rotation + "deg");
+    }
+    function changeDecorAdjustment(kind) {
+      const config = {
+        scale: ["decorScaleStrength", "decorScale"],
+        opacity: ["decorOpacityStrength", "decorOpacity"],
+        rotation: ["decorRotationStrength", "decorRotation"]
+      }[kind];
+      if (!config) return;
+      if (storyArea.dataset.decorLocked === "true") {
+        updateDecorAdjustControls();
+        return;
+      }
+      storyArea.dataset[config[1]] = document.getElementById(config[0]).value;
+      updateDecorAdjustControls();
+    }
+    function updateDecorMoveModeButton() {
+      const story = document.querySelector(".story");
+      const button = document.getElementById("decorMoveModeButton");
+      if (!story || !button) return;
+      const hasDecor = Boolean(story.dataset.decorPreset);
+      const moving = story.classList.contains("decorMoveMode");
+      button.disabled = !hasDecor || story.dataset.decorLocked === "true";
+      button.setAttribute("aria-pressed", String(moving));
+      button.textContent = moving
+        ? "装飾の移動を終了"
+        : "装飾を写真上で動かす";
+    }
+    function toggleDecorMoveMode() {
+      const story = document.querySelector(".story");
+      if (!story.dataset.decorPreset || story.dataset.decorLocked === "true") return;
+      const enabled = story.classList.toggle("decorMoveMode");
+      updateDecorMoveModeButton();
+    }
+    ["decorScaleStrength", "decorOpacityStrength", "decorRotationStrength"].forEach(id => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      input.addEventListener("pointerdown", saveHistory);
+      input.addEventListener("keydown", event => {
+        if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End", "PageUp", "PageDown"].includes(event.key)) saveHistory();
+      });
+    });
+    updateDecorAdjustControls();
+    updateDecorMoveModeButton();
+    const decorMoveOverlay = document.createElement("div");
+    decorMoveOverlay.className = "decorMoveOverlay";
+    decorMoveOverlay.setAttribute("aria-label", "ドラッグして装飾を移動");
+    storyArea.appendChild(decorMoveOverlay);
+    const decorPointers = new Map();
+    let decorDragState = null;
+    function getDecorPointerPoint(event) {
+      const rect = storyArea.getBoundingClientRect();
+      const scaleX = rect.width / (storyArea.offsetWidth || rect.width);
+      const scaleY = rect.height / (storyArea.offsetHeight || rect.height);
+      return {
+        x: (event.clientX - rect.left) / scaleX,
+        y: (event.clientY - rect.top) / scaleY
+      };
+    }
+    function setDecorGestureTransform(x, y, scale, rotation) {
+      storyArea.dataset.decorX = String(x);
+      storyArea.dataset.decorY = String(y);
+      storyArea.dataset.decorScale = String(scale);
+      storyArea.dataset.decorRotation = String(rotation);
+      storyArea.style.setProperty("--decor-x", x + "px");
+      storyArea.style.setProperty("--decor-y", y + "px");
+      updateDecorAdjustControls();
+    }
+    function beginDecorDrag(pointerId, point, keepHistory) {
+      decorDragState = {
+        mode: "drag",
+        pointerId,
+        startX: point.x,
+        startY: point.y,
+        originX: Number(storyArea.dataset.decorX || 0),
+        originY: Number(storyArea.dataset.decorY || 0),
+        historySaved: Boolean(keepHistory)
+      };
+    }
+    function beginDecorTransformGesture() {
+      const pointerIds = [...decorPointers.keys()].slice(0, 2);
+      if (pointerIds.length < 2) return;
+      const [first, second] = pointerIds.map(id => decorPointers.get(id));
+      const dx = second.x - first.x;
+      const dy = second.y - first.y;
+      decorDragState = {
+        mode: "transform",
+        pointerIds,
+        startDistance: Math.max(1, Math.hypot(dx, dy)),
+        startAngle: Math.atan2(dy, dx) * 180 / Math.PI,
+        startCenterX: (first.x + second.x) / 2,
+        startCenterY: (first.y + second.y) / 2,
+        originX: Number(storyArea.dataset.decorX || 0),
+        originY: Number(storyArea.dataset.decorY || 0),
+        originScale: Number(storyArea.dataset.decorScale || 100),
+        originRotation: Number(storyArea.dataset.decorRotation || 0),
+        historySaved: false
+      };
+    }
+    function startDecorPointer(event, captureTarget = decorMoveOverlay) {
+      if (event.button !== undefined && event.button !== 0) return;
+      event.preventDefault();
+      if (decorPointers.size >= 2) return;
+      decorPointers.set(event.pointerId, getDecorPointerPoint(event));
+      try { captureTarget.setPointerCapture(event.pointerId); } catch (_) {}
+      if (decorPointers.size === 1) {
+        beginDecorDrag(event.pointerId, decorPointers.get(event.pointerId), false);
+      } else {
+        beginDecorTransformGesture();
+      }
+    }
+    decorMoveOverlay.addEventListener("pointerdown", startDecorPointer);
+    storyArea.addEventListener("pointermove", function (event) {
+      if (!decorPointers.has(event.pointerId) || !decorDragState) return;
+      decorPointers.set(event.pointerId, getDecorPointerPoint(event));
+      if (decorDragState.mode === "drag") {
+        if (event.pointerId !== decorDragState.pointerId) return;
+        const point = decorPointers.get(event.pointerId);
+        const dx = point.x - decorDragState.startX;
+        const dy = point.y - decorDragState.startY;
+        if (!decorDragState.historySaved && Math.hypot(dx, dy) < 2) return;
+        if (!decorDragState.historySaved) {
+          saveHistory();
+          decorDragState.historySaved = true;
+        }
+        setDecorGestureTransform(
+          decorDragState.originX + dx,
+          decorDragState.originY + dy,
+          Number(storyArea.dataset.decorScale || 100),
+          Number(storyArea.dataset.decorRotation || 0)
+        );
+        return;
+      }
+      if (decorDragState.mode !== "transform" ||
+          decorDragState.pointerIds.some(id => !decorPointers.has(id))) return;
+      const [first, second] = decorDragState.pointerIds.map(id => decorPointers.get(id));
+      const dx = second.x - first.x;
+      const dy = second.y - first.y;
+      const distance = Math.max(1, Math.hypot(dx, dy));
+      const centerX = (first.x + second.x) / 2;
+      const centerY = (first.y + second.y) / 2;
+      const moveX = centerX - decorDragState.startCenterX;
+      const moveY = centerY - decorDragState.startCenterY;
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      let angleDelta = angle - decorDragState.startAngle;
+      angleDelta = ((angleDelta + 540) % 360) - 180;
+      if (!decorDragState.historySaved &&
+          Math.hypot(moveX, moveY, distance - decorDragState.startDistance, angleDelta) < 2) return;
+      if (!decorDragState.historySaved) {
+        saveHistory();
+        decorDragState.historySaved = true;
+      }
+      const scale = Math.max(40, Math.min(180,
+        Math.round((decorDragState.originScale * distance / decorDragState.startDistance) / 5) * 5));
+      const rotation = Math.max(-180, Math.min(180,
+        Math.round((decorDragState.originRotation + angleDelta) / 5) * 5));
+      setDecorGestureTransform(
+        decorDragState.originX + moveX,
+        decorDragState.originY + moveY,
+        scale,
+        rotation
+      );
+    });
+    function finishDecorDrag(event) {
+      if (!decorPointers.has(event.pointerId)) return;
+      const moved = Boolean(decorDragState && decorDragState.historySaved);
+      decorPointers.delete(event.pointerId);
+      if (decorPointers.size === 1) {
+        const [pointerId, point] = [...decorPointers.entries()][0];
+        beginDecorDrag(pointerId, point, moved);
+      } else if (decorPointers.size >= 2) {
+        beginDecorTransformGesture();
+      } else {
+        decorDragState = null;
+        if (!moved) {
+          deselectAllItems();
+          closeActiveEditorPanel();
+        }
+      }
+    }
+    storyArea.addEventListener("pointerup", finishDecorDrag);
+    storyArea.addEventListener("pointercancel", finishDecorDrag);
+    // キャンバス上の装飾を直接つかんで移動できるようにする。
+    // 写真や文字などの実アイテム上の操作は、それぞれのドラッグ処理に任せる。
+    storyArea.addEventListener("pointerdown", function (event) {
+      const editor = document.getElementById("editorArea");
+      if (event.target !== storyArea ||
+          !storyArea.dataset.decorPreset ||
+          storyArea.dataset.decorLocked === "true" ||
+          !editor.classList.contains("panelOpen") ||
+          editor.dataset.activePanel !== "decor") return;
+
+      event.stopImmediatePropagation();
+      selectedPhoto = null;
+      selectedText = null;
+      selectedDecorPreset = true;
+      document.querySelectorAll(".storyPhotoItem, .storyTextItem").forEach(function (item) {
+        item.classList.remove("selected");
+      });
+      storyArea.classList.add("decorPresetSelected", "decorMoveMode");
+      document.getElementById("storyText").value = "";
+      refreshPhotoList();
+      refreshTextList();
+      refreshStickerList();
+      updateDecorMoveModeButton();
+      updateItemCornerActions();
+      startDecorPointer(event, storyArea);
+    }, true);
+    function closeActiveEditorPanel() {
+      const editor = document.getElementById("editorArea");
+      if (editor.classList.contains("panelOpen") && editor.dataset.activePanel) {
+        showTab(editor.dataset.activePanel, null);
+      }
+    }
     // 文字の選択
     function selectText(el) {
       if (!el) return;
+      clearDecorPresetSelection();
       document.querySelectorAll(".storyTextItem").forEach(function (item) {
         item.classList.remove("selected");
       });
@@ -2571,6 +3160,7 @@
       document.getElementById("rotationValue").textContent =
         Math.round(angle) + "°";
       refreshTextList();
+      refreshStickerList();
     }
     // CSSの色をカラーピッカー用に変換
     function rgbToHex(color) {
@@ -2582,15 +3172,17 @@
     }
     // 文字一覧を更新
     function refreshTextList() {
+      if (!textList) return;
       textList.innerHTML = "";
       document.querySelectorAll(".storyTextItem").forEach(function (el, index) {
         const button = document.createElement("button");
         button.type = "button";
         const lockIcon =
           el.dataset.locked === "true" ? "🔒 " : "";
+        const itemType = el.classList.contains("storyStickerItem") ? "アイテム文字" : "文字";
         button.textContent =
           lockIcon +
-          (index + 1) + ": " +
+          itemType + " " + (index + 1) + ": " +
           (el.textContent.slice(0, 12) || "空の文字");
         if (el === selectedText) {
           button.classList.add("active");
@@ -2601,6 +3193,49 @@
         textList.appendChild(button);
       });
     }
+    function refreshStickerList() {
+      if (!stickerList) return;
+      stickerList.innerHTML = "";
+      const decorPreset = storyArea.dataset.decorPreset || "";
+      if (decorPreset) {
+        const presetLabels = {
+          heisei: "平成プリ装飾",
+          korean: "韓国コラージュ装飾",
+          y2k: "Y2Kカメラ装飾",
+          scrapbook: "スクラップブック装飾",
+          softSparkle: "ソフトきらめき装飾",
+          polaroid: "ポラロイド装飾"
+        };
+        const decorButton = document.createElement("button");
+        decorButton.type = "button";
+        decorButton.textContent =
+          (storyArea.dataset.decorLocked === "true" ? "🔒 " : "") +
+          (presetLabels[decorPreset] || "装飾");
+        if (selectedDecorPreset) decorButton.classList.add("active");
+        decorButton.addEventListener("click", function () {
+          document.querySelectorAll(".storyPhotoItem, .storyTextItem").forEach(function (item) {
+            item.classList.remove("selected");
+          });
+          selectedPhoto = null;
+          selectedText = null;
+          selectedDecorPreset = true;
+          storyArea.classList.add("decorPresetSelected");
+          if (storyArea.dataset.decorLocked === "true") {
+            storyArea.classList.remove("decorMoveMode");
+          } else {
+            storyArea.classList.add("decorMoveMode");
+          }
+          document.getElementById("storyText").value = "";
+          refreshPhotoList();
+          refreshTextList();
+          refreshStickerList();
+          updateDecorMoveModeButton();
+          updateItemCornerActions();
+          showTab("decor", null, true);
+        });
+        stickerList.appendChild(decorButton);
+      }
+    }
     // 文字を追加
     function addText() {
       const el = document.createElement("p");
@@ -2609,7 +3244,7 @@
       el.style.top = "200px";
       el.style.color = "#555555";
       el.style.fontSize = "15px";
-      el.style.fontFamily = "sans-serif";
+      el.style.fontFamily = "Nico Moji Plus";
       el.dataset.x = "0";
       el.dataset.y = "0";
       saveHistory();
@@ -2619,6 +3254,117 @@
       // 写真を前面に設定している場合も重なり順を維持
       setPhotoLayer(photoLayer);
       document.getElementById("storyText").focus();
+    }
+    function setTextEntryMode(mode) {
+      const usePresets = mode === "presets";
+      document.getElementById("customTextEntry").hidden = usePresets;
+      document.getElementById("presetTextEntry").hidden = !usePresets;
+      document.getElementById("customTextModeButton").classList.toggle("active", !usePresets);
+      document.getElementById("presetTextModeButton").classList.toggle("active", usePresets);
+      document.getElementById("customTextModeButton").setAttribute("aria-selected", String(!usePresets));
+      document.getElementById("presetTextModeButton").setAttribute("aria-selected", String(usePresets));
+    }
+    function addPresetText(text) {
+      addText();
+      document.getElementById("storyText").value = text;
+      changeText();
+      document.getElementById("storyText").blur();
+    }
+    function addQuickSticker(kind) {
+      const today = new Date();
+      const pad = value => String(value).padStart(2, "0");
+      const dateLabel = today.getFullYear() + "." +
+        pad(today.getMonth() + 1) + "." + pad(today.getDate());
+      const stickers = {
+        sparkle: { text: "✦", size: 42, color: "#fff3b0", outline: "#d978a7", shadow: true },
+        bow: { text: "🎀", size: 40, color: "#ed75a7", shadow: true },
+        heart: { text: "♡", size: 46, color: "#f174a3", outline: "#fffafd", shadow: true },
+        star: { text: "★", size: 40, color: "#ffe08a", outline: "#d799b7", shadow: true },
+        date: { text: dateLabel, size: 17, color: "#fffaf6", outline: "#a97891", shadow: true, font: "monospace" },
+        korean: { text: "오늘의 한 컷", size: 19, color: "#fffaf6", outline: "#a97891", shadow: true },
+        crystal: { text: "💎", size: 38, color: "#d9b9ff", outline: "#fffafd", shadow: true },
+        bear: { text: "🧸", size: 38, color: "#c98e70", shadow: true },
+        bunny: { text: "🐰", size: 38, color: "#f2a9bd", shadow: true },
+        cloud: { text: "☁", size: 42, color: "#fffafd", outline: "#b9c8e7", shadow: true },
+        wings: { text: "🪽", size: 40, color: "#fffafd", shadow: true },
+        flower: { text: "🌼", size: 38, color: "#ffdf78", shadow: true },
+        lace: { text: "୨୧", size: 42, color: "#fff4f8", outline: "#dc8eaf", shadow: true },
+        pearl: { text: "˚₊‧꒰ა ☆ ໒꒱‧₊˚", size: 17, color: "#fff8e8", outline: "#bd91ae", shadow: true },
+        caption: { text: "♡ 오늘의 주인공 ♡", size: 17, color: "#fffafd", outline: "#c56d99", shadow: true },
+        cute: { text: "오늘도 귀여워", size: 19, color: "#fffafd", outline: "#c56d99", shadow: true },
+        birthday: { text: "HAPPY B-DAY", size: 18, color: "#fff2b2", outline: "#d17ca5", shadow: true, font: "monospace" },
+        mail: { text: "♡ from me to you ♡", size: 16, color: "#fffafd", outline: "#b97e9d", shadow: true },
+        koreanMood: { text: "오늘의\n무드", size: 19, color: "#fffafd", outline: "#c56d99", shadow: true, badge: { fill: "#db78a5", border: "#fff4fa", radius: 10, padX: 9, padY: 5 } },
+        youthMemo: { text: "✦ 청춘 기록 ✦", size: 17, color: "#fffaf0", outline: "#96765f", shadow: true, badge: { fill: "#78928c", border: "#f7eddd", radius: 6, padX: 9, padY: 5 } },
+        fourCut: { text: "인생네컷", size: 20, color: "#fffafd", outline: "#3f3941", shadow: true, badge: { fill: "#3f3941", border: "#fffafd", radius: 5, padX: 9, padY: 4 } },
+        bestie: { text: "우리 우정 ♡", size: 18, color: "#bd628c", outline: "#fffafd", shadow: true, badge: { fill: "#fff0f6", border: "#e5a4c1", radius: 14, padX: 10, padY: 5 } },
+        shineToday: { text: "오늘도 빛나", size: 20, color: "#ffe593", outline: "#fffafd", shadow: true },
+        happyCharge: { text: "행복 충전", size: 18, color: "#fffafd", outline: "#d989a9", shadow: true, badge: { fill: "#f2a9c2", border: "#fff6fa", radius: 999, padX: 10, padY: 5 } },
+        favoriteMoment: { text: "최애 순간", size: 18, color: "#fffafd", outline: "#9b83c4", shadow: true, badge: { fill: "#9b83c4", border: "#f8f2ff", radius: 8, padX: 9, padY: 5 } },
+        jjukkumi: { text: "뽀짝\n모먼트", size: 19, color: "#fffafd", outline: "#eb8eaf", shadow: true, badge: { fill: "#f8c6d8", border: "#fffafd", radius: 12, padX: 8, padY: 5 } },
+        saveAngle: { text: "저장각", size: 18, color: "#fffafd", outline: "#7589bd", shadow: true, badge: { fill: "#7589bd", border: "#f2f5ff", radius: 5, padX: 10, padY: 5 } },
+        chakkak: { text: "찰칵!", size: 23, color: "#fff7e7", outline: "#c87764", shadow: true, badge: { fill: "#e79c82", border: "#fff9ef", radius: 999, padX: 11, padY: 4 } },
+        lovelyDay: { text: "사랑스러운 날", size: 17, color: "#fffafd", outline: "#c56d99", shadow: true },
+        luckyDay: { text: "✦ 행운 가득 ✦", size: 17, color: "#fff6d2", outline: "#b79554", shadow: true, badge: { fill: "#c7a969", border: "#fff7dc", radius: 8, padX: 9, padY: 5 } },
+        memoryArchive: { text: "추억 저장", size: 18, color: "#fffaf0", outline: "#9b7b65", shadow: true, badge: { fill: "#b98e75", border: "#fff4e8", radius: 4, padX: 9, padY: 5 } },
+        filmMark: { text: "▰  PHOTO  ▰\nNO. 01 · TODAY", size: 12, color: "#fffafd", outline: "#58505c", shadow: true, font: "monospace", badge: { fill: "#514957", border: "#e8d6e3", radius: 4, padX: 8, padY: 6 } },
+        soulmate: { text: "너와 나\n♡ together ♡", size: 16, color: "#fffafd", outline: "#b675a0", shadow: true },
+        daebak: { text: "대박!", size: 24, color: "#fff4a7", outline: "#f06f91", shadow: true },
+        cuteAlert: { text: "귀여움 주의", size: 17, color: "#fffafd", outline: "#d66e91", shadow: true, badge: { fill: "#e58aa5", border: "#fffafd", radius: 6, padX: 9, padY: 5 } },
+        moodSpoon: { text: "감성 한 스푼", size: 17, color: "#fffaf0", outline: "#a58470", shadow: true, badge: { fill: "#b99b85", border: "#fff8ef", radius: 999, padX: 10, padY: 5 } },
+        heartDoodle: { text: "♡  ♥  ♡\n⋆｡˚ 하트 낙서 ˚｡⋆", size: 17, color: "#ff8cb7", outline: "#fffafd", shadow: true },
+        flowerFrame: { text: "❀  ✿  ❀\n꽃처럼 예쁜 날", size: 16, color: "#fffafd", outline: "#d28ca6", shadow: true },
+        twinkleTrail: { text: "✧·····✦·····✧", size: 22, color: "#fff2b5", outline: "#cf88aa", shadow: true },
+        ribbonLabel: { text: "୨୧ 소중한 순간 ୨୧", size: 15, color: "#ae597e", outline: "#fffafd", shadow: true, badge: { fill: "#f8dce8", border: "#d995b2", radius: 5, padX: 9, padY: 5 } },
+        washiTape: { text: "/// 오늘의 기록 ///", size: 15, color: "#806c5d", outline: "#fffaf0", shadow: true, badge: { fill: "#ead9bf", border: "#fff6e8", radius: 2, padX: 9, padY: 5 } },
+        holoTicket: { text: "✦ PHOTO PASS ✦", size: 16, color: "#fffafd", outline: "#7a79b5", shadow: true, font: "monospace", badge: { fill: "#aaa4d5", border: "#f8f5ff", radius: 7, padX: 10, padY: 6 } },
+        ticketStub: { text: "입장권  No. 01\n오늘의 순간", size: 15, color: "#fff8ef", outline: "#ba7f6a", shadow: true, font: "monospace", badge: { fill: "#d69e83", border: "#fff5e9", radius: 4, padX: 9, padY: 6 } },
+        starBurst: { text: "✦", size: 58, color: "#ffe794", outline: "#fffafd", shadow: true },
+        cloudMemo: { text: "☁︎ 오늘도 맑음", size: 17, color: "#fffafd", outline: "#8da9c8", shadow: true, badge: { fill: "#b8d1e7", border: "#f8fcff", radius: 999, padX: 10, padY: 5 } },
+        pearlChain: { text: "˚｡⋆ ୨୧ ⋆｡˚", size: 24, color: "#fff4d5", outline: "#d7b8cb", shadow: true },
+        bowClip: { text: "˚₊‧ 리본 핀 ‧₊˚", size: 17, color: "#fffafd", outline: "#d978a7", shadow: true },
+        miniPolaroid: { text: "♡ PHOTO ♡\n오늘의 한 컷", size: 15, color: "#87766c", outline: "#fffafd", shadow: true, font: "monospace", badge: { fill: "#fffaf1", border: "#e9ddce", radius: 3, padX: 10, padY: 8 } }
+      };
+      const sticker = stickers[kind];
+      if (!sticker) return;
+      saveHistory();
+      const item = document.createElement("p");
+      item.className = "storyTextItem storyStickerItem";
+      item.style.top = "200px";
+      item.dataset.x = "0";
+      item.dataset.y = "0";
+      storyArea.appendChild(item);
+      enableTextDrag(item);
+      item.textContent = sticker.text;
+      item.dataset.stickerKind = kind;
+      item.style.fontSize = sticker.size + "px";
+      item.style.fontWeight = "700";
+      item.style.fontFamily = sticker.font || "sans-serif";
+      item.style.lineHeight = "1.1";
+      item.style.color = sticker.color;
+      if (sticker.badge) {
+        const badge = sticker.badge;
+        item.style.padding = badge.padY + "px " + badge.padX + "px";
+        item.style.backgroundColor = badge.fill;
+        item.style.border = "1px solid " + badge.border;
+        item.style.borderRadius = badge.radius + "px";
+        item.style.boxShadow = "0 3px 12px rgba(69,45,62,.18)";
+        item.dataset.badgeFill = badge.fill;
+        item.dataset.badgeBorder = badge.border;
+        item.dataset.badgeRadius = String(badge.radius);
+        item.dataset.badgePadX = String(badge.padX);
+        item.dataset.badgePadY = String(badge.padY);
+      }
+      item.classList.toggle("outline", Boolean(sticker.outline));
+      item.classList.toggle("shadow", Boolean(sticker.shadow));
+      if (sticker.outline) {
+        item.dataset.outlineColor = sticker.outline;
+        item.dataset.outlineWidth = kind === "date" || kind === "korean" ? "2" : "1";
+      }
+      updateTextOutline(item);
+      updateTextTransform(item);
+      selectText(item);
+      setPhotoLayer(photoLayer);
     }
     // 選択中の文字を削除
     function duplicateText() {
@@ -2661,6 +3407,7 @@
       } else {
         document.getElementById("storyText").value = "";
         refreshTextList();
+        refreshStickerList();
       }
     }
     // 文字をドラッグできるようにする
@@ -2754,53 +3501,31 @@
       }
     } function addTextFromToolbar() {
       const editor = document.getElementById("editorArea");
-      if (!editor.classList.contains("panelOpen") || editor.dataset.activePanel !== "text") {
-        showTab("text");
-      }
+      if (!editor.classList.contains("panelOpen") || editor.dataset.activePanel !== "text") showTab("text", null, true);
       addText();
     }
     function showTab(tabName, clickedButton, forceOpen) {
+      if (tabName === "items") tabName = "decor";
       const editor = document.getElementById("editorArea");
-      const panelName = tabName === "style" ? "background" : tabName;
-      const panel = document.getElementById(panelName + "Tab");
+      const panel = document.getElementById(tabName + "Tab");
       if (!panel) return;
-
-      const wasOpen = editor.classList.contains("panelOpen");
-      const previousPanel = editor.dataset.activePanel || "";
-      const shouldClose = !forceOpen && wasOpen && previousPanel === tabName;
-
-      document.querySelectorAll(".tabContent").forEach(function (tab) {
-        tab.classList.remove("active");
-      });
-      document.querySelectorAll(".tabButton").forEach(function (button) {
-        button.classList.remove("active");
-      });
-
+      const shouldClose = !forceOpen && editor.classList.contains("panelOpen") && editor.dataset.activePanel === tabName;
+      document.querySelectorAll(".tabContent").forEach(function (tab) { tab.classList.remove("active"); });
+      document.querySelectorAll(".tabButton").forEach(function (button) { button.classList.remove("active"); });
       if (shouldClose) {
         editor.classList.remove("panelOpen");
         editor.dataset.activePanel = "";
         return;
       }
-
       panel.classList.add("active");
       editor.dataset.activePanel = tabName;
       editor.classList.add("panelOpen");
-
-      const dockButton = clickedButton || document.getElementById(
-        tabName === "photo" ? "photoTabButton" :
-        tabName === "style" ? "styleTabButton" :
-        tabName === "background" ? "backgroundTabButton" : ""
-      );
-      if (dockButton) dockButton.classList.add("active");
-
-      if (tabName === "background") {
-        requestAnimationFrame(function () {
-          const preset = panel.querySelector(".gradientButtons");
-          if (preset) panel.scrollTop = Math.max(0, preset.offsetTop - 12);
-        });
-      } else if (tabName === "style") {
-        panel.scrollTop = 0;
+      const dockButton = clickedButton || document.getElementById(tabName === "photo" ? "photoTabButton" : tabName === "text" ? "textTabButton" : tabName === "effect" ? "effectTabButton" : tabName === "decor" ? "decorTabButton" : tabName === "style" ? "styleTabButton" : "");
+      if (dockButton) {
+        dockButton.classList.add("active");
+        dockButton.scrollIntoView({ block: "nearest", inline: "nearest" });
       }
+      if (tabName === "style") panel.scrollTop = 0;
     }
     /* 写真サイズのスライダー操作を履歴に保存 */
     const photoSizeSlider = document.getElementById("photoSize");
@@ -3029,6 +3754,7 @@
     }
     /* 写真・文字の選択を解除する */
     function deselectAllItems() {
+      clearDecorPresetSelection();
       // 写真の選択を解除
       document.querySelectorAll(".storyPhotoItem").forEach(function (img) {
         img.classList.remove("selected");
@@ -3044,15 +3770,31 @@
       // 一覧の選択表示を更新
       refreshPhotoList();
       refreshTextList();
+      refreshStickerList();
     }
     // ストーリーの何もない部分をタップしたとき
     storyArea.addEventListener("pointerdown", function (e) {
       // 写真や文字をタップした場合は解除しない
       if (e.target !== storyArea) return;
       deselectAllItems();
+      closeActiveEditorPanel();
     });
     /* 選択した写真または文字を削除 */
     function deleteSelectedItem() {
+      if (selectedDecorPreset) {
+        saveHistory();
+        delete storyArea.dataset.decorPreset;
+        delete storyArea.dataset.decorLocked;
+        selectedDecorPreset = false;
+        storyArea.classList.remove("decorPresetSelected", "decorMoveMode");
+        updateDecorMoveModeButton();
+        updateHeiseiDecorButton();
+        updateKoreanDecorButton();
+        updateY2KDecorButton();
+        refreshStickerList();
+        updateItemCornerActions();
+        return;
+      }
       // 写真が選択されている場合
       if (selectedPhoto) {
         removePhoto();
@@ -3103,14 +3845,27 @@
     /* 写真・文字をタップしたら編集タブを切り替える */
     storyArea.addEventListener("pointerdown", function (e) {
       const tappedPhoto = e.target.closest(".storyPhotoItem");
+      const tappedSticker = e.target.closest(".storyStickerItem");
       const tappedText = e.target.closest(".storyTextItem");
       // 写真をタップした場合
       if (tappedPhoto) {
         showTab("photo", document.getElementById("photoTabButton"), true);
       }
+      else if (tappedSticker) {
+        const editor = document.getElementById("editorArea");
+        if (editor.classList.contains("panelOpen") && editor.dataset.activePanel) {
+          showTab(editor.dataset.activePanel, null);
+        }
+      }
       // 文字をタップした場合
       else if (tappedText) {
-        showTab("text", null, true);
+        const editor = document.getElementById("editorArea");
+        if (
+          editor.classList.contains("panelOpen") &&
+          editor.dataset.activePanel === "text"
+        ) {
+          showTab("text", null);
+        }
       }
     });
     /* 中央ガイドラインの作成 */
@@ -3257,6 +4012,17 @@
       return item && item.dataset.locked === "true";
     }
     function toggleItemLock() {
+      if (selectedDecorPreset) {
+        saveHistory();
+        const isLocked = storyArea.dataset.decorLocked === "true";
+        storyArea.dataset.decorLocked = isLocked ? "false" : "true";
+        storyArea.classList.remove("decorMoveMode");
+        updateDecorAdjustControls();
+        updateDecorMoveModeButton();
+        refreshStickerList();
+        updateItemCornerActions();
+        return;
+      }
       const item =
         document.querySelector(".storyPhotoItem.selected") ||
         document.querySelector(".storyTextItem.selected");
@@ -3328,6 +4094,11 @@
     class="cornerLock"
     aria-label="ロック切り替え">🔓</button>
   <button type="button"
+    class="cornerFont"
+    aria-label="フォント（準備中）"
+    title="フォント選択は準備中です"
+    disabled>フォント</button>
+  <button type="button"
     class="cornerDelete"
     aria-label="削除">×</button>
 `;
@@ -3347,38 +4118,82 @@
       const item = storyArea.querySelector(
         ".storyPhotoItem.selected, .storyTextItem.selected"
       );
-      if (!item) {
+      if (!item && !selectedDecorPreset) {
+        itemCornerActions.classList.remove("stickerActions");
         itemCornerActions.style.display = "none";
         return;
       }
+      if (selectedDecorPreset) {
+        itemCornerActions.classList.add("stickerActions");
+        const lockButton = itemCornerActions.querySelector(".cornerLock");
+        const fontButton = itemCornerActions.querySelector(".cornerFont");
+        const deleteButton = itemCornerActions.querySelector(".cornerDelete");
+        const isLocked = storyArea.dataset.decorLocked === "true";
+        fontButton.style.display = "none";
+        itemCornerActions.style.left = "";
+        itemCornerActions.style.top = "";
+        itemCornerActions.style.right = "8px";
+        itemCornerActions.style.bottom = "8px";
+        lockButton.textContent = isLocked ? "ロック解除" : "ロック";
+        lockButton.classList.toggle("isLocked", isLocked);
+        lockButton.setAttribute("aria-label", isLocked ? "ロックを解除" : "ロックする");
+        deleteButton.textContent = "削除";
+        itemCornerActions.style.display = "flex";
+        return;
+      }
+      const isTextItem = item.classList.contains("storyTextItem");
+      itemCornerActions.classList.toggle("stickerActions", isTextItem);
+      const lockButton = itemCornerActions.querySelector(".cornerLock");
+      const fontButton = itemCornerActions.querySelector(".cornerFont");
+      const deleteButton = itemCornerActions.querySelector(".cornerDelete");
+      const isLocked = item.dataset.locked === "true";
+      if (isTextItem) {
+        fontButton.style.display = "flex";
+        itemCornerActions.style.left = "";
+        itemCornerActions.style.top = "";
+        itemCornerActions.style.right = "8px";
+        itemCornerActions.style.bottom = "8px";
+        lockButton.textContent = isLocked ? "ロック解除" : "ロック";
+        deleteButton.textContent = "削除";
+        lockButton.classList.toggle("isLocked", isLocked);
+        lockButton.setAttribute(
+          "aria-label",
+          isLocked ? "ロックを解除" : "ロックする"
+        );
+        itemCornerActions.style.display = "flex";
+        return;
+      }
+      fontButton.style.display = "none";
+      itemCornerActions.style.right = "";
+      itemCornerActions.style.bottom = "";
+      lockButton.textContent = "🔒";
+      deleteButton.textContent = "×";
       const storyRect = storyArea.getBoundingClientRect();
       const itemRect = item.getBoundingClientRect();
       // 表示倍率を考慮
       const scaleX = storyRect.width / storyArea.offsetWidth;
       const scaleY = storyRect.height / storyArea.offsetHeight;
-      // アイテム右上の位置
+      // アイテム枠の右上に小さく配置
+      const actionsWidth = itemCornerActions.offsetWidth || 34;
+      const actionsHeight = itemCornerActions.offsetHeight || 16;
       let left =
-        (itemRect.right - storyRect.left) / scaleX - 56;
+        (itemRect.right - storyRect.left) / scaleX - actionsWidth - 2;
       let top =
-        (itemRect.top - storyRect.top) / scaleY - 10;
+        (itemRect.top - storyRect.top) / scaleY + 2;
       // ストーリーの外に出ないようにする
       left = Math.max(
         4,
-        Math.min(left, storyArea.offsetWidth - 60)
+        Math.min(left, storyArea.offsetWidth - actionsWidth - 4)
       );
       top = Math.max(
         4,
-        Math.min(top, storyArea.offsetHeight - 30)
+        Math.min(top, storyArea.offsetHeight - actionsHeight - 4)
       );
       itemCornerActions.style.left = left + "px";
       itemCornerActions.style.top = top + "px";
       itemCornerActions.style.display = "flex";
       // ロック状態に合わせて鍵マークを変更
-      const lockButton =
-        itemCornerActions.querySelector(".cornerLock");
-      const isLocked = item.dataset.locked === "true";
       // 鍵の形は変えず、色の濃さだけ切り替える
-      lockButton.textContent = "🔒";
       lockButton.classList.toggle("isLocked", isLocked);
       lockButton.setAttribute(
         "aria-label",
@@ -3488,8 +4303,8 @@
       if (!button) return;
       const enabled = story.dataset.decorPreset === "heisei";
       button.textContent = enabled
-        ? "✓ ハート＆キラキラを外す"
-        : "✨ ハート＆キラキラを追加";
+        ? "平成プリ ✓"
+        : "平成プリ";
     }
     /* 韓国コラージュ装飾のON・OFF */
     function toggleKoreanDecor() {
@@ -3513,8 +4328,8 @@
       const enabled =
         story.dataset.decorPreset === "korean";
       button.textContent = enabled
-        ? "✓ 韓国コラージュを外す"
-        : "🧸 韓国コラージュを追加";
+        ? "韓国コラージュ ✓"
+        : "韓国コラージュ";
     }
     /* Y2Kカメラ装飾のON・OFF */
     function toggleY2KDecor() {
@@ -3547,9 +4362,48 @@
       const button = document.getElementById("y2kDecorButton");
       if (!button) return;
       const enabled = story.dataset.decorPreset === "y2k";
+      document.getElementById("effectTab").classList.toggle("y2kCameraActive", enabled);
       button.textContent = enabled
-        ? "✓ Y2Kカメラ風を外す"
-        : "📹 Y2Kカメラ風を追加";
+        ? "Y2Kカメラ ✓"
+        : "Y2Kカメラ";
+      syncDecorPresetButtons();
+    }
+    function syncDecorPresetButtons() {
+      const story = document.querySelector(".story");
+      const activePreset = story.dataset.decorPreset || "";
+      document.querySelectorAll("[data-decor-preset-button]").forEach(function (button) {
+        const active = button.dataset.decorPresetButton === activePreset;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      if (selectedDecorPreset && !activePreset) {
+        selectedDecorPreset = false;
+        storyArea.classList.remove("decorPresetSelected", "decorMoveMode");
+      }
+      if (!activePreset) {
+        delete story.dataset.decorLocked;
+        story.classList.remove("decorPresetSelected", "decorMoveMode");
+        selectedDecorPreset = false;
+        ["decorScaleStrength", "decorOpacityStrength", "decorRotationStrength"].forEach(function (id) {
+          const input = document.getElementById(id);
+          if (input) input.disabled = false;
+        });
+      }
+      updateDecorMoveModeButton();
+      refreshStickerList();
+      updateItemCornerActions();
+    }
+    function toggleDecorPreset(preset) {
+      const story = document.querySelector(".story");
+      saveHistory();
+      if (story.dataset.decorPreset === preset) {
+        delete story.dataset.decorPreset;
+      } else {
+        story.dataset.decorPreset = preset;
+      }
+      updateHeiseiDecorButton();
+      updateKoreanDecorButton();
+      updateY2KDecorButton();
     }
     /* フィルター強度の変更履歴 */
     const filterStrengthSlider =
@@ -3598,6 +4452,7 @@
       );
       const slider = document.getElementById("y2kGrainStrength");
       slider.value = strength;
+      slider.style.setProperty("--range-fill", strength + "%");
       document.getElementById("y2kGrainValue").textContent =
         strength + "%";
       const isY2K = storyArea.dataset.decorPreset === "y2k";
@@ -3682,6 +4537,7 @@
       const slider =
         document.getElementById("y2kLightStrength");
       slider.value = strength;
+      slider.style.setProperty("--range-fill", strength + "%");
       document.getElementById(
         "y2kLightValue"
       ).textContent = strength + "%";
@@ -3726,6 +4582,412 @@
         saveHistory();
       }
     });
+
+    const collageTemplates = {
+      bluePostcard: {
+        label: "BLUE POSTCARD", background: "#dce7ef", accent: "#557b9c", paper: "#f7f6f1", motif: "✦  ✧  ✦",
+        slots: [
+          { id: "1", x: 18, y: 27, w: 142, h: 178, angle: -8, frame: "polaroid" },
+          { id: "2", x: 112, y: 155, w: 142, h: 188, angle: 3, frame: "polaroid" },
+          { id: "3", x: 20, y: 286, w: 122, h: 157, angle: -5, frame: "instax" }
+        ]
+      },
+      seoulFourCut: {
+        label: "SEOUL PHOTO BOOTH", background: "#f3dfe5", accent: "#b16682", paper: "#fff9f8", motif: "♥  04 CUT  ♥",
+        slots: [0, 1, 2, 3].map((i) => ({ id: String(i + 1), x: 45, y: 26 + i * 108, w: 180, h: 94, angle: 0, frame: "film" }))
+      },
+      pinkDiary: {
+        label: "MY LITTLE DIARY", background: "#f8dbe8", accent: "#d079a5", paper: "#fff9fc", motif: "♡  ribbon  ♡",
+        slots: [
+          { id: "1", x: 17, y: 35, w: 145, h: 178, angle: -7, frame: "polaroid" },
+          { id: "2", x: 108, y: 153, w: 145, h: 183, angle: 6, frame: "polaroid" },
+          { id: "3", x: 20, y: 292, w: 118, h: 145, angle: -3, frame: "paper" }
+        ]
+      },
+      y2kFilm: {
+        label: "Y2K / 2000", background: "#d9e8f4", accent: "#5870a4", paper: "#f7f9ff", motif: "REC ● 2000",
+        slots: [0, 1, 2, 3].map((i) => ({ id: String(i + 1), x: 33, y: 24 + i * 108, w: 204, h: 94, angle: 0, frame: "film" }))
+      },
+      junkJournal: {
+        label: "LITTLE THINGS", background: "#e9dfd0", accent: "#846a61", paper: "#fff9ee", motif: "✂  KEEP THIS",
+        slots: [
+          { id: "1", x: 24, y: 33, w: 135, h: 165, angle: -6, frame: "paper" },
+          { id: "2", x: 111, y: 154, w: 132, h: 165, angle: 5, frame: "polaroid" },
+          { id: "3", x: 22, y: 296, w: 126, h: 147, angle: -3, frame: "paper" }
+        ]
+      },
+      creamAlbum: {
+        label: "SUNDAY ALBUM", background: "#eee6d7", accent: "#9c8067", paper: "#fffdf6", motif: "SUNDAY  /  01",
+        slots: [
+          { id: "1", x: 22, y: 35, w: 226, h: 177, angle: -2, frame: "instax" },
+          { id: "2", x: 42, y: 254, w: 184, h: 185, angle: 2, frame: "instax" }
+        ]
+      },
+      airmailPostcard: {
+        label: "POSTCARD FROM", background: "#e1edf2", accent: "#6889a0", paper: "#fbfaf4", motif: "✈  WITH LOVE",
+        slots: [
+          { id: "1", x: 20, y: 38, w: 146, h: 191, angle: -7, frame: "polaroid" },
+          { id: "2", x: 105, y: 238, w: 145, h: 190, angle: 5, frame: "polaroid" }
+        ]
+      },
+      denimScrap: {
+        label: "DENIM DAYS", background: "#cbddea", accent: "#466d93", paper: "#f6f7f2", motif: "★  patched memories  ★",
+        slots: [
+          { id: "1", x: 20, y: 35, w: 136, h: 163, angle: -5, frame: "paper" },
+          { id: "2", x: 117, y: 147, w: 132, h: 163, angle: 5, frame: "paper" },
+          { id: "3", x: 35, y: 292, w: 194, h: 139, angle: -2, frame: "paper" }
+        ]
+      },
+      softFocus: {
+        label: "SOFT FOCUS", background: "#eadff0", accent: "#9275a7", paper: "#fffaff", motif: "☾  dreamy day  ☾",
+        slots: [
+          { id: "1", x: 15, y: 38, w: 132, h: 164, angle: -5, frame: "paper", shape: "round" },
+          { id: "2", x: 123, y: 165, w: 132, h: 164, angle: 5, frame: "paper", shape: "round" },
+          { id: "3", x: 37, y: 298, w: 135, h: 146, angle: -2, frame: "instax" }
+        ]
+      },
+      photoDumpGrid: {
+        label: "PHOTO DUMP", background: "#eee5d8", accent: "#826c5d", paper: "#fffaf1", motif: "A FEW GOOD MOMENTS",
+        slots: [0, 1, 2, 3, 4, 5].map((i) => ({ id: String(i + 1), x: 19 + (i % 2) * 119, y: 43 + Math.floor(i / 2) * 132, w: 111, h: 119, angle: 0, frame: "paper" }))
+      }
+,
+      cherryBlossom: {
+        label: "CHERRY MEMORY", background: "#f6dce5", accent: "#bf718d", paper: "#fff8f7", motif: "♡  SAKURA DAYS  ♡",
+        slots: [
+          { id: "1", x: 15, y: 66, w: 145, h: 174, angle: -7, frame: "polaroid" },
+          { id: "2", x: 112, y: 165, w: 142, h: 176, angle: 6, frame: "polaroid" },
+          { id: "3", x: 35, y: 300, w: 117, h: 112, angle: -3, frame: "instax" }
+        ]
+      },
+      seoulGrid: {
+        label: "SEOUL SNAPSHOTS", background: "#f1e2e8", accent: "#9d617a", paper: "#fffafa", motif: "SEOUL  /  EVERYDAY",
+        slots: [
+          { id: "1", x: 18, y: 68, w: 111, h: 147, angle: -2, frame: "paper" },
+          { id: "2", x: 141, y: 68, w: 111, h: 147, angle: 2, frame: "paper" },
+          { id: "3", x: 18, y: 239, w: 111, h: 147, angle: 2, frame: "paper" },
+          { id: "4", x: 141, y: 239, w: 111, h: 147, angle: -2, frame: "paper" }
+        ]
+      },
+      candyOval: {
+        label: "CANDY PORTRAITS", background: "#f5d9e8", accent: "#ba70a2", paper: "#fff8fd", motif: "SWEET  /  LIKE  CANDY",
+        slots: [
+          { id: "1", x: 22, y: 75, w: 112, h: 155, angle: -8, frame: "paper", shape: "round" },
+          { id: "2", x: 137, y: 120, w: 112, h: 155, angle: 7, frame: "paper", shape: "round" },
+          { id: "3", x: 65, y: 255, w: 137, h: 150, angle: -2, frame: "instax", shape: "round" }
+        ]
+      },
+      filmTickets: {
+        label: "ADMIT ONE / MEMORIES", background: "#e5e2f0", accent: "#70648f", paper: "#fbf9ff", motif: "GOOD TIMES  •  KEEP FOREVER",
+        slots: [
+          { id: "1", x: 22, y: 67, w: 226, h: 91, angle: -2, frame: "film" },
+          { id: "2", x: 31, y: 184, w: 208, h: 91, angle: 2, frame: "film" },
+          { id: "3", x: 22, y: 301, w: 226, h: 91, angle: -1, frame: "film" }
+        ]
+      },
+      vintageLedger: {
+        label: "COLLECTED MOMENTS", background: "#e8ddc9", accent: "#8a7058", paper: "#fffaf0", motif: "VOL. 04  /  LITTLE JOYS",
+        slots: [
+          { id: "1", x: 20, y: 65, w: 104, h: 143, angle: -5, frame: "paper" },
+          { id: "2", x: 144, y: 75, w: 105, h: 132, angle: 4, frame: "instax" },
+          { id: "3", x: 25, y: 236, w: 121, h: 158, angle: 3, frame: "polaroid" },
+          { id: "4", x: 157, y: 245, w: 91, h: 137, angle: -4, frame: "paper" }
+        ]
+      },
+      cloudAlbum: {
+        label: "A SOFT LITTLE DAY", background: "#dceaf4", accent: "#6889a4", paper: "#fbfdff", motif: "☁  DREAM A LITTLE  ☁",
+        slots: [
+          { id: "1", x: 17, y: 70, w: 236, h: 157, angle: -3, frame: "instax" },
+          { id: "2", x: 32, y: 249, w: 205, h: 158, angle: 3, frame: "polaroid" }
+        ]
+      },
+      neonContact: {
+        label: "NIGHT FLASH / 2000", background: "#d9d9f0", accent: "#655d9c", paper: "#faf9ff", motif: "FLASH ON  •  FEEL FOREVER",
+        slots: [0, 1, 2, 3].map((i) => ({ id: String(i + 1), x: 17 + (i % 2) * 123, y: 73 + Math.floor(i / 2) * 166, w: 112, h: 145, angle: i % 2 ? 3 : -3, frame: "film" }))
+      },
+      cafeReceipt: {
+        label: "TODAY'S CAFE", background: "#efe2d7", accent: "#9a7064", paper: "#fffaf4", motif: "LATTE  /  LAUGH  /  REPEAT",
+        slots: [
+          { id: "1", x: 20, y: 72, w: 142, h: 170, angle: -6, frame: "polaroid" },
+          { id: "2", x: 115, y: 168, w: 137, h: 169, angle: 5, frame: "instax" },
+          { id: "3", x: 23, y: 300, w: 102, h: 105, angle: -2, frame: "paper" }
+        ]
+      },
+      mirrorballMix: {
+        label: "DANCE FLOOR DIARY", background: "#e1e5f2", accent: "#727ba6", paper: "#fbfbff", motif: "✦  STAY IN THE SPOTLIGHT  ✦",
+        slots: [
+          { id: "1", x: 23, y: 69, w: 135, h: 155, angle: -5, frame: "polaroid" },
+          { id: "2", x: 132, y: 139, w: 115, h: 132, angle: 5, frame: "paper" },
+          { id: "3", x: 27, y: 245, w: 103, h: 125, angle: 4, frame: "instax" },
+          { id: "4", x: 144, y: 284, w: 104, h: 123, angle: -4, frame: "paper" },
+          { id: "5", x: 92, y: 354, w: 87, h: 62, angle: 1, frame: "paper" }
+        ]
+      },
+      bestieDuo: {
+        label: "BESTIES FOREVER", background: "#f3dce4", accent: "#b36b86", paper: "#fff9fa", motif: "YOU  +  ME  =  MEMORIES",
+        slots: [
+          { id: "1", x: 19, y: 74, w: 111, h: 317, angle: -2, frame: "instax" },
+          { id: "2", x: 140, y: 74, w: 111, h: 317, angle: 2, frame: "instax" }
+        ]
+      },
+      postcardRouge: {
+        label: "LOVE LETTER / SEOUL", background: "#f3d8d5", accent: "#a94e58", paper: "#fff8ef", motif: "✉  SEALED WITH A KISS", design: "postcard", tape: true,
+        slots: [{ id: "1", x: 16, y: 65, w: 143, h: 176, angle: -7, frame: "polaroid" }, { id: "2", x: 111, y: 165, w: 141, h: 179, angle: 6, frame: "instax" }, { id: "3", x: 24, y: 294, w: 117, h: 117, angle: -3, frame: "paper" }]
+      },
+      flowerMarket: {
+        label: "FLOWER MARKET", background: "#e3ebdc", accent: "#648064", paper: "#fbf7e9", motif: "GROW IN YOUR OWN WAY", design: "botanical", tape: true,
+        slots: [{ id: "1", x: 18, y: 69, w: 108, h: 142, angle: -4, frame: "paper" }, { id: "2", x: 142, y: 76, w: 107, h: 138, angle: 4, frame: "instax" }, { id: "3", x: 25, y: 239, w: 108, h: 142, angle: 3, frame: "instax" }, { id: "4", x: 143, y: 244, w: 104, h: 137, angle: -3, frame: "paper" }]
+      },
+      laceLetter: {
+        label: "A LETTER FOR YOU", background: "#eadce0", accent: "#9d6b78", paper: "#fff9f5", motif: "WITH LOVE  /  ALWAYS", design: "lace", tape: false,
+        slots: [{ id: "1", x: 21, y: 77, w: 226, h: 151, angle: -3, frame: "polaroid" }, { id: "2", x: 27, y: 263, w: 214, h: 148, angle: 3, frame: "instax" }]
+      },
+      moonDream: {
+        label: "MOONLIGHT CLUB", background: "#d9d9ec", accent: "#696b9a", paper: "#f8f6ff", motif: "MEET ME UNDER THE STARS", design: "celestial", tape: true,
+        slots: [{ id: "1", x: 20, y: 72, w: 128, h: 157, angle: -6, frame: "instax" }, { id: "2", x: 129, y: 159, w: 121, h: 153, angle: 5, frame: "paper", shape: "round" }, { id: "3", x: 35, y: 285, w: 132, h: 124, angle: -2, frame: "polaroid" }]
+      },
+      ticketPop: {
+        label: "LIVE! / FRONT ROW", background: "#ead8f1", accent: "#7953a0", paper: "#fff8ff", motif: "DANCE ALL NIGHT", design: "concert", tape: true,
+        slots: [{ id: "1", x: 18, y: 70, w: 108, h: 142, angle: -4, frame: "film" }, { id: "2", x: 143, y: 72, w: 108, h: 139, angle: 4, frame: "polaroid" }, { id: "3", x: 25, y: 240, w: 106, h: 141, angle: 3, frame: "polaroid" }, { id: "4", x: 142, y: 245, w: 108, h: 136, angle: -3, frame: "film" }]
+      },
+      travelJournal: {
+        label: "POSTED FROM SOMEWHERE", background: "#dce8e5", accent: "#527d79", paper: "#fff8e9", motif: "TAKE THE SCENIC ROUTE", design: "travel", tape: true,
+        slots: [{ id: "1", x: 19, y: 76, w: 132, h: 150, angle: -5, frame: "polaroid" }, { id: "2", x: 139, y: 92, w: 111, h: 127, angle: 4, frame: "paper" }, { id: "3", x: 25, y: 248, w: 104, h: 137, angle: 3, frame: "instax" }, { id: "4", x: 137, y: 239, w: 116, h: 148, angle: -4, frame: "polaroid" }]
+      },
+      cafeScrap: {
+        label: "SLOW MORNING CAFE", background: "#e9ddce", accent: "#86654f", paper: "#fff7e9", motif: "SIP SLOWLY  /  STAY AWHILE", design: "cafe", tape: true,
+        slots: [{ id: "1", x: 18, y: 74, w: 142, h: 174, angle: -6, frame: "instax" }, { id: "2", x: 113, y: 170, w: 139, h: 174, angle: 5, frame: "polaroid" }, { id: "3", x: 24, y: 296, w: 102, h: 102, angle: -2, frame: "paper", shape: "round" }]
+      },
+      holoParty: {
+        label: "HOLO PARTY / 2000", background: "#d8e2f0", accent: "#6b70a8", paper: "#fffaff", motif: "SHINE BRIGHT  ✦  ALL NIGHT", design: "holo", tape: false,
+        slots: [{ id: "1", x: 18, y: 70, w: 105, h: 139, angle: -4, frame: "film" }, { id: "2", x: 145, y: 71, w: 106, h: 138, angle: 4, frame: "paper" }, { id: "3", x: 80, y: 174, w: 111, h: 145, angle: -2, frame: "instax" }, { id: "4", x: 18, y: 287, w: 105, h: 112, angle: 3, frame: "paper" }, { id: "5", x: 146, y: 284, w: 105, h: 115, angle: -3, frame: "film" }]
+      },
+      comicBesties: {
+        label: "BEST DAY EVER!", background: "#f4e6b9", accent: "#b45b57", paper: "#fffbe9", motif: "POW!  BFF  WOW!", design: "comic", tape: true,
+        slots: [{ id: "1", x: 19, y: 76, w: 135, h: 159, angle: -6, frame: "paper" }, { id: "2", x: 118, y: 164, w: 134, h: 160, angle: 6, frame: "instax" }, { id: "3", x: 29, y: 288, w: 125, h: 113, angle: -3, frame: "polaroid" }]
+      },
+      memoryBook: {
+        label: "OUR LITTLE ARCHIVE", background: "#e8ded0", accent: "#826d62", paper: "#fff9ee", motif: "KEEP THE GOOD PARTS", design: "memory", tape: true,
+        slots: [{ id: "1", x: 18, y: 69, w: 116, h: 149, angle: -5, frame: "polaroid" }, { id: "2", x: 141, y: 77, w: 109, h: 134, angle: 4, frame: "paper" }, { id: "3", x: 31, y: 231, w: 116, h: 145, angle: 4, frame: "instax" }, { id: "4", x: 148, y: 224, w: 103, h: 130, angle: -4, frame: "paper" }, { id: "5", x: 85, y: 335, w: 103, h: 77, angle: -1, frame: "paper" }]
+      }
+    };
+    function renderCollageTemplatePreviews() {
+      document.querySelectorAll(".collageTemplateChoice").forEach(function (button) {
+        const match = (button.getAttribute("onclick") || "").match(/applyCollageTemplate\('([^']+)'\)/);
+        const template = match && collageTemplates[match[1]];
+        const preview = button.querySelector(".collageTemplateThumb");
+        if (!template || !preview) return;
+        preview.classList.add("hasPreview");
+        preview.style.background = `linear-gradient(145deg, ${template.background}, ${template.paper})`;
+        template.slots.forEach(function (slot) {
+          const miniSlot = document.createElement("span");
+          miniSlot.className = "collageMiniSlot" + (slot.frame === "film" ? " film" : "") + (slot.shape === "round" ? " round" : "");
+          miniSlot.style.left = (slot.x / 270 * 100) + "%";
+          miniSlot.style.top = (slot.y / 480 * 100) + "%";
+          miniSlot.style.width = (slot.w / 270 * 100) + "%";
+          miniSlot.style.height = (slot.h / 480 * 100) + "%";
+          miniSlot.style.transform = `rotate(${slot.angle}deg)`;
+          preview.appendChild(miniSlot);
+        });
+      });
+    }
+    renderCollageTemplatePreviews();
+
+    function collageDecorationSvg(template) {
+      const a = template.accent;
+      const p = template.paper;
+      const details = {
+        postcard: `<g fill="none" stroke="${a}" opacity=".78"><rect x="197" y="62" width="47" height="55" rx="2" fill="${p}" stroke-width="2"/><path d="M201 68h39m-39 5h39M12 257c24-21 47-21 71 0s47 21 71 0" stroke-width="1.3" stroke-dasharray="3 3"/><circle cx="225" cy="140" r="20" stroke-width="2"/><circle cx="225" cy="140" r="14" stroke-width="1"/><path d="M220 140h10m-5-5v10" stroke-width="2"/></g><text x="220" y="96" text-anchor="middle" font-size="7" fill="${a}" letter-spacing="1">AIR MAIL</text><text x="16" y="450" font-size="8" fill="${a}" letter-spacing="2">✉ BY AIR / WITH LOVE</text>`,
+        botanical: `<g fill="none" stroke="${a}" stroke-width="1.4" opacity=".75"><path d="M17 78q14 14 26 0m-16 8q-4 14 8 20m198-22q-12 14-24 0m11 7q4 14-8 20M19 397q14-14 28 0m-19-7q-2-12 9-19m199 24q-12-14-25 0m17-8q2-12-9-19"/><g fill="${a}"><circle cx="38" cy="75" r="3"/><circle cx="229" cy="75" r="3"/><circle cx="40" cy="402" r="3"/><circle cx="230" cy="402" r="3"/></g></g><text x="18" y="54" font-size="9" fill="${a}" letter-spacing="2">✿ PRESS FLOWERS ✿</text><path d="M191 432h59" stroke="${a}" stroke-dasharray="2 3" opacity=".6"/>`,
+        lace: `<g fill="none" stroke="${a}" opacity=".55" stroke-width="1.2"><rect x="10" y="49" width="250" height="383" rx="15" stroke-dasharray="2 3"/><path d="M18 62q6-10 12 0t12 0t12 0t12 0M204 62q6-10 12 0t12 0t12 0M18 420q6-10 12 0t12 0t12 0t12 0M204 420q6-10 12 0t12 0t12 0"/><circle cx="135" cy="50" r="18" fill="${p}" stroke-width="2"/><circle cx="135" cy="50" r="11"/></g><path d="M135 42c-8-8-14 3 0 12 14-9 8-20 0-12z" fill="${a}" opacity=".7"/><text x="118" y="455" font-size="8" fill="${a}" letter-spacing="2">♡ DEAR YOU ♡</text>`,
+        celestial: `<g fill="${a}" opacity=".78"><path d="M226 68a20 20 0 1 0 18 29 17 17 0 0 1-18-29z"/><path d="M38 106l3 8 8 3-8 3-3 8-3-8-8-3 8-3zM228 246l2 6 6 2-6 2-2 6-2-6-6-2 6-2zM44 392l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><circle cx="181" cy="114" r="2"/><circle cx="215" cy="384" r="2"/><circle cx="30" cy="275" r="2"/></g><g fill="none" stroke="${a}" opacity=".4"><path d="M16 173q37-33 70-2t70 0" stroke-dasharray="2 4"/><circle cx="220" cy="177" r="22"/><circle cx="220" cy="177" r="28" stroke-dasharray="1 5"/></g><text x="15" y="449" font-size="8" fill="${a}" letter-spacing="2">✧ DREAM / WISH / REPEAT ✧</text>`,
+        concert: `<g fill="none" stroke="${a}" opacity=".75"><path d="M14 62h48m146 0h48M14 414h62m127 0h53" stroke-width="2" stroke-dasharray="3 3"/><path d="M36 54l4 10 10 4-10 4-4 10-4-10-10-4 10-4zM229 364l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="${p}" stroke-width="2"/><path d="M231 128v18a5 5 0 1 1-3-5V125l16-4v18a5 5 0 1 1-3-5v-11z" fill="${a}" stroke="none"/></g><text x="17" y="102" font-size="8" fill="${a}" letter-spacing="1">✦ ALL AGES / DOORS 7PM</text><text x="165" y="439" font-size="8" fill="${a}" letter-spacing="1">LIVE MEMORIES</text>`,
+        travel: `<g fill="none" stroke="${a}" opacity=".72"><path d="M18 135c48-44 74 17 117-8s60 12 111-16" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M227 94l8 16-8 16-8-16z" fill="${p}" stroke-width="2"/><circle cx="227" cy="110" r="3" fill="${a}"/><circle cx="37" cy="276" r="22"/><path d="M37 255v42m-21-21h42m-35-15 29 29m0-29-29 29"/><path d="M24 407h65m93 0h62" stroke-dasharray="3 3"/></g><text x="16" y="61" font-size="8" fill="${a}" letter-spacing="2">✈ PASSPORT STAMPS</text><text x="173" y="458" font-size="8" fill="${a}" letter-spacing="1">NEXT STOP: HAPPINESS</text>`,
+        cafe: `<g fill="none" stroke="${a}" stroke-width="2" opacity=".75"><path d="M24 92h27v20q0 15-13 15t-14-15zM51 97h7q10 0 5 11h-12M28 86q4-8 0-13m11 13q4-8 0-13m11 13q4-8 0-13"/><path d="M207 75q10-12 20 0t20 0m-40 8q10-12 20 0t20 0"/><circle cx="37" cy="376" r="9"/><path d="M33 371q7-5 9 2-3 7-9 5-4-3 0-7z"/><path d="M201 370h48m-48 7h34m-34 7h43" stroke-width="1"/></g><text x="20" y="145" font-size="7" fill="${a}" letter-spacing="1">NO. 01 / LATTE</text><text x="20" y="435" font-size="8" fill="${a}" letter-spacing="1">A LITTLE COFFEE BREAK</text>`,
+        holo: `<defs><linearGradient id="foil" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${a}" stop-opacity=".06"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="${a}" stop-opacity=".25"/></linearGradient></defs><g fill="url(#foil)" stroke="${a}" stroke-opacity=".65"><path d="M28 80l15-18 15 18-15 18z"/><path d="M213 122l12-15 12 15-12 15z"/><path d="M24 390l14-17 14 17-14 17z"/><circle cx="226" cy="371" r="23" fill="none"/><circle cx="226" cy="371" r="17" fill="none"/><path d="M20 252h39m-19-19v39M212 257h36m-18-18v36" fill="none"/></g><text x="17" y="116" font-size="8" fill="${a}" letter-spacing="2">✦ CHROME DREAMS ✦</text><text x="171" y="437" font-size="8" fill="${a}" letter-spacing="1">GLITTER MODE: ON</text>`,
+        comic: `<g fill="${p}" stroke="${a}" stroke-width="2" opacity=".9"><path d="M25 80l7 14 16 2-12 10 3 16-14-8-14 8 3-16L2 96l16-2z"/><path d="M205 98q0-13 14-13h27q14 0 14 13v14q0 13-14 13h-12l-9 10 1-10q-21-1-21-14z"/><path d="M195 370l7 14 16 2-12 10 3 16-14-8-14 8 3-16-12-10 16-2z"/></g><g fill="${a}" opacity=".45"><circle cx="229" cy="159" r="2"/><circle cx="239" cy="159" r="2"/><circle cx="249" cy="159" r="2"/><circle cx="25" cy="269" r="2"/><circle cx="35" cy="269" r="2"/><circle cx="45" cy="269" r="2"/></g><text x="213" y="104" font-size="7" fill="${a}" font-weight="bold">BFF!</text><text x="15" y="443" font-size="8" fill="${a}" letter-spacing="2">POW! BEST DAY!</text>`,
+        memory: `<g fill="${p}" stroke="${a}" stroke-opacity=".65"><path d="M19 82h55v27H19z"/><path d="M187 70l56 0 0 28-56 0z"/><path d="M19 397h72v24H19z"/><path d="M184 395h65v25h-65z"/></g><g fill="none" stroke="${a}" opacity=".75"><path d="M18 89h56m-56 7h39M190 78h49m-49 7h38M21 405h68m-68 7h45" stroke-width="1"/><path d="M242 239q-9-9-18 0t-18 0m18 0q9 9 18 0" stroke-width="2"/><path d="M31 143l13-11 12 11-12 11zM224 324l12-10 12 10-12 10z" fill="${p}"/></g><text x="21" y="105" font-size="6" fill="${a}" letter-spacing="1">LITTLE NOTE</text><text x="195" y="93" font-size="6" fill="${a}" letter-spacing="1">ARCHIVE 01</text><text x="22" y="414" font-size="6" fill="${a}" letter-spacing="1">KEEP THIS</text>`
+      };
+      return details[template.design] || "";
+    }
+    function makeCollageArtSvg(template) {
+      const decor = collageDecorationSvg(template);
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="270" height="480" viewBox="0 0 270 480"><defs><linearGradient id="paper" x2=".9" y2="1"><stop stop-color="${template.background}"/><stop offset="1" stop-color="${template.paper}"/></linearGradient><pattern id="grain" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="${template.accent}" opacity=".16"/><circle cx="10" cy="8" r=".55" fill="#fff" opacity=".5"/></pattern></defs><rect width="270" height="480" fill="url(#paper)"/><rect width="270" height="480" fill="url(#grain)"/><path d="M0 56H270M0 426H270" stroke="${template.accent}" stroke-opacity=".13" stroke-width="1"/><text x="135" y="20" text-anchor="middle" font-family="sans-serif" font-size="8" letter-spacing="2" fill="${template.accent}" opacity=".8">${template.label}</text><text x="135" y="466" text-anchor="middle" font-family="sans-serif" font-size="9" letter-spacing="1.2" fill="${template.accent}" opacity=".85">${template.motif}</text>${decor}<g fill="${template.accent}" opacity=".68"><path d="M239 42l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><path d="M25 244l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><circle cx="242" cy="394" r="3"/><circle cx="30" cy="75" r="2"/></g></svg>`;
+    }
+
+    function collageSlotInsets(slot) {
+      if (slot.frame === "polaroid" || slot.frame === "instax") return { top: 6, right: 6, bottom: 25, left: 6 };
+      if (slot.frame === "film") return { top: 7, right: 9, bottom: 7, left: 9 };
+      return { top: 5, right: 5, bottom: 5, left: 5 };
+    }
+
+    function findCollageSlot(templateName, slotId) {
+      const template = collageTemplates[templateName];
+      return template && template.slots.find(slot => slot.id === String(slotId));
+    }
+
+    function drawCollageSlotBases(ctx, templateName) {
+      const template = collageTemplates[templateName];
+      if (!template) return;
+      template.slots.forEach(function (slot) {
+        ctx.save();
+        ctx.translate((slot.x + slot.w / 2) * 4, (slot.y + slot.h / 2) * 4);
+        ctx.rotate(slot.angle * Math.PI / 180);
+        ctx.shadowColor = "rgba(45,40,52,.24)";
+        ctx.shadowBlur = 28;
+        ctx.shadowOffsetX = 3;
+        ctx.shadowOffsetY = 12;
+        ctx.fillStyle = slot.frame === "film" ? "#282b38" : slot.frame === "paper" ? template.paper : "#fff";
+        ctx.fillRect(-slot.w * 2, -slot.h * 2, slot.w * 4, slot.h * 4);
+        ctx.restore();
+      });
+    }
+
+    function drawCollageSlotPhoto(ctx, img) {
+      const templateName = document.querySelector(".story").dataset.collageTemplate;
+      const slot = findCollageSlot(templateName, img.dataset.collageSlot);
+      if (!slot) return;
+      const inset = collageSlotInsets(slot);
+      const innerW = slot.w - inset.left - inset.right;
+      const innerH = slot.h - inset.top - inset.bottom;
+      const zoom = Number(img.dataset.size || 100) / 100;
+      const scale = Math.max(innerW / img.naturalWidth, innerH / img.naturalHeight) * zoom;
+      const drawW = img.naturalWidth * scale;
+      const drawH = img.naturalHeight * scale;
+      ctx.save();
+      ctx.translate((slot.x + slot.w / 2) * 4, (slot.y + slot.h / 2) * 4);
+      ctx.rotate(slot.angle * Math.PI / 180);
+      ctx.beginPath();
+      if (slot.shape === "round") {
+        ctx.ellipse((inset.left + innerW / 2 - slot.w / 2) * 4,
+          (inset.top + innerH / 2 - slot.h / 2) * 4, innerW * 2, innerH * 2, 0, 0, Math.PI * 2);
+      } else {
+        ctx.rect((inset.left - slot.w / 2) * 4, (inset.top - slot.h / 2) * 4, innerW * 4, innerH * 4);
+      }
+      ctx.clip();
+      ctx.save();
+      ctx.translate(Number(img.dataset.x || 0) * 4, Number(img.dataset.y || 0) * 4);
+      ctx.rotate(Number(img.dataset.rotation || 0) * Math.PI / 180);
+      ctx.filter = img.style.filter || "none";
+      ctx.drawImage(img, -drawW * 2, -drawH * 2, drawW * 4, drawH * 4);
+      ctx.restore();
+      ctx.restore();
+    }
+
+    function drawCollageSlotFrames(ctx, templateName) {
+      const template = collageTemplates[templateName];
+      if (!template) return;
+      template.slots.forEach(function (slot) {
+        ctx.save();
+        ctx.translate((slot.x + slot.w / 2) * 4, (slot.y + slot.h / 2) * 4);
+        ctx.rotate(slot.angle * Math.PI / 180);
+        ctx.lineWidth = slot.frame === "film" ? 4 : 3;
+        ctx.strokeStyle = slot.frame === "film" ? "#faf7f0" : template.accent + "88";
+        const inset = collageSlotInsets(slot);
+        if (slot.shape === "round") {
+          ctx.beginPath();
+          ctx.ellipse((inset.left + (slot.w - inset.left - inset.right) / 2 - slot.w / 2) * 4,
+            (inset.top + (slot.h - inset.top - inset.bottom) / 2 - slot.h / 2) * 4,
+            (slot.w - inset.left - inset.right) * 2,
+            (slot.h - inset.top - inset.bottom) * 2, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        } else {
+          ctx.strokeRect((inset.left - slot.w / 2) * 4, (inset.top - slot.h / 2) * 4,
+            (slot.w - inset.left - inset.right) * 4, (slot.h - inset.top - inset.bottom) * 4);
+        }
+        if (slot.frame === "film") {
+          ctx.fillStyle = "#faf7f0";
+          for (let x = -slot.w * 2 + 10; x < slot.w * 2 - 8; x += 34) {
+            ctx.fillRect(x, -slot.h * 2 + 3, 17, 8);
+            ctx.fillRect(x, slot.h * 2 - 11, 17, 8);
+          }
+        }
+        ctx.restore();
+      });
+    }
+
+    function updateCollagePhoto(img) {
+      const slotEl = img.closest(".collageSlot");
+      const mask = slotEl && slotEl.querySelector(".collagePhotoMask");
+      if (!mask || !img.naturalWidth) return;
+      const zoom = Number(img.dataset.size || 100) / 100;
+      img.style.width = (mask.clientWidth * zoom) + "px";
+      img.style.height = (mask.clientHeight * zoom) + "px";
+      img.style.left = `calc(50% + ${Number(img.dataset.x || 0)}px)`;
+      img.style.top = `calc(50% + ${Number(img.dataset.y || 0)}px)`;
+      img.style.transform = `translate(-50%, -50%) rotate(${Number(img.dataset.rotation || 0)}deg)`;
+      img.style.objectFit = "cover";
+      img.style.zIndex = "1";
+      slotEl.classList.add("has-photo");
+    }
+
+    function applyCollageTemplate(name, recordHistory = true, keepBackground = false) {
+      const template = collageTemplates[name];
+      if (!template) return;
+      const story = document.querySelector(".story");
+      const oldPhotos = [...story.querySelectorAll(".storyPhotoItem")];
+      if (recordHistory) saveHistory();
+      oldPhotos.forEach(img => img.remove());
+      story.querySelectorAll(".collageTemplateArt, .collageSlot").forEach(el => el.remove());
+      story.dataset.collageTemplate = name;
+      if (!keepBackground) {
+        story.style.backgroundColor = template.background;
+        story.style.backgroundImage = "none";
+        delete story.dataset.bgPreset;
+      }
+      const art = document.createElement("img");
+      art.className = "collageTemplateArt";
+      art.alt = "";
+      art.draggable = false;
+      art.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(makeCollageArtSvg(template));
+      story.insertBefore(art, story.firstChild);
+      template.slots.forEach(slot => {
+        const frame = document.createElement("div");
+        frame.className = "collageSlot " + slot.frame + (slot.shape ? " " + slot.shape : "") + (template.tape ? " taped" : "");
+        frame.dataset.slotId = slot.id;
+        frame.setAttribute("aria-label", "写真枠 " + slot.id);
+        frame.style.left = slot.x + "px";
+        frame.style.top = slot.y + "px";
+        frame.style.width = slot.w + "px";
+        frame.style.height = slot.h + "px";
+        frame.style.transform = `rotate(${slot.angle}deg)`;
+        const mask = document.createElement("div");
+        mask.className = "collagePhotoMask";
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.className = "slotAddButton";
+        plus.textContent = "+";
+        plus.setAttribute("aria-label", "写真枠 " + slot.id + " に写真を追加");
+        plus.addEventListener("click", function (event) {
+          event.stopPropagation();
+          photo.dataset.collageTarget = slot.id;
+          photo.click();
+        });
+        frame.append(mask, plus);
+        story.appendChild(frame);
+      });
+      oldPhotos.forEach((img, index) => {
+        if (index < template.slots.length) {
+          const slot = template.slots[index];
+          img.dataset.collageSlot = slot.id;
+          img.dataset.x = "0";
+          img.dataset.y = "0";
+          img.dataset.size = "100";
+          img.dataset.rotation = "0";
+          const frame = story.querySelector(`.collageSlot[data-slot-id="${slot.id}"]`);
+          frame.querySelector(".collagePhotoMask").appendChild(img);
+          updateCollagePhoto(img);
+        } else {
+          delete img.dataset.collageSlot;
+          story.appendChild(img);
+          updatePhotoItem(img);
+        }
+      });
+      document.querySelectorAll(".collageTemplateChoice").forEach(button => {
+        button.classList.toggle("active", button.getAttribute("onclick").includes("'" + name + "'"));
+      });
+      refreshPhotoList();
+      setPhotoLayer(photoLayer);
+    }
 
     /* 世界観スタイルをワンタップで適用 */
     function applyStylePreset(name) {
@@ -3791,7 +5053,6 @@
 
       updatePhotoFilterButtons();
       updatePhotoFilterStrengthUI();
-
       updateY2KGrain();
       updateY2KLight();
     }
